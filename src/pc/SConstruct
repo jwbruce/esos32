@@ -1,0 +1,36 @@
+#
+# SConstruct to build ESOS applications on the PC
+#
+opt = Environment(CCFLAGS = '-O2')
+dbg = Environment(CCFLAGS = '-g')
+
+# add the include directories to the search path
+dbg.Append(CPPPATH=['../../include', '../../include/pc'])
+opt.Append(CPPPATH=['../../include', '../../include/pc'])
+
+#print opt.Dump()
+
+
+ESOS_common = Split("""../esos.c
+                ../esos_comm.c
+                ../esos_mail.c
+                ../esos_cb.c
+                """)
+
+ESOS_hwxxx = Split("""esos_hwxxx_tick.c
+                esos_hwxxx_rs232.c
+                esos_hwxxx_irq.c""")
+
+ESOS_pc = Split("""esos_pc_tick.c
+             esos_pc_stdio.c""")
+
+#ESOS_app = Split("""app_uppercase.c""")
+ESOS_app = Split("""app_example.c""")
+
+#p0 = opt.Program('app-rel', ESOS_common+ESOS_pc+ESOS_app)
+p1 = dbg.Program('app-dbg', ESOS_common+ESOS_pc+ESOS_app )
+p2 = dbg.Program('app-mailA', ESOS_common+ESOS_pc+ Split("""app_mail_A.c""") )
+p3 = dbg.Program('app-mailB', ESOS_common+ESOS_pc+ Split("""app_mail_B.c""") )
+p4 = dbg.Program('app-mailC', ESOS_common+ESOS_pc+ Split("""app_mail_C.c""") )
+# See `no parallel link`_.
+dbg.SideEffect('/dummy', p1 + p2 + p3 + p4)
