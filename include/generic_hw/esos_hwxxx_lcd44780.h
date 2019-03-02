@@ -32,18 +32,18 @@
  * \addtogroup ESOS_Task_LCD_Service
  * @{
  */
- 
- /** \file
- *  \brief This file contains routines which define, configure,
- * and allow use of the "LCD character display" service on
- * the target hardware (hwxxxx)
- */
+
+/** \file
+*  \brief This file contains routines which define, configure,
+* and allow use of the "LCD character display" service on
+* the target hardware (hwxxxx)
+*/
 
 /* I N C L U D E S **********************************************************/
 #include <esos_lcd.h>
 
 /* HW-SPECIFIC MACROS *******************************************************/
-#define  __esos_lcd44780_hw_config		__esos_lcd44780_hwxxx_config
+#define  __esos_lcd44780_hw_config    __esos_lcd44780_hwxxx_config
 
 #define  __esos_lcd44780_hw_setDataPins \
     __esos_lcd44780_hwxxx_setDataPins

@@ -53,7 +53,8 @@
 // in the long-run.
 //
 // PC versions do NOT have IRQs (yet) so do NOT define the variables
-#ifndef __linux
+#if 0
+// #ifndef __linux
 #define ESOS_USE_IRQS
 #endif
 
@@ -381,7 +382,7 @@ void    __esos_InitCommSystem(void);
  * intead of fcn access
  */
 extern uint8_t        __esos_u8UserTasksRegistered;
-extern uint16_t       __esos_u32UserFlags, __esos_u32SystemFlags;
+extern uint32_t       __esos_u32UserFlags, __esos_u32SystemFlags;
 extern uint32_t       __esos_u32FNVHash;
 
 /**
@@ -528,9 +529,10 @@ extern uint32_t       __esos_u32FNVHash;
 #define     __ESOS_SYS_FLAG_NULL_LAST_TASK      BIT1
 #define     __ESOS_SYS_COMM_TX_IS_BUSY        BIT2
 #define     __ESOS_SYS_COMM_RX_IS_BUSY        BIT3
-#define   __ESOS_SYS_I2C_IS_BUSY          BIT4
-#define   __ESOS_SYS_SPI_IS_BUSY          BIT5
-#define   __ESOS_SYS_ADC_IS_BUSY          BIT6
+#define   __ESOS_SYS_COMM_TX_ONGOING    BIT4
+#define   __ESOS_SYS_I2C_IS_BUSY          BIT8
+#define   __ESOS_SYS_SPI_IS_BUSY          BIT9
+#define   __ESOS_SYS_ADC_IS_BUSY          BIT10
 
 // Other useful macros for the user
 #define   __abs(x)    (((x) < 0) ? -(x) : (x))

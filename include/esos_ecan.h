@@ -25,46 +25,46 @@
  *
  */
 
- /**
- * \addtogroup ESOS_Task_ECAN_Service
- * @{
- */
+/**
+* \addtogroup ESOS_Task_ECAN_Service
+* @{
+*/
 
- /** \file
- *  This file contains macros, prototypes, and definitions for
- *  ECAN services for ESOS tasks.
- */
+/** \file
+*  This file contains macros, prototypes, and definitions for
+*  ECAN services for ESOS tasks.
+*/
 
 #ifndef ESOS_ECAN_H
-#define	ESOS_ECAN_H
+#define ESOS_ECAN_H
 
 /* I N C L U D E S **********************************************************/
 #include    "esos.h"
 
 /* D E F I N E S ************************************************************/
 #define MAX_CANFACTORY_CLIENTS  32
-#define DEFAULT_MSG_ID			0x7a0
-#define DEBUG_MODE				ESOS_USER_FLAG_F
+#define DEFAULT_MSG_ID      0x7a0
+#define DEBUG_MODE        ESOS_USER_FLAG_F
 
-#define ENABLE_DEBUG_MODE()		esos_SetUserFlag(DEBUG_MODE)
-#define DISABLE_DEBUG_MODE()	esos_ClearUserFlag(DEBUG_MODE)
-#define CHECK_DEBUG_MODE_ENABLED()		esos_IsUserFlagSet(DEBUG_MODE)
+#define ENABLE_DEBUG_MODE()   esos_SetUserFlag(DEBUG_MODE)
+#define DISABLE_DEBUG_MODE()  esos_ClearUserFlag(DEBUG_MODE)
+#define CHECK_DEBUG_MODE_ENABLED()    esos_IsUserFlagSet(DEBUG_MODE)
 
 #define TRUE                    1
 #define FALSE                   0
 
 /* S T R U C T U R E S ******************************************************/
 typedef enum {
-    MASKCONTROL_FIELD_NONZERO,
-    MASKCONTROL_EQUAL
+  MASKCONTROL_FIELD_NONZERO,
+  MASKCONTROL_EQUAL
 } maskcontrol_t;
 
 typedef struct {
-    uint16_t        u16_canID;
-    uint16_t        u16_idMask;
-    maskcontrol_t   m_idMaskControl;
-	uint8_t (*pf_task) (ESOS_TASK_HANDLE pst_Task);
-	//uint8_t(*pfn) (struct stTask *pst_Task);
+  uint16_t        u16_canID;
+  uint16_t        u16_idMask;
+  maskcontrol_t   m_idMaskControl;
+  uint8_t (*pf_task) (ESOS_TASK_HANDLE pst_Task);
+  //uint8_t(*pfn) (struct stTask *pst_Task);
 } client_t;
 
 /* P U B L I C  P R O T O T Y P E S *****************************************/
@@ -166,4 +166,4 @@ BOOL esos_ecan_mask_check (uint16_t u16_subscribed, uint16_t u16_recieved, uint1
  */
 ESOS_USER_TASK ( CANFactory );
 
-#endif	/* ESOS_ECAN_H */
+#endif  /* ESOS_ECAN_H */

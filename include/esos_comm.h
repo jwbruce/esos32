@@ -63,22 +63,24 @@ uint8_t __esos_unsafe_GetUint8(void);
 #define ESOS_COMM_SYS_USB       0x80
 #define ESOS_COMM_SYS_SERIAL    0x00
 #define ESOS_COMM_SYS_SERIAL_REV  (ESOS_COMM_SYS_SERIAL + 0x01)
-// size of buffer to catch data incoming to PIC (based on USB terminology)
+// size of buffer to catch data incoming to MCU (based on USB terminology)
 #define ESOS_SERIAL_OUT_EP_SIZE    64
-// size of buffer to hold data leaving the PIC (based on USB terminology)
+// size of buffer to hold data leaving the MCU (based on USB terminology)
 #define ESOS_SERIAL_IN_EP_SIZE     64
+#define DEFAULT_BAUDRATE      57600
 
 /***
  *** A few defines to help make data transfer easier
  ***/
 #define   __ESOS_COMM_TXFIFO_PREP()                     \
-  u16_tmp = __st_TxBuffer.u16_Head;                     \
+  do{u16_tmp = __st_TxBuffer.u16_Head;                     \
   u16_tmp++;                                            \
-  if (u16_tmp == ESOS_SERIAL_IN_EP_SIZE) u16_tmp = 0
+  if (u16_tmp == ESOS_SERIAL_IN_EP_SIZE) u16_tmp = 0;   \
+  } while (0)
 
 #define   __ESOS_COMM_WRITE_TXFIFO( u8_out )            \
-    __st_TxBuffer.pau8_Data[u16_tmp] = (u8_out);        \
-    __st_TxBuffer.u16_Head = u16_tmp
+    do{__st_TxBuffer.pau8_Data[u16_tmp] = (u8_out);        \
+    __st_TxBuffer.u16_Head = u16_tmp;} while (0)
 
 
 
@@ -225,30 +227,6 @@ uint8_t __esos_unsafe_GetUint8(void);
 #define   ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM()                                                \
             ESOS_TASK_WAIT_WHILE( __esos_IsSystemFlagSet( __ESOS_SYS_COMM_TX_IS_BUSY ) );       \
             __esos_SetSystemFlag( __ESOS_SYS_COMM_TX_IS_BUSY )
-/**
- * Signals to other requesting tasks that the ESOS "in" stream is being used by
- * the current task.  \ref ESOS_TASK_WAIT_ON_AVAILABLE_IN_COMM now signals for
- * us when the "in" stream is available.
- *
- * \sa ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM()
- * \sa ESOS_TASK_WAIT_ON_AVAILABLE_IN_COMM()
- * \deprecated  Discontinue use of this function.  It is subject to removal at any point.
- * \hideinitializer
- */
-#define   ESOS_TASK_SIGNAL_BUSY_IN_COMM()     __esos_SetSystemFlag( __ESOS_SYS_COMM_RX_IS_BUSY )
-
-/**
- * Signals to other requesting tasks that the ESOS "out" stream is being used by
- * the current task. \ref ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM now signals for
- * us when the "out" stream is available.
- *
- * \sa ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM()
- * \sa ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM()
- * \deprecated  Discontinue use of this function.  It is subject to removal at any point.
- * \hideinitializer
- */
-#define   ESOS_TASK_SIGNAL_BUSY_OUT_COMM()    __esos_SetSystemFlag( __ESOS_SYS_COMM_TX_IS_BUSY )
-
 
 /**
  * Signals to other requesting tasks that the current task is making the ESOS "in" stream
@@ -451,24 +429,11 @@ uint8_t __esos_unsafe_GetUint8(void);
 
 /* S T R U C T U R E S ******************************************************/
 
-/**
-* structure to contain a set of descriptors about the buffers used
-* ES_OS bulk communications transfer defined by this library
-*
-* Data transfer can be over USB or old-fashioned RS-232 serial UART
-**/
-typedef struct _ESOS_COMM_BUFF_DSC {
-  volatile uint8_t*       pau8_Data;
-  uint16_t                u16_Head;
-  uint16_t                u16_Tail;
-  uint16_t                u16_Length;
-} ESOS_COMM_BUFF_DSC;
 
 /* E X T E R N S ************************************************************/
 extern volatile uint8_t                 __esos_comm_tx_buff[ESOS_SERIAL_IN_EP_SIZE];
 extern volatile uint8_t                 __esos_comm_rx_buff[ESOS_SERIAL_OUT_EP_SIZE];
-extern volatile ESOS_COMM_BUFF_DSC    __st_TxBuffer, __st_RxBuffer;
-extern volatile struct stTask         __stChildTaskTx, __stChildTaskRx;
+extern volatile struct stTask           __stChildTaskTx, __stChildTaskRx;
 
 /* P U B L I C  P R O T O T Y P E S *****************************************/
 /**

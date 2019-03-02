@@ -229,7 +229,7 @@ typedef struct __stMAILMESSAGE {
 
 #define ESOS_TASK_SEND_MESSAGE(pst_ToTask, pst_Msg)           __esos_SendMailMessage((pst_ToTask),(pst_Msg))
 
-#define ESOS_TASK_SEND_MESSAGE_WAIT_DELIVERY(pst_ToTask, pstMsg)		ESOS_TASK_WAIT_ON_DELIVERY((pst_ToTask), (pstMsg))
+#define ESOS_TASK_SEND_MESSAGE_WAIT_DELIVERY(pst_ToTask, pstMsg)    ESOS_TASK_WAIT_ON_DELIVERY((pst_ToTask), (pstMsg))
 
 #define ESOS_TASK_WAIT_ON_DELIVERY(pst_ToTask, pstMsg)                               \
         do{                                                                                 \

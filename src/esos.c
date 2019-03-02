@@ -35,7 +35,6 @@
 
 #include    "esos.h"
 
-
 //**********************************************************
 // GLOBAL variables for ESOS to use/maintain
 //**********************************************************
@@ -654,7 +653,7 @@ void __esosInit(void) {
 
 main_t main(void) {
   uint8_t             u8TaskReturnedVal=0;
-  uint8_t             u8i ,u8j, u8NumRegdTasksTemp;
+  uint8_t             u8i,u8j, u8NumRegdTasksTemp;
   ESOS_TASK_HANDLE  pstNowTask;
 
   __esosInit();

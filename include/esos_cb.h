@@ -50,8 +50,8 @@
 /* S T R U C T U R E S ******************************************************/
 
 /**
-* structure to contain a set of descriptors about the buffers used
-* to implement ESOS task mailboxes
+* structure to contain a set of descriptors about the circular buffers
+* used to implement ESOS task mailboxes, communication buffers, etc.
 **/
 typedef struct __stCIRCBUFF {
   uint16_t          u16_Length;                       // maximum number of elements
@@ -70,12 +70,12 @@ typedef CBUFFER*    CBUFF_HANDLE;
 #define __ESOS_CB_GET_LENGTH(pstCB)                         ((pstCB)->u16_Length)
 #define __ESOS_CB_GET_COUNT(pstCB)                          ((pstCB)->u16_Count)
 #define __ESOS_CB_GET_AVAILABLE(pstCB)                      (__ESOS_CB_GET_LENGTH(pstCB)-__ESOS_CB_GET_COUNT(pstCB))
-#define __ESOS_CB_IS_AVAILABLE_AT_LEAST(pstCB, x)           (__ESOS_CB_GOT_AVAILABLE((pstCB))>=(x))
-#define __ESOS_CB_IS_AVAILABLE_EXACTLY(pstCB, x)            (__ESOS_CB_GOT_AVAILABLE((pstCB))==(x))
+#define __ESOS_CB_IS_AVAILABLE_AT_LEAST(pstCB, x)           (__ESOS_CB_GET_AVAILABLE((pstCB))>=(x))
+#define __ESOS_CB_IS_AVAILABLE_EXACTLY(pstCB, x)            (__ESOS_CB_GET_AVAILABLE((pstCB))==(x))
 
 #define ESOS_TASK_WAIT_WHILE_CB_IS_EMPTY(pstCB)                   ESOS_TASK_WAIT_WHILE(__ESOS_CB_IS_EMPTY((pstCB)))
 #define ESOS_TASK_WAIT_WHILE_CB_IS_FULL(pstCB)                    ESOS_TASK_WAIT_WHILE(__ESOS_CB_IS_FULL((pstCB)))
-#define ESOS_TASK_WAIT_UNTIL_CB_HAS_AVAILABLE_AT_LEAST(pstCB,x)   ESOS_TASK_WAIT_UNTIL(__ESOS_CB_IS_AVAILABLE_AT_LEAST((pstCB),x))
+#define ESOS_TASK_WAIT_UNTIL_CB_HAS_AVAILABLE_AT_LEAST(pstCB,x)   ESOS_TASK_WAIT_UNTIL(__ESOS_CB_IS_AVAILABLE_AT_LEAST((pstCB),(x)))
 
 
 /* E X T E R N S ************************************************************/

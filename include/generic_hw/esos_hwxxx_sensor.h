@@ -32,12 +32,12 @@
  * \addtogroup ESOS_Task_Sensor_Service
  * @{
  */
- 
- /** \file
- *  \brief This file contains routines which define, configure and
- *  allow use of the "sensors" service (A/D converter) on the target
- * hardware (hwxxxx)
- */
+
+/** \file
+*  \brief This file contains routines which define, configure and
+*  allow use of the "sensors" service (A/D converter) on the target
+* hardware (hwxxxx)
+*/
 
 /* I N C L U D E S **********************************************************/
 #include <esos_hwxxx.h>

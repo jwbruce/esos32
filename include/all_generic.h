@@ -33,15 +33,18 @@
  * \note This file is to be included in ESOS builds on all platforms.
 */
 
-#pragma once
+
+#ifndef __ALL_GENERIC_H
+#define __ALL_GENERIC_H
 
 #include <stdint.h>
 #ifdef  __linux
-//#warning    Compiling for 32-bit Linux
+#warning    Compiling for 32-bit Linux
 #include "pc_generic.h"
 #define HELLO_MSG "\n" __FILE__ ", built on " __DATE__ " at " __TIME__ "\n"
 #else
-//#warning    Compiling for STM32 L4
+#warning    Compiling for STM32 L4
+#define HELLO_MSG "\n" __FILE__ ", built on " __DATE__ " at " __TIME__ "\n"
 /*
  * We might need to include pc_generic.h here or write a new one.
  */
@@ -399,6 +402,7 @@ unsigned b31:
  * A single bit quantity. Takes on the value TRUE or FALSE.
  * \hideinitializer
  */
+
 typedef enum _BOOL {
   /** False, not true, off, zero */
   FALSE = 0,
@@ -411,14 +415,21 @@ typedef enum _BOOL {
 /** another way to say \ref FALSE */
 #define FAIL            FALSE
 
+
 #define ON        TRUE
 #define OFF       FALSE
+
 
 #define HIGH      TRUE
 #define LOW       FALSE
 
+// These defines are defined in the HAL include files.  If we define
+// them here, it throws compiler errors
+//      error: redeclaration of enumerator 'FALSE'
+#ifndef USE_HAL_DRIVER
 #define ENABLE      TRUE
 #define DISABLE     FALSE
+#endif
 
 /** An uninitialized pointer */
 #define NULLPTR         0
@@ -570,3 +581,5 @@ typedef enum _BOOL {
  * \hideinitializer
  */
 #define IS_BIT_CLEAR(var, bitnum)        (~(var) & ((1 << (bitnum))))
+
+#endif    // __ALL_GENERIC_H

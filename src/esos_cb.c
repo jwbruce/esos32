@@ -34,12 +34,12 @@
 ** F U N C T I O N S
 ****************************************************************/
 void __esos_CB_Init(CBUFFER* pst_CBuffer, uint8_t* pau8_ptr, uint16_t u16_Len) {
-  // setup (or reset) the mailbox descriptors
+  // setup (or reset) the circular buffer descriptors
   pst_CBuffer->u16_Start = 0;
   pst_CBuffer->u16_Count = 0;
   pst_CBuffer->u16_Length = u16_Len;
   pst_CBuffer->pau8_Data = pau8_ptr;
-} // endof esos_InitMailbox()
+} // endof __esos_CB_Init()
 
 
 /******************************************

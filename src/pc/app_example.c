@@ -221,7 +221,7 @@ ESOS_USER_TASK( task3 ) {
  * ======================================
  */
 ESOS_USER_TASK( taskSemA ) {
-  uint32_t     		 u32_rnd;
+  uint32_t         u32_rnd;
   static uint8_t     u8_cnt;
 
   ESOS_TASK_BEGIN();
@@ -244,7 +244,7 @@ ESOS_USER_TASK( taskSemA ) {
 
 ESOS_USER_TASK( taskSemB ) {
   uint32_t     u32_rnd;
-  static	uint8_t     u8_cnt;
+  static  uint8_t     u8_cnt;
 
   ESOS_TASK_BEGIN();
   u8_cnt = 0;
@@ -261,7 +261,7 @@ ESOS_USER_TASK( taskSemB ) {
 
 ESOS_USER_TASK( taskSemC ) {
   uint32_t    u32_rnd;
-  static     uint8_t	u8_cnt;
+  static     uint8_t  u8_cnt;
 
   ESOS_TASK_BEGIN();
   u8_cnt = 0;
@@ -298,7 +298,7 @@ ESOS_USER_TASK( taskMutexA ) {
 
 ESOS_USER_TASK( taskMutexB ) {
   uint32_t    u32_rnd;
-  static     uint8_t 	u8_cnt;
+  static     uint8_t  u8_cnt;
 
   ESOS_TASK_BEGIN();
   u8_cnt = 0;

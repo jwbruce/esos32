@@ -29,7 +29,7 @@
  * \addtogroup ESOS_Task_Sensor_Service
  * @{
  */
- 
+
 /*** I N C L U D E S *************************************************/
 #include "esos_hwxxx_sensor.h"
 
@@ -49,8 +49,7 @@ Configure and enable the sensor module for hwxxx hardware.
 \param e_senVRef specifies sensor voltage reference
 \hideinitializer
  */
-void esos_sensor_config_hw (esos_sensor_ch_t e_senCh, esos_sensor_vref_t e_senVRef)
-{
+void esos_sensor_config_hw (esos_sensor_ch_t e_senCh, esos_sensor_vref_t e_senVRef) {
 
 }
 
@@ -58,8 +57,7 @@ void esos_sensor_config_hw (esos_sensor_ch_t e_senCh, esos_sensor_vref_t e_senVR
 Determine truth of: the sensor is currently converting
 \hideinitializer
  */
-BOOL esos_sensor_is_converting_hw (void)
-{
+BOOL esos_sensor_is_converting_hw (void) {
 
 }
 
@@ -67,8 +65,7 @@ BOOL esos_sensor_is_converting_hw (void)
 Initiate a conversion for a configured sensor
 \hideinitializer
  */
-void esos_sensor_initiate_conversion_hw (void)
-{
+void esos_sensor_initiate_conversion_hw (void) {
 
 }
 
@@ -76,8 +73,7 @@ void esos_sensor_initiate_conversion_hw (void)
 Receive the value from a conversion that has already been initiated
 \hideinitializer
  */
-uint16_t esos_sensor_getvalue_u16_hw (void)
-{
+uint16_t esos_sensor_getvalue_u16_hw (void) {
 
 }
 
@@ -85,7 +81,6 @@ uint16_t esos_sensor_getvalue_u16_hw (void)
 Release any pending conversions for the sensor
 \hideinitializer
  */
-void esos_sensor_release_hw (void)
-{
+void esos_sensor_release_hw (void) {
 
 }
