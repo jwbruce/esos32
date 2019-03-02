@@ -62,7 +62,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
-
+extern	void __esos_tmrSvcsExecute(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -187,7 +187,12 @@ void SysTick_Handler(void) {
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
-
+  
+  // After the HAL increments the tick, call ESOS's software
+  // timer service to determine which (if any) ESOS software
+  // timers need to execute on this tick
+  __esos_tmrSvcsExecute();      // let ESOS implement the S/w tmr service
+  
   /* USER CODE END SysTick_IRQn 1 */
 }
 
