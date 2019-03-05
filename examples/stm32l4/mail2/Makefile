@@ -53,9 +53,11 @@ src/stm32l4xx_hal_msp.c \
 src/system_stm32l4xx.c \
 $(ESOS_DIR)/src/esos.c \
 $(ESOS_DIR)/src/esos_cb.c \
+$(ESOS_DIR)/src/esos_utils.c \
 $(ESOS_DIR)/src/esos_comm.c \
 $(ESOS_DIR)/src/esos_mail.c \
 $(ESOS_DIR)/src/stm32l4/esos_stm32l4_tick.c \
+$(ESOS_DIR)/src/stm32l4/esos_stm32l4_utils.c \
 $(ESOS_DIR)/src/stm32l4/esos_stm32l4_rs232.c
 
 # ASM sources
@@ -192,4 +194,5 @@ clean:
 -include $(wildcard $(BUILD_DIR)/*.d)
 
 # *** EOF ***
+
 

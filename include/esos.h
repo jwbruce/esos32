@@ -44,8 +44,8 @@
 
 
 // Include all the files we need
-//#include "user_config.h"      // get the user's configuration requests
 #include "all_generic.h"
+#include "esos_utils.h"
 #include "esos_task.h"          // defines ESOS tasks and semaphores
 #include "esos_mail.h"          // defines ESOS task mailboxes (eventually make MAILBOXes optional)
 
@@ -337,14 +337,8 @@ void    user_init( void );
 ESOS_TASK_HANDLE   esos_RegisterTask( uint8_t (*pfn_TaskFcn)(struct stTask *pst_Task) );
 uint8_t   esos_UnregisterTask( uint8_t (*pfn_TaskFcn)(struct stTask *pst_Task) ) ;
 ESOS_TASK_HANDLE  esos_GetFreeChildTaskStruct();
-uint32_t    esos_GetRandomUint32();
 ESOS_TASK_HANDLE    esos_GetTaskHandle( uint8_t (*taskname)(ESOS_TASK_HANDLE pstTask) );
 ESOS_TASK_HANDLE    esos_GetTaskHandleFromID( uint16_t u16_TaskID );
-
-// ESOS-provided hash functions
-uint16_t esos_hash_u32_to_u16(uint32_t u32_hash);
-uint32_t esos_string_hash_u32(char *psz_str);
-uint32_t esos_buffer_hash_u32(void *buf, uint16_t len);
 
 
 // prototypes for ESOS software timers
@@ -353,9 +347,20 @@ uint8_t    esos_UnregisterTimer( ESOS_TMR_HANDLE hnd_timer );
 ESOS_TMR_HANDLE    esos_GetTimerHandle( void (*pfnTmrFcn)(void) );
 uint8_t    esos_ChangeTimerPeriod( ESOS_TMR_HANDLE hnd_timer, uint32_t u32_period );
 
+/* ********************************************************************
+*  ESOS requires that the hardware-specific code provide certain basic
+*  functions, even for a stripped down ESOS app.
+* ********************************************************************/
+
 // The user must provide the HW-specific way of getting a 32bit 1.0ms tick
-void    __esos_hw_InitSystemTick(void);
-uint32_t  __esos_hw_GetSystemTickCount(void);
+void    	__esos_hw_InitSystemTick(void);
+uint32_t 	__esos_hw_GetSystemTickCount(void);
+// pseudo random number generation routines
+uint32_t	__esos_hw_PRNG_u32(void);
+void		__esos_hw_config_PRNG(void);
+void 		__esos_hw_set_PRNG_Seed(uint32_t u32_seed);
+
+
 
 /**
  * Get the current value of the ESOS system tick counter
@@ -383,7 +388,6 @@ void    __esos_InitCommSystem(void);
  */
 extern uint8_t        __esos_u8UserTasksRegistered;
 extern uint32_t       __esos_u32UserFlags, __esos_u32SystemFlags;
-extern uint32_t       __esos_u32FNVHash;
 
 /**
  * Get the current number of user task registered with the

@@ -29,8 +29,8 @@
 
 // INCLUDEs go here  (First include the main esos.h file)
 //      After that, the user can include what they need
-#include    "esos.h"
-#include  "user_app.h"
+#include	"esos.h"
+#include	"user_app.h"
 #ifdef __linux
 #include    "esos_pc.h"
 #include    "esos_pc_stdio.h"
