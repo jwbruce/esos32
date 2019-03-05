@@ -5,7 +5,7 @@
 ######################################
 # target
 ######################################
-TARGET = mail1_app
+TARGET = rng_test_app
 
 ######################################
 # building variables
@@ -28,7 +28,7 @@ ESOS_DIR = /home/jwbruce/REPOs/esos32
 ######################################
 # C sources
 C_SOURCES =  \
-src/mail1_app.c \
+src/rng_test_app.c \
 ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.c \
 ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c \
 ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rng.c \

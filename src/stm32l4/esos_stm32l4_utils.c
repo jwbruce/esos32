@@ -38,6 +38,11 @@
 #include    "esos_stm32l4.h"
 #include	"esos_stm32l4_utils.h"
 
+// VARIABLES
+#ifdef STM32L452xx
+RNG_HandleTypeDef hrng;
+#endif
+
 /***************************************************
  * 
  * HARDWARE-specific ESOS utility functions
@@ -59,7 +64,23 @@
 *
 ********************************************************/
 uint32_t   __esos_hw_PRNG_u32(void) {
-  return	__esos_get_PRNG_RandomUint32();
+#ifdef STM32L452xx
+  uint32_t		u32_randomNum;
+  
+  #if 1
+    HAL_RNG_GenerateRandomNumber( &hrng, &u32_randomNum);
+  #else
+    // not sure why this doesn't work...... should be
+    // faster than above as we will read last RNG and then
+    //  kick off the RNG hardware to make a new RNG before
+    //  our next read.   Need to study HAL more to figure this out.
+    u32_randomNum = HAL_RNG_ReadLastRandomNumber( &hrng ); 
+    HAL_RNG_GenerateRandomNumber_IT( &hrng );
+  #endif
+  return u32_randomNum;
+#else
+  return ( __esos_get_PRNG_RandomUint32() );
+#endif
 } // end __esos_hw_PRNG_u32(void)
 
 
@@ -76,7 +97,13 @@ uint32_t   __esos_hw_PRNG_u32(void) {
 *
 *******************************************************  */
 void   __esos_hw_config_PRNG(void) {
-
+#ifdef STM32L452xx	
+  hrng.Instance = RNG;
+  if (HAL_RNG_Init(&hrng) != HAL_OK)
+  {
+    Error_Handler();
+  }
+#endif
 }  // end __esos_hw_config_PRNG(void)
 
 /* *******************************************************
@@ -96,5 +123,10 @@ void   __esos_hw_config_PRNG(void) {
 *
 ********************************************************** */
 void __esos_hw_set_PRNG_Seed(uint32_t u32_seed) {
-  __esos_set_PRNG_U32Seed(u32_seed);
+#ifdef STM32L452xx
+   // RNG hardware doesn't let us set the seed
+#else
+   __esos_set_PRNG_U32Seed(u32_seed);
+#endif
+  
 } // end __esos_hw_setPRNG_Seed(uint32)

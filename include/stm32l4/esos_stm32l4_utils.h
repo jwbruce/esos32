@@ -43,13 +43,15 @@
 
 
 /* I N C L U D E S **********************************************************/
-#include "esos.h"
-#include "esos_stm32l4.h"
+#include	"esos.h"
+#include 	"esos_stm32l4.h"
 
 /* D E F I N I T I O N S ****************************************************/
 
 /* E X T E R N S ************************************************************/
-
+#ifdef STM32L452xx
+extern RNG_HandleTypeDef hrng;
+#endif
 /* M A C R O S **************************************************************/
 
 

@@ -52,6 +52,7 @@
  * OK!  We have a real microprocessor, so start including the real
  *   hardware files for the compiler
  */
+ 
 #include    "stm32l4xx_hal.h"
 
 #endif      // __linux
@@ -60,7 +61,7 @@
 #ifdef      ESOS_USE_IRQS
 #include    "esos_stm32l4_irq.h"
 #endif
-#ifdef ESOS_USE_SERIAL_PORT
+#ifdef 		ESOS_USE_SERIAL_PORT
 #include    "esos_stm32l4_rs232.h"
 #endif
 

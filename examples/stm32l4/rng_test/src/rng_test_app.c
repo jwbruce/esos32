@@ -30,8 +30,8 @@
 // INCLUDEs go here  (First include the main esos.h file)
 //      After that, the user can include what they need
 #include    "esos.h"
-#include	"user_app.h"
-#include	<stdio.h>			// get prototypes for sprintf()
+#include  	"user_app.h"
+#include	"stdio.h"
 #ifdef __linux
 #include    "esos_pc.h"
 #include    "esos_pc_stdio.h"
@@ -54,10 +54,6 @@
  */
 void __user_init_hw( void );
 uint32_t getRandomDelay(void);
-ESOS_USER_TASK(sender_C0);
-ESOS_USER_TASK(sender_C1);
-ESOS_USER_TASK(recipient_C);
-
 
 // GLOBALs go here
 //  Generally, the user-created semaphores will be defined/allocated here
@@ -103,155 +99,78 @@ ESOS_USER_TASK( task_flash_LED ) {
 
 /**********************************************************
 **
-**     a few tasks to send mail messages to each other
+**  create a few tasks to generate and print random numbers
 **
 ************************************************************/
-ESOS_USER_TASK( sender_C0 ) {
-  uint32_t                      u32_rnd;
-  static  uint8_t               u8_cnt;
-  static  ESOS_TASK_HANDLE    hTask;
-  static  MAILMESSAGE         st_Message;
-  static  char					psz_tempStr[80];
+ESOS_USER_TASK( periodic_rand ) {
+  static uint32_t		u32_rnd;
+  static  char			psz_tempStr[80];
 
   ESOS_TASK_BEGIN();
-  u8_cnt=0;
-  // store handle to our recipient ESOS task
-  hTask = esos_GetTaskHandle( recipient_C );
-
   while (TRUE) {
 
-    // create/fill in the local copy of the message
-    // we will send a single uint8 as data payload
-    ESOS_TASK_MAKE_MSG_UINT8(st_Message, u8_cnt);
-
-    // simulate a task that does other things if the
-    // receipient task mailbox is full
-
-	ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
-    if (ESOS_TASK_MAILBOX_GOT_AT_LEAST_DATA_BYTES( hTask, sizeof(uint8_t) ) ) {
-      // ESOS task mailboxes are stored locally in each task.
-      // but we already now the recipient task has enough space
-      // in their mailbox, so send message
-      sprintf(psz_tempStr, "C0 sending MESSAGE %d\n", u8_cnt);
-      ESOS_TASK_WAIT_ON_SEND_STRING( psz_tempStr );
-      ESOS_TASK_SEND_MESSAGE(hTask, &st_Message);
-    } else {
-      sprintf(psz_tempStr, "C0 doing useful work instead of mailing. Discarding MESSAGE %d.\n", u8_cnt );
-      ESOS_TASK_WAIT_ON_SEND_STRING( psz_tempStr );
-    }
-    ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
-    u8_cnt++;
-    if (u8_cnt>50) u8_cnt=0;
-
+    ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
+    sprintf(psz_tempStr,"periodic: 0x%08lx\n", esos_GetRandomUint32() );
+	ESOS_TASK_WAIT_ON_SEND_STRING( psz_tempStr );
+	ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+	
     // wait a random amount of time between sending mail messages
-    u32_rnd = 1+(0x0F & esos_GetRandomUint32());
+    //  use the hidden ESOS software RNG so as not to disturb
+    //  the hardware RNG we are testing
+    u32_rnd = 1+(0x0F & __esos_get_PRNG_RandomUint32());
     u32_rnd <<= 7;
     ESOS_TASK_WAIT_TICKS( u32_rnd);
-
   } // endof while(TRUE)
   ESOS_TASK_END();
-} // end sender_C0()
+} // end periodic_rand()
 
-ESOS_USER_TASK( sender_C1 ) {
-  static    uint32_t        u32_rnd;
-  static  uint8_t         u8_cnt;
-  static  ESOS_TASK_HANDLE    hTask;
-  static  MAILMESSAGE       st_Message;
-  static  char					psz_tempStr[80];
+ESOS_USER_TASK( burst_rand ) {
+  static uint32_t		u32_rnd;
+  static uint32_t		u32_r1, u32_r2, u32_r3, u32_r4, u32_r5, u32_r6;
+  static  char			psz_tempStr[80];
 
   ESOS_TASK_BEGIN();
-  u8_cnt= 100;
-  hTask = esos_GetTaskHandle( recipient_C );
-
   while (TRUE) {
-    ESOS_TASK_MAKE_MSG_UINT8(st_Message, u8_cnt);               // create message locally
-    ESOS_TASK_WAIT_ON_TASKS_MAILBOX_HAS_AT_LEAST(hTask, sizeof(uint8_t));     // wait until recipient has mailbox space
-
-    // get a random number
-    u32_rnd = 1+(0x0F & esos_GetRandomUint32());
-    // create a random message that wants delivery confirmation (1-in-4 chance)
-    if ( (u32_rnd % 4) == 0 ) {
-      st_Message.u8_flags |= ESOS_MAILMESSAGE_REQUEST_ACK;
-      ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
-      sprintf(psz_tempStr, "C1 sending MESSAGE with ACK request %d\n", u8_cnt);
-      ESOS_TASK_WAIT_ON_SEND_STRING( psz_tempStr );
-      ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
-      ESOS_TASK_WAIT_ON_DELIVERY(hTask, &st_Message);
-    } else {
-	  ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
-      sprintf(psz_tempStr,"C1 sending MESSAGE %d\n", u8_cnt );
-      ESOS_TASK_WAIT_ON_SEND_STRING( psz_tempStr );
-      ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
-      ESOS_TASK_SEND_MESSAGE(hTask, &st_Message);
-    }
-
-    u8_cnt++;
-    if (u8_cnt>150) u8_cnt=100;
-
-    u32_rnd <<= 7;
-    ESOS_TASK_WAIT_TICKS( u32_rnd);
-
-  } // endof while(TRUE)
-  ESOS_TASK_END();
-} // end sender_C1()
-
-
-//TASK that doesn't check mail very often
-ESOS_USER_TASK( recipient_C ) {
-  uint32_t                u32_rnd;
-  static MAILMESSAGE    stMsg;
-  static ESOS_TASK_HANDLE           hSenderC0, hSenderC1;
-  static  char					psz_tempStr[80];
-
-  ESOS_TASK_BEGIN();
-  hSenderC0 = esos_GetTaskHandle( sender_C0);
-  hSenderC1 = esos_GetTaskHandle( sender_C1);
-  while (TRUE) {
-
-    // create a random delay to simulate being "busy"
-    u32_rnd = 1+(0x0F & esos_GetRandomUint32());
+    ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
+    u32_r1=esos_GetRandomUint32();       u32_r2=esos_GetRandomUint32();
+    u32_r3=esos_GetRandomUint32();       u32_r4=esos_GetRandomUint32();
+    u32_r5=esos_GetRandomUint32();       u32_r6=esos_GetRandomUint32();
+    sprintf(psz_tempStr,"burst: 0x%08lx\n", u32_r1 );
+	ESOS_TASK_WAIT_ON_SEND_STRING( psz_tempStr );
+    sprintf(psz_tempStr,"burst: 0x%08lx\n", u32_r2 );
+	ESOS_TASK_WAIT_ON_SEND_STRING( psz_tempStr );
+    sprintf(psz_tempStr,"burst: 0x%08lx\n", u32_r3 );
+	ESOS_TASK_WAIT_ON_SEND_STRING( psz_tempStr );
+    sprintf(psz_tempStr,"burst: 0x%08lx\n", u32_r4 );
+	ESOS_TASK_WAIT_ON_SEND_STRING( psz_tempStr );
+    sprintf(psz_tempStr,"burst: 0x%08lx\n", u32_r5 );
+	ESOS_TASK_WAIT_ON_SEND_STRING( psz_tempStr );
+    sprintf(psz_tempStr,"burst: 0x%08lx\n", u32_r6 );
+	ESOS_TASK_WAIT_ON_SEND_STRING( psz_tempStr );
+	ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+	
+    // wait a random amount of time between sending mail messages
+    //  use the hidden ESOS software RNG so as not to disturb
+    //  the hardware RNG we are testing
+    u32_rnd = 1+(0x0F & __esos_get_PRNG_RandomUint32());
     u32_rnd <<= 10;
-    ESOS_TASK_WAIT_TICKS( u32_rnd );
-
-    // check for incoming mail
-    ESOS_TASK_WAIT_FOR_MAIL();
-
-    // keep reading mail messages until they are all processed
-    while ( ESOS_TASK_IVE_GOT_MAIL() ) {
-      // make local copy of message (frees up mailbox space)
-      ESOS_TASK_GET_NEXT_MESSAGE( &stMsg );
-      ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
-      sprintf(psz_tempStr, "Got a message from ");
-      ESOS_TASK_WAIT_ON_SEND_STRING( psz_tempStr );
-      if (ESOS_IS_TASK_SENDER( hSenderC0, stMsg)) {
-        sprintf(psz_tempStr,"sender_C0");
-      } else if (ESOS_IS_TASK_SENDER( hSenderC1, stMsg)) {
-        sprintf(psz_tempStr,"sender_C1");
-      } else {
-        sprintf(psz_tempStr,"UNKNOWN");
-      }
-      ESOS_TASK_WAIT_ON_SEND_STRING( psz_tempStr );
-      sprintf (psz_tempStr," containing %d          enroute time = %ld ms\n", stMsg.au8_Contents[0], esos_GetSystemTick()-ESOS_GET_MSG_POSTMARK(stMsg) );
-	  ESOS_TASK_WAIT_ON_SEND_STRING( psz_tempStr );      
-	  ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
-    } //endof while()
+    ESOS_TASK_WAIT_TICKS( u32_rnd);
   } // endof while(TRUE)
   ESOS_TASK_END();
-} // end recipient_C()
+} // end periodic_rand()
 
 /************************************************************************
  * User supplied functions
  ************************************************************************
  */
  
- /*
+/*
  * return an uint32_t that can be used for a reasonable delay
  * should not be too short (~255 ticks) and not too long (~4096 ticks)
  */
 inline uint32_t getRandomDelay() {
   return ((esos_GetRandomUint32() & 0x0FFF)|0x100);
 }
-
  
 void __user_init_hw(void) {
   GPIO_InitTypeDef GPIO_InitStruct;
@@ -327,9 +246,8 @@ void user_init(void) {
    *   the ESOS scheduler.
    */
   esos_RegisterTask( task_flash_LED );
-  esos_RegisterTask( sender_C0 );
-  esos_RegisterTask( sender_C1 );
-  esos_RegisterTask( recipient_C );
+  esos_RegisterTask( periodic_rand );
+  esos_RegisterTask( burst_rand );
 
 } // end user_init()
 

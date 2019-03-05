@@ -15,7 +15,6 @@ DEBUG = 1
 # optimization
 OPT = -Og
 
-
 #######################################
 # paths
 #######################################
@@ -30,10 +29,9 @@ ESOS_DIR = /home/jwbruce/REPOs/esos32
 # C sources
 C_SOURCES =  \
 src/semaphore1_app.c \
-src/stm32l4xx_it.c \
-src/stm32l4xx_hal_msp.c \
 ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.c \
 ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c \
+../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rng.c \
 ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c \
 ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c \
 ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c \
@@ -50,7 +48,6 @@ src/stm32l4xx_hal_msp.c \
 ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr.c \
 ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c \
 ../Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c \
-src/system_stm32l4xx.c \
 $(ESOS_DIR)/src/esos.c \
 $(ESOS_DIR)/src/esos_cb.c \
 $(ESOS_DIR)/src/esos_utils.c \
@@ -58,12 +55,14 @@ $(ESOS_DIR)/src/esos_comm.c \
 $(ESOS_DIR)/src/esos_mail.c \
 $(ESOS_DIR)/src/stm32l4/esos_stm32l4_tick.c \
 $(ESOS_DIR)/src/stm32l4/esos_stm32l4_utils.c \
-$(ESOS_DIR)/src/stm32l4/esos_stm32l4_rs232.c
+$(ESOS_DIR)/src/stm32l4/esos_stm32l4_rs232.c \
+$(ESOS_DIR)/src/stm32l4/HAL_core/system_stm32l4xx.c \
+$(ESOS_DIR)/src/stm32l4/HAL_core/stm32l4xx_it.c \
+$(ESOS_DIR)/src/stm32l4/HAL_core/stm32l4xx_hal_msp.c
 
 # ASM sources
 ASM_SOURCES =  \
-src/startup_stm32l452xx.s
-
+$(ESOS_DIR)/src/stm32l4/HAL_core/startup_stm32l452xx.s
 
 #######################################
 # binaries
@@ -123,6 +122,7 @@ C_INCLUDES =  \
 -I../Drivers/CMSIS/Include \
 -I$(ESOS_DIR)/include \
 -I$(ESOS_DIR)/include/stm32l4 \
+-I$(ESOS_DIR)/include/stm32l4/HAL_core \
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections

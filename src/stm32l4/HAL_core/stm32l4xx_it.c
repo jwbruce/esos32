@@ -73,6 +73,7 @@ extern	void __esos_tmrSvcsExecute(void);
 /* External variables --------------------------------------------------------*/
 /* USER CODE BEGIN EV */
 extern UART_HandleTypeDef st_huart2;
+extern RNG_HandleTypeDef hrng;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -216,6 +217,21 @@ void USART2_IRQHandler(void) {
 
   /* USER CODE END USART2_IRQn 1 */
 }
+
+/**
+  * @brief This function handles RNG global interrupt.
+  */
+void RNG_IRQHandler(void)
+{
+  /* USER CODE BEGIN RNG_IRQn 0 */
+
+  /* USER CODE END RNG_IRQn 0 */
+  HAL_RNG_IRQHandler(&hrng);
+  /* USER CODE BEGIN RNG_IRQn 1 */
+
+  /* USER CODE END RNG_IRQn 1 */
+}
+
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */

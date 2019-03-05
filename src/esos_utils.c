@@ -62,7 +62,7 @@ uint32_t            __esos_u32FNVHash = 2166136261uL;
  * See http://www.firstpr.com.au/dsp/rand31/  for more information
  */
 void __esos_set_PRNG_U32Seed(uint32_t u32_seed) {
-  __u32_esos_PRNG_Seed = u32_seed;
+   __u32_esos_PRNG_Seed = u32_seed;
 } // end __esos_set_PRNG_U32Seed()
 
 /**
