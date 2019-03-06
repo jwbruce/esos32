@@ -25,8 +25,14 @@
  *
  */
 
+/** \file
+ * \brief Hardware independent code for ESOS32 Communications service
+ *
+ */
+
+
 #include    "esos.h"
-#include  "esos_cb.h"
+#include  	"esos_cb.h"
 #include    "esos_comm.h"
 
 // ******** G L O B A L S ***************

@@ -38,7 +38,7 @@
 // this file won't be documented.
 /** \file
  *  \brief This file contains routines which configure and
- *  use hardware-version of the ESOS utility functions
+ *  use hardware-version of the ESOS32 utility functions
  */
 
 

@@ -31,6 +31,14 @@
  * @{
  */
 
+// Documentation for this file. If the \file tag isn't present,
+// this file won't be documented.
+/** \file
+* \brief Template for creating hardware-specific support for ESOS32
+* I<sup>2</sup>C services
+*/
+
+
 /*** I N C L U D E S *************************************************/
 #include "esos_hwxxx_i2c.h"
 

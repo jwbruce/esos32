@@ -25,6 +25,12 @@
  *
  */
 
+/** \file
+ * \brief Various hardware independent utilties for ESOS32 and its user applications
+ *
+ */
+
+
 #include    "esos.h"
 #include    "esos_utils.h"
 

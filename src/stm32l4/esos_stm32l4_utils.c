@@ -27,10 +27,9 @@
 
 // Documentation for this file. If the \file tag isn't present,
 // this file won't be documented.
-/**
-* \file
-* Hardware-specific file to generate the various ESOS utilities
-* random numbers, CRC, hashes, etc.  in hardware if available
+/** \file
+* \brief STM32L4xx hardware support for various ESOS utilities
+* random numbers, CRC, hashes, etc.  executed in hardware, *if available*
 */
 
 // Include any HW-specific header files to pick up the HW register

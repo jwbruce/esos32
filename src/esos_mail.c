@@ -25,6 +25,12 @@
  *
  */
 
+/** \file
+ * \brief Mailboxes and messaging code for ESOS32 tasks
+ *
+ */
+
+
 #include    "esos.h"
 #include    "esos_mail.h"
 

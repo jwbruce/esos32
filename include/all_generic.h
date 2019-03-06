@@ -29,8 +29,8 @@
 // this file won't be documented.
 /** \file
  * \brief Embedded Systems Operating System 32 bit (ESOS32)
- * Definitions to make ESOS code more generic and portable.
- * \note This file is to be included in ESOS builds on all platforms.
+ * definitions to make ESOS32 code more generic and portable.
+ * \note This file is to be included in ESOS32 builds on all platforms.
 */
 
 

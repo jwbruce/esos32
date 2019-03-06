@@ -31,9 +31,11 @@
  */
 
 /** \file
-*  \brief This file contains routines which configure and
-*  use an ECAN interface on the Microchip PIC24 MCUs.
+*  \brief This file contains routines which define, configure and
+*  allow use of Controller Area Network (CAN)  service on the target
+* hardware (hwxxxx)
 */
+
 
 #ifndef ESOS_HWXXX_ECAN_H
 #define ESOS_HWXXX_ECAN_H

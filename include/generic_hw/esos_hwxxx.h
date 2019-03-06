@@ -29,8 +29,12 @@
 // Documentation for this file. If the \file tag isn't present,
 // this file won't be documented.
 /** \file
- *  \brief This is the master include file for implementing ESOS on Microchip PIC24 MCUs
- */
+*  \brief This is the master include file template 
+*  for the target hardware (hwxxxx)
+*/
+
+
+ 
 #ifndef ESOS_HWXXX_H
 #define ESOS_HWXXX_H
 

@@ -33,6 +33,42 @@
  *
  */
 
+/*! \mainpage Embedded Systems Operating System 32-bit (ESOS32)
+ *
+ * \section intro_sec Introduction
+ *
+ * Embedded Systems Operating Systems 32-bit (ESOS32) is a continuation
+ * of the line of ESOS operating systems which have include ports for
+ * 8-bit and 16-bit microcontrollers, predominantly the Microchip 
+ * architectures.
+ * 
+ * The initial port of ESOS32 is aimed at the ARM-Cortex M4 chips from
+ * STMicroelectronics. The first specific target processor is the
+ * STM32L452 processor hosted on the Nucleo64 development board.
+ *
+ * \section install_sec Installation
+ * 
+ * The public repository for ESOS32 is hosted by
+ * [Bitbucket](http://bitbucket.org/).
+ * Source code can be found at 
+ * [ESOS32 public repo](https://bitbucket.org/jwbruce/esos32).
+ *
+ * \section using_dox Using this documentation
+ *
+ * A good jumping off point in this documentation is to visit
+ * the "Modules" page via the link above.  This page will give the
+ * reader a high-level overview of the major systems and services
+ * provided by ESOS32.
+ * 
+ * As the reader becomes more familiar with ESOS32, then venturing
+ * into the structures, macros, and source code is the next step.
+ * 
+ * Of course, the provided example ESOS32 applications should give
+ * great insight into the structure and use of ESOS32.
+ * 
+ * **Enjoy!**
+ */
+
 #include    "esos.h"
 
 //**********************************************************

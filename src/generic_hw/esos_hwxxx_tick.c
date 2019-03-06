@@ -25,6 +25,20 @@
  *
  */
 
+/**
+ * \addtogroup ESOS_Tick
+ * @{
+ */
+
+// Documentation for this file. If the \file tag isn't present,
+// this file won't be documented.
+/** \file
+* \brief Template for creating hardware-specific support for ESOS32 
+* system tick
+*/
+
+
+
 // Documentation for this file. If the \file tag isn't present,
 // this file won't be documented.
 /**

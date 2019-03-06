@@ -31,8 +31,8 @@
  */
 
 /** \file
-*  \brief This file contains routines which configure and
-*  use an ECAN interface on the Microchip PIC24 MCUs.
+* \brief Template for creating hardware-specific support for the ESOS32
+* Controller Area Network (CAN) service 
 */
 
 /*** I N C L U D E S *************************************************/

@@ -25,11 +25,22 @@
  *
  */
 
+
+/**
+ * \addtogroup ESOS_UART_Service
+ * @{
+ */
+
 // Documentation for this file. If the \file tag isn't present,
 // this file won't be documented.
-/*
- *  To do.
- */
+/**
+* /** \file
+* \brief PC (linux) code to emulating the ESOS32 communications service.
+* Input comes from keyboard, and output is directed to the "terminal".
+* It would not be *too hard* to modify to actually use a serial port.
+* 
+* \note The windows version has not been tested in many years.
+*/
 
 /*** I N C L U D E S ****
 *********************************************/

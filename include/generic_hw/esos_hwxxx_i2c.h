@@ -37,9 +37,10 @@
 // Documentation for this file. If the \file tag isn't present,
 // this file won't be documented.
 /** \file
- *  \brief This file contains routines which configure and
- *  use I<sup>2</sup>C on the Microchip PIC24 MCUs.
- */
+*  \brief This file contains routines which define, configure and
+*  allow use of the I<sup>2</sup>C service on the target
+* hardware (hwxxxx)
+*/
 
 
 /* I N C L U D E S **********************************************************/

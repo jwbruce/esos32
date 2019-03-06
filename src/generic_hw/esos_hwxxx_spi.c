@@ -31,6 +31,16 @@
  * @{
  */
 
+
+
+// Documentation for this file. If the \file tag isn't present,
+// this file won't be documented.
+/** \file
+* \brief Template for creating hardware-specific support for ESOS32 
+* SPI communications service
+*/
+
+
 /*** I N C L U D E S *************************************************/
 #include "esos_hwxxx_spi.h"
 

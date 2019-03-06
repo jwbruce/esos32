@@ -39,8 +39,10 @@
 // Documentation for this file. If the \file tag isn't present,
 // this file won't be documented.
 /** \file
- *  This file contains routines which se SPI on the Microchip PIC24 MCU.
- */
+*  \brief This file contains templates for routines which define, configure and
+*  allow use of the SPI service on the target
+* hardware (hwxxxx)
+*/
 
 
 /* I N C L U D E S **********************************************************/

@@ -25,6 +25,20 @@
  *
  */
 
+/**
+ * \addtogroup ESOS_Tick
+ * @{
+ */
+
+// Documentation for this file. If the \file tag isn't present,
+// this file won't be documented.
+/**
+* \file
+* \brief PC (linux) code to emulate the ESOS32 system tick functionality.
+* 
+* \note Windows version has not been tested in many years.
+*/
+
 
 /************************************************************************
  * esos_pc_tick.c

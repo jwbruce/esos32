@@ -34,9 +34,11 @@
 
 // Documentation for this file. If the \file tag isn't present,
 // this file won't be documented.
-/** \file
- *  To do.
- */
+/**
+* /** \file
+* \brief Template for creating hardware-specific support for the
+* ESOS32 serial communications service
+*/
 
 /*** I N C L U D E S *************************************************/
 #include "esos_hwxxx_rs232.h"

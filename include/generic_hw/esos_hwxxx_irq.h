@@ -25,11 +25,12 @@
  *
  */
 
-
 /** \file
- *  \brief This file contains macros, prototypes, and definitions for
- *  Microchip PIC24 family specific interrupts on ESOS
- */
+*  \brief This file contains routines which define, configure and
+*  allow use of hardware interrupts on the target hardware (hwxxxx)
+*/
+
+
 
 /************************************************************************
  * esos_hwxxx_irq.h

@@ -25,6 +25,12 @@
  *
  */
 
+/** \file
+ * \brief Circular buffer routines for ESOS32
+ *
+ */
+
+
 #include    "esos.h"
 #include    "esos_cb.h"
 
@@ -71,20 +77,21 @@ void __esos_CB_Init(CBUFFER* pst_CBuffer, uint8_t* pau8_ptr, uint16_t u16_Len) {
     --(pstB)->u16_Count;                                                      \
   } while(0)
 
+
+/***************************************************************
+**** WRITERs
+***************************************************************/
+
 /**
 * Writes byte data to a circular buffer
 *
 * \param pst_CBuffer  pointer to structure (CBUFFER) describing the circular buffer
 * \param u8_x     data to write to the circular buffer
-* \note This function <em>ASSUMES</em> that there is ample free space available in specified
-* circular buffer.
+* \note This function <em>ASSUMES</em> that there is ample free
+* space available in specified circular buffer.
 *
 * \hideinitializer
 */
-
-/***************************************************************
-**** WRITERs
-***************************************************************/
 void __esos_CB_WriteUINT8(CBUFFER* pst_CBuffer, uint8_t u8_x ) {
   uint16_t    u16_end;
 

@@ -27,7 +27,7 @@
 
 /** \file
  *  \brief This file contains macros, prototypes, and definitions for
- *  STM32L4xxx Family specific communications on ESOS
+ *  STM32L4xxx Family specific communications on ESOS32
  */
 
 

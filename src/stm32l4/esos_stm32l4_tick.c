@@ -25,12 +25,19 @@
  *
  */
 
+/**
+ * \addtogroup ESOS_Tick
+ * @{
+ */
+
+
 // Documentation for this file. If the \file tag isn't present,
 // this file won't be documented.
 /**
 * \file
-* Hardware-specific file to generate the ESOS system tick functionality
-* in the STM32L452RE processor..... We use the Nucleo-L452RE board.
+* \brief STM32L4xx hardware support to generate the ESOS system tick functionality.
+* 
+* \note Currently the code supports the STM32L452RE processor..... on the Nucleo-L452RE board.
 */
 
 // Include any HW-specific header files to pick up the HW register

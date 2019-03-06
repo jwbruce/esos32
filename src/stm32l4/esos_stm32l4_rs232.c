@@ -35,7 +35,8 @@
 // Documentation for this file. If the \file tag isn't present,
 // this file won't be documented.
 /** \file
- *  To do.
+ * \brief STM32L4xx hardware support for RS-232 serial communications
+ *
  */
 
 /*** I N C L U D E S *************************************************/
