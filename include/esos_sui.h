@@ -162,11 +162,16 @@ extern void  esos_hw_sui_configSwitch( ESOS_SUI_LED_HANDLE h_led );
                                                                     ESOS_TASK_WAIT_UNTIL_SUI_SW_PRESSED((x));           \
                                                                     ESOS_TASK_WAIT_UNTIL_SUI_SW_RELEASED((x));          \
                                                                   } while (0) 
-#define ESOS_TASK_WAIT_UNTIL_SUI_SW_DOUBLE_PRESSED(x)             do {                                                    \
-                                                                    ESOS_TASK_WAIT_UNTIL_SUI_SW_PRESSED();           \
-                                                                    ESOS_TASK_WAIT_UNTIL_SUI_SW_RELEASED();          \
-                                                                    ESOS_TASK_WAIT_UNTIL_SUI_SW_PRESSED();           \
-                                                                    ESOS_TASK_WAIT_UNTIL_SUI_SW_RELEASED();          \
+#define ESOS_TASK_WAIT_UNTIL_SUI_SW_PRESSED_TWICE(x)              do {                                                    \
+                                                                    ESOS_TASK_WAIT_UNTIL_SUI_SW_PRESSED((x));           \
+                                                                    ESOS_TASK_WAIT_UNTIL_SUI_SW_RELEASED((x));          \
+                                                                    ESOS_TASK_WAIT_UNTIL_SUI_SW_PRESSED((x));           \
+                                                                    ESOS_TASK_WAIT_UNTIL_SUI_SW_RELEASED((x));          \
                                                                   } while (0)
+#define ESOS_TASK_WAIT_UNTIL_SUI_SW_EVENT(x)               		 ESOS_TASK_WAIT_WHILE( esos_sui_getSwitchLastEvent((x)) == ESOS_SUI_SWITCH_EVENT_NULL )
+#define ESOS_TASK_WAIT_UNTIL_SUI_SW_HOLD_EVENT(x)                ESOS_TASK_WAIT_UNTIL( esos_sui_getSwitchLastEvent((x)) == ESOS_SUI_SWITCH_EVENT_HOLD )
+#define ESOS_TASK_WAIT_UNTIL_SUI_SW_CLICK_EVENT(x)               ESOS_TASK_WAIT_UNTIL( esos_sui_getSwitchLastEvent((x)) == ESOS_SUI_SWITCH_EVENT_CLICK )
+#define ESOS_TASK_WAIT_UNTIL_SUI_SW_DOUBLE_CLICK_EVENT(x)        ESOS_TASK_WAIT_UNTIL( esos_sui_getSwitchLastEvent((x)) == ESOS_SUI_SWITCH_EVENT_DOUBLE_CLICK )
+
 
 #endif    // ESOS_SUI
