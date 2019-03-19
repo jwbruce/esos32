@@ -77,10 +77,8 @@ enum esos_sui_switchStates {
 
 enum esos_sui_switchEvents {
   ESOS_SUI_SWITCH_EVENT_NULL,
-  ESOS_SUI_SWITCH_EVENT_PRESSED,
+  ESOS_SUI_SWITCH_EVENT_HOLD,
   ESOS_SUI_SWITCH_EVENT_CLICK,  
-  ESOS_SUI_SWITCH_EVENT_QUICK_CLICK,  
-  ESOS_SUI_SWITCH_EVENT_LONG_CLICK,
   ESOS_SUI_SWITCH_EVENT_DOUBLE_CLICK
 };
 
@@ -121,7 +119,7 @@ ESOS_USER_TASK( __esos_sui_task );
 // PUBLIC API FUNCTION PROTOTYPES
 void __esos_InitSUI(void);
 ESOS_SUI_SWITCH_HANDLE   esos_sui_registerSwitch(uint32_t u32_d1, uint32_t u32_d2);
-uint8_t esos_sui_getNumberOfSwitches(vESOS_SUI_SWITCH_EVENT_LONG_CLICKoid);
+uint8_t esos_sui_getNumberOfSwitches(void);
 
 BOOL esos_sui_isSWPressed ( ESOS_SUI_SWITCH_HANDLE h_sw );
 BOOL esos_sui_isSWReleased ( ESOS_SUI_SWITCH_HANDLE h_sw );

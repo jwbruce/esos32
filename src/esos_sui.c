@@ -51,7 +51,6 @@ volatile uint32_t u32_previousTimeSW3;
 // PRIVATE ESOS SUI SERVICE VARIABLES
 volatile uint8_t    __u8_esosSuiNumLEDs = 0;
 volatile uint8_t    __u8_esosSuiNumSWs = 0;
-volatile uint32_t   __u32_esosSuiDoubleClickPeriod;
 volatile _st_esos_sui_Switch    __ast_esosSuiSwitches[ ESOS_SUI_NUM_MAX_SWITCHES];
 volatile _st_esos_sui_LED       __ast_esosSuiLEDs[ ESOS_SUI_NUM_MAX_LEDS];
 
@@ -551,9 +550,10 @@ ESOS_SUI_SWITCH_HANDLE   esos_sui_registerSwitch(uint32_t u32_d1, uint32_t u32_d
 
 // SUI task to periodically manage the simple user-interface elements
 ESOS_USER_TASK( __esos_sui_task ){
-  ESOS_SUI_LED_HANDLE     h_LED;
-  ESOS_SUI_SWITCH_HANDLE  h_SW;
-  uint32_t    u32_now;
+  ESOS_SUI_LED_HANDLE     	h_LED;
+  ESOS_SUI_SWITCH_HANDLE  	h_SW;
+  uint32_t    				u32_now;
+  BOOL						b_swState;
   
   ESOS_TASK_BEGIN();
   while(TRUE) {
@@ -647,6 +647,7 @@ ESOS_USER_TASK( __esos_sui_task ){
       // Now, let's process the SWITCHES
       // ***********************************************************
       for (h_SW=0; h_SW<esos_sui_getNumberOfSwitches(); h_SW++) {
+		b_swState = esos_hw_sui_isSwitchPressed(h_SW);   
         // we case use the switch-case statement here because it
         //    will be completely executed in the current context
         // WARNING:   Do not add any ESOS_TASK_WAIT_xxxx statements
@@ -654,7 +655,7 @@ ESOS_USER_TASK( __esos_sui_task ){
         switch( __ast_esosSuiSwitches[h_SW]._u8_state ) {
           case ESOS_SUI_SWSTATE_IDLE: {
             // Waiting for the "button" to be pressed.
-            if(esos_hw_sui_isSwitchPressed(h_SW)) {
+            if(b_swState) {
               __ast_esosSuiSwitches[h_SW]._u8_state = ESOS_SUI_SWSTATE_WAIT_SW_UP;
               __ast_esosSuiSwitches[h_SW]._u32_nextTickTime = u32_now + HOLD_TICK;
             }
@@ -663,17 +664,15 @@ ESOS_USER_TASK( __esos_sui_task ){
           
           // waiting for the button to be released.
           case ESOS_SUI_SWSTATE_WAIT_SW_UP: {
-            if(esos_hw_sui_isSwitchReleased(h_SW) && (__ast_esosSuiSwitches[h_SW]._u32_nextTickTime > u32_now)) {
+            if(!b_swState && (__ast_esosSuiSwitches[h_SW]._u32_nextTickTime > u32_now)) {
               // Detected that button was released (quickly), before our HOLD_TICK duration
-              __ast_esosSuiSwitches[h_SW].u8_lastEvent = ESOS_SUI_SWITCH_EVENT_CLICK;
-              __ast_esosSuiSwitches[h_SW].u32_lastEventTime = u32_now;              
               __ast_esosSuiSwitches[h_SW]._u8_state = ESOS_SUI_SWSTATE_WAIT_CLICK_TIMEOUT;
               __ast_esosSuiSwitches[h_SW]._u32_nextTickTime = u32_now + CLICK_TICK;
               break;
             }
-            if(esos_hw_sui_isSwitchReleased(h_SW) && (__ast_esosSuiSwitches[h_SW]._u32_nextTickTime <= u32_now)) {
+            if(!b_swState && (__ast_esosSuiSwitches[h_SW]._u32_nextTickTime <= u32_now)) {
               // Detected that button was released (slowly), after our HOLD_TICK duration
-              __ast_esosSuiSwitches[h_SW].u8_lastEvent = ESOS_SUI_SWITCH_EVENT_CLICK;
+              __ast_esosSuiSwitches[h_SW].u8_lastEvent = ESOS_SUI_SWITCH_EVENT_HOLD;
               __ast_esosSuiSwitches[h_SW].u32_lastEventTime = u32_now;
               __ast_esosSuiSwitches[h_SW]._u8_state = ESOS_SUI_SWSTATE_IDLE;
               __ast_esosSuiSwitches[h_SW]._u32_nextTickTime = 0;
@@ -684,13 +683,15 @@ ESOS_USER_TASK( __esos_sui_task ){
           
           case ESOS_SUI_SWSTATE_WAIT_CLICK_TIMEOUT: {
             // Waiting for a button to be pressed the second time or timeout.
-            if(esos_hw_sui_isSwitchPressed(h_SW) && (__ast_esosSuiSwitches[h_SW]._u32_nextTickTime > u32_now)) {
+            if(b_swState && (__ast_esosSuiSwitches[h_SW]._u32_nextTickTime > u32_now)) {
               __ast_esosSuiSwitches[h_SW]._u8_state = ESOS_SUI_SWSTATE_WAIT_DCLICK_TIMEOUT;
               __ast_esosSuiSwitches[h_SW]._u32_nextTickTime = u32_now + DOUBLE_CLICK_TICK;
               break;
             }
             if( __ast_esosSuiSwitches[h_SW]._u32_nextTickTime <= u32_now) {
               // Detected a Click event
+              __ast_esosSuiSwitches[h_SW].u8_lastEvent = ESOS_SUI_SWITCH_EVENT_CLICK;
+              __ast_esosSuiSwitches[h_SW].u32_lastEventTime = u32_now;                            
               __ast_esosSuiSwitches[h_SW]._u8_state = ESOS_SUI_SWSTATE_IDLE;
               __ast_esosSuiSwitches[h_SW]._u32_nextTickTime = 0;
               break;
@@ -702,7 +703,7 @@ ESOS_USER_TASK( __esos_sui_task ){
             // If logic Level = HIGH (release Button) => we got double-click
             // If we timeout, leave switch event at CLICK
             // Either way, change state to IDLE
-            if(esos_hw_sui_isSwitchReleased(h_SW) && (__ast_esosSuiSwitches[h_SW]._u32_nextTickTime > u32_now)) {
+            if(!b_swState && (__ast_esosSuiSwitches[h_SW]._u32_nextTickTime > u32_now)) {
               // quick release, so generate a double click event.
               __ast_esosSuiSwitches[h_SW].u8_lastEvent = ESOS_SUI_SWITCH_EVENT_DOUBLE_CLICK;
               __ast_esosSuiSwitches[h_SW].u32_lastEventTime = u32_now;
@@ -757,9 +758,6 @@ void __esos_InitSUI(void) {
     esos_hw_sui_configSwitch( u8_i );
   }
 
-  // use 300 ms as the double-click interval as a default
-  __u32_esosSuiDoubleClickPeriod = 300;
-  
   // finally, register the hidden ESOS SUI task
   esos_RegisterTask( __esos_sui_task );
 }
