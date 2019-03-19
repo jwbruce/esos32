@@ -555,7 +555,15 @@ void __esosInit(void) {
   __esos_InitCommSystem();
 #endif
 
+  
   user_init();
+
+#ifdef ESOS_USE_SUI
+  // must be called **AFTER** user_init() because we expect the user
+  // to "register" their SUI elements before we try to initialize the
+  // devices
+  __esos_InitSUI();
+#endif
 
 } // end osInit()
 
