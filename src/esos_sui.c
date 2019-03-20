@@ -25,6 +25,13 @@
  *
  */
 
+
+/**
+ * \addtogroup ESOS_SIMPLE_USER_INTERFACE_Service
+ * @{
+ */
+
+
 /** \file
  * \brief Hardware indepdendent code for ESOS32's Simple User Interface
  * (LEDs and pushbuttons) service

@@ -25,56 +25,33 @@
  *
  */
 
-
-/**
- * \addtogroup ESOS_WATCHDOG_Service
- * @{
+/** \file
+ *  \brief This file contains macros, prototypes, and definitions for
+ *  a generic hardware implementation for watchdog service on ESOS32
  */
 
+#ifndef _ESOS_hwxxx_WDOG_H
+#define _ESOS_hwxxx_WDOG_H
+
+/* I N C L U D E S **********************************************************/
+#include "esos.h"
+#include "esos_wdog.h"
+#include "esos_hwxxx.h"
+
+/* D E F I N I T I O N S ****************************************************/
+
+/* E X T E R N S ************************************************************/
+
+/* M A C R O S **************************************************************/
+
+/* P U B L I C  P R O T O T Y P E S *****************************************/
+extern void    _esos_hw_wdog_initWatchdog(uint32_t	u32_msBetweenWdogResets );
+extern void  	_esos_hw_wdog_feedWatchdog( void ) ;
 
 // Documentation for this file. If the \file tag isn't present,
 // this file won't be documented.
-/**
-* /** \file
-* \brief Template for creating hardware-specific support for the
-* ESOS32 watchdog service
-*/
 
-/*** I N C L U D E S *************************************************/
-#include "esos_hwxxx_wdog.h"
-
-/*** G L O B A L S *************************************************/
-
-/*** T H E   C O D E *************************************************/
-
-/*********************************************************
- * Public functions intended to be called by other files *
- *********************************************************/
-/**
-* Initialize the hardware watchdog timers
-*
-* \param uint32 with the desired number of milliseconds betweeen
-*  watchdog resets
-*
-* \sa _esos_feed_initWatchdog()
-* \hideinitializer
-*/ 
-void    _esos_hw_wdog_initWatchdog(uint32_t	u32_ticksBetweenWatchdogResets );
-
-}
-
-/**
-* "Feeds" the hardware watchdog
-*
-* \note This function <em>ASSUMES</em> that the hardware watchdog has been
-* configured properly
-*
-* \sa _esos_hw_initWatchdog()
-* \hideinitializer
-*/ 
-void  	_esos_hw_wdog_feedWatchdog( void );
-  // HW code to feed/reset the watchdog timer goes here
-}
+/* ########################################################################### */
 
 
-/** @} */
+#endif // end ESOS_hwxxx_WDOG_H

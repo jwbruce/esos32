@@ -25,6 +25,13 @@
  *
  */
 
+
+/**
+ * \addtogroup ESOS_WATCHDOG_Service
+ * @{
+ */
+
+
 /** \file
  *  This file contains macros, prototypes, and definitions for
  *  relatively hardware-independent interrupts on ESOS
@@ -116,6 +123,6 @@ void _esos_hw_wdog_initWatchdog(uint32_t	u32_msBetweenWatchdogResets );
 void _esos_hw_wdog_feedWatchdog(void);
  
 // ******** G L O B A L S ***************
-volatile uint32_t		__esos_ticksWatchdogLastFed;
+volatile uint32_t		__esos_wdog_ticksWatchdogLastFed;
 
 #endif              // ESOS_WDOG_H
