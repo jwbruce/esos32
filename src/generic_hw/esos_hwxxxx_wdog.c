@@ -52,7 +52,7 @@
 /**
 * Initialize the hardware watchdog timers
 *
-* \param uint32 with the desired number of milliseconds betweeen
+* \param u32_ticksBetweenWatchdogResets desired number of milliseconds betweeen
 *  watchdog resets
 *
 * \sa _esos_wdog_initWatchdog()
@@ -65,7 +65,6 @@ void    _esos_hw_wdog_initWatchdog(uint32_t	u32_ticksBetweenWatchdogResets );
 
 /**
 * "Feeds" the hardware watchdog
-*yg8gpkttiyle@107.180.51.21
 * \note This function <em>ASSUMES</em> that the hardware watchdog has been
 * configured properly
 *
