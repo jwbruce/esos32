@@ -58,8 +58,8 @@
 * when the LED was registered
 *
 * \sa esos_sui_registerLED()
-* \sa esos_hw_sui_TurnLEDLEDOn()
-* \sa esos_hw_sui_TurnLEDLEDOff()
+* \sa esos_hw_sui_TurnLEDOn()
+* \sa esos_hw_sui_TurnLEDOff()
 * \hideinitializer
 */
 void esos_hw_sui_configLED( u8_i ) {
@@ -76,11 +76,11 @@ void esos_hw_sui_configLED( u8_i ) {
 *
 * \sa esos_sui_registerLED()
 * \sa esos_hw_sui_configLED()
-* \sa esos_hw_sui_TurnLEDLEDOff()
+* \sa esos_hw_sui_TurnLEDOff()
 * \hideinitializer
 */
 
-void esos_hw_sui_TurnLEDLEDOn( u8_i )  {
+void esos_hw_sui_TurnLEDOn( u8_i )  {
   // HW code to turn on LED denoted by handle u8_i goes here
 }
 
@@ -94,10 +94,10 @@ void esos_hw_sui_TurnLEDLEDOn( u8_i )  {
 *
 * \sa esos_sui_registerLED()
 * \sa esos_hw_sui_configLED()
-* \sa esos_hw_sui_TurnLEDLEDOn()
+* \sa esos_hw_sui_TurnLEDOn()
 * \hideinitializer
 */
-void esos_hw_sui_TurnLEDLEDOff( u8_i ) {
+void esos_hw_sui_TurnLEDOff( u8_i ) {
   // HW code to turn off LED denoted by handle u8_i goes here
 }
 
