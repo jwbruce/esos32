@@ -27,7 +27,7 @@
 # *************************************************
 # To maintain a consistent style, this batch file runs the `Artistic Style <http://astyle.sourceforge.net/>`_ code formatter on all sources in the library.
 #
-astyle --style=google --indent-switches --indent=spaces=2 --recursive --exclude=Drivers --exclude=build --lineend=linux --suffix=none --formatted --convert-tabs *.c *.h
+astyle --style=google --indent-switches --indent=spaces=2 --recursive --exclude=Drivers --exclude=build --lineend=linux --suffix=none --formatted --convert-tabs *.c,*.h
 #
 # Notes on options (see http://astyle.sourceforge.net/astyle.html for more information):
 #

@@ -25,13 +25,6 @@
  *
  */
 
-
-/**
- * \addtogroup ESOS_SIMPLE_USER_INTERFACE_Service
- * @{
- */
-
-
 /** \file
  * \brief Hardware indepdendent code for ESOS32's Simple User Interface
  * (LEDs and pushbuttons) service
@@ -39,21 +32,14 @@
  */
 
 
+/**
+ * \addtogroup ESOS_Simple_User_Interface_Service
+ * @{
+ */
+
+// INCLUDES
 #include "esos_sui.h"
 #include "esos_stm32l4.h"
-
-//LED time trackers
-volatile uint32_t u32_previousTimeLED1;
-volatile uint32_t u32_previousTimeLED2;
-volatile uint32_t u32_previousTimeLED3;
-
-//Button time trackers
-volatile uint8_t u8_switchStateSW1 = 0;
-volatile uint8_t u8_switchStateSW2 = 0;
-volatile uint8_t u8_switchStateSW3 = 0;
-volatile uint32_t u32_previousTimeSW1;
-volatile uint32_t u32_previousTimeSW2;
-volatile uint32_t u32_previousTimeSW3;
 
 // PRIVATE ESOS SUI SERVICE VARIABLES
 volatile uint8_t    __u8_esosSuiNumLEDs = 0;
@@ -65,7 +51,7 @@ volatile _st_esos_sui_LED       __ast_esosSuiLEDs[ ESOS_SUI_NUM_MAX_LEDS];
 /**
 * Returns the number of switches being managed by ESOS SUI service
 *
-* \retval the number of switches currently registered in the ESOS
+* \retval uint8_t  number of switches currently registered in the ESOS
 * SUI service
 * 
 * \sa esos_sui_registerSwitch()
@@ -79,7 +65,7 @@ inline uint8_t esos_sui_getNumberOfSwitches(void){
 /**
 * Returns the number of LEDs being managed by ESOS SUI service
 *
-* \retval the number of LEDs currently registered in the ESOS
+* \retval uint8_t  number of LEDs currently registered in the ESOS
 * SUI service
 * 
 * \sa esos_sui_registerLED()
@@ -93,9 +79,9 @@ inline uint8_t esos_sui_getNumberOfLEDs(void){
 // PUBLIC SWITCH QUERIES (also GETTERs and SETTERs) ******************
 /**
 * Returns the state of the swtich
-* \param "switch handle" to switch that was returned to user 	
+* \param h_sw  a "switch handle" to switch that was returned to user 	
 * when the switch was registered
-* \retval TRUE if switch is pressed, FALSE otherwise
+* \retval BOOL TRUE if switch is pressed, FALSE otherwise
 * 
 * \sa esos_sui_registerSwitch()
 * \sa esos_hw_sui_isSwitchPressed()
@@ -108,9 +94,9 @@ inline BOOL esos_sui_isSWPressed (ESOS_SUI_SWITCH_HANDLE   h_sw) {
 
 /**
 * Returns the state of the swtich
-* \param "switch handle" to switch that was returned to user
+* \param h_sw  "switch handle" to switch that was returned to user
 * when the switch was registered
-* \retval TRUE if switch is released, FALSE otherwise
+* \retval BOOL  TRUE if switch is released, FALSE otherwise
 * 
 * \sa esos_sui_registerSwitch()
 * \sa esos_hw_sui_isSwitchPressed()
@@ -123,9 +109,9 @@ inline BOOL esos_sui_isSWReleased (ESOS_SUI_SWITCH_HANDLE   h_sw) {
 
 /**
 * Returns the state of the swtich
-* \param "switch handle" to switch that was returned to user
+* \param h_sw  "switch handle" to switch that was returned to user
 * when the switch was registered
-* \retval TRUE if switch is double-pressed, FALSE otherwise
+* \retval BOOL TRUE if switch is double-pressed, FALSE otherwise
 * 
 * \sa esos_sui_registerSwitch()
 * \sa esos_hw_sui_isSwitchPressed()
@@ -139,9 +125,10 @@ inline BOOL esos_sui_isSWDoublePressed (ESOS_SUI_SWITCH_HANDLE   h_sw) {
 /**
 * Returns the most recent event (as opposed to the current state) 
 * of a given switch
-* \param "switch handle" to switch that was returned to user
+* \param h_sw "switch handle" to switch that was returned to user
 * when the switch was registered
-* \retval ESOS_SUI_SWITCH_STATE
+* \retval ESOS_SUI_SWITCH_STATE   the most recent switch event to occur
+* based on h_sw actions
 * 
 * \note this call will "clear" the switch state event to ESOS_SUI_SWITCH_EVENT_NULL
 * 
@@ -159,9 +146,9 @@ inline uint8_t esos_sui_getSwitchLastEvent (ESOS_SUI_SWITCH_HANDLE   h_sw) {
 /**
 * Returns the system tick value that corresponds to the most recent event
 * (as opposed to the current state)  of a given switch
-* \param "switch handle" to switch that was returned to user
+* \param h_sw "switch handle" to switch that was returned to user
 * when the switch was registered
-* \retval system tick value when the last event occured
+* \retval uint32_t system tick value when the last event occured
 * 
 * \note The value returned by this function is meaningless if the
 * last event of the switch was ESOS_SUI_SWITCH_EVENT_NULL
@@ -177,9 +164,9 @@ inline uint32_t esos_sui_getSwitchLastEventTime (ESOS_SUI_SWITCH_HANDLE   h_sw) 
 
 /**
 * Returns the first user data word associated with this switch
-* \param "switch handle" to switch that was returned to user
+* \param h_sw "switch handle" to switch that was returned to user
 * when the switch was registered
-* \retval uint32 user data word #1
+* \retval uint32 the value of user data word #1
 * 
 * \note The user data value is set by the user when the switch is
 * registerd in user_init().  User data can not be modified after the
@@ -194,9 +181,9 @@ inline uint32_t esos_sui_getSwitchUserData1 (ESOS_SUI_SWITCH_HANDLE   h_sw) {
 
 /**
 * Returns the second user data word associated with this switch
-* \param "switch handle" to switch that was returned to user
+* \param h_sw "switch handle" to switch that was returned to user
 * when the switch was registered
-* \retval uint32 user data word #2
+* \retval uint32 the value of user data word #2
 * 
 * \note The user data value is set by the user when the switch is
 * registerd in user_init().  User data can not be modified after the
@@ -214,9 +201,9 @@ inline uint32_t esos_sui_getSwitchUserData2 (ESOS_SUI_SWITCH_HANDLE   h_sw) {
 //LED QUERIES (also GETTERs and SETTERs)  ***************************
 /**
 * Returns the current state of the associated LED
-* \param "LED handle" to switch that was returned to user
+* \param h_led "LED handle" to switch that was returned to user
 * when the LED was registered
-* \retval Boolean TRUE if LED is ON, FALSE otherwise
+* \retval BOOL TRUE if LED is ON, FALSE otherwise
 * 
 * \sa esos_sui_registerLED()
 * \sa esos_sui_turnLEDOn()
@@ -229,9 +216,9 @@ inline BOOL esos_sui_isLEDOn (ESOS_SUI_LED_HANDLE   h_led) {
 
 /**
 * Returns the current state of the associated LED
-* \param "LED handle" to switch that was returned to user
+* \param h_led "LED handle" to switch that was returned to user
 * when the LED was registered
-* \retval Boolean TRUE if LED is OFF, FALSE otherwise
+* \retval BOOL TRUE if LED is OFF, FALSE otherwise
 * 
 * 
 * \sa esos_sui_registerLED()
@@ -245,9 +232,9 @@ inline BOOL esos_sui_isLEDOff (ESOS_SUI_LED_HANDLE   h_led) {
 
 /**
 * Returns whether the associated LED is "flashing"
-* \param "LED handle" to switch that was returned to user
+* \param h_led "LED handle" to switch that was returned to user
 * when the LED was registered
-* \retval Boolean TRUE if LED is currently flashing, FALSE otherwise
+* \retval BOOL TRUE if LED is currently flashing, FALSE otherwise
 *  
 * \sa esos_sui_registerLED()
 * \sa esos_sui_turnLEDOn()
@@ -265,9 +252,9 @@ inline BOOL esos_sui_isLEDFlashing (ESOS_SUI_LED_HANDLE   h_led) {
 
 /**
 * Returns whether the associated LED is in a one-shot state
-* \param "LED handle" to switch that was returned to user
+* \param h_led "LED handle" to switch that was returned to user
 * when the LED was registered
-* \retval Boolean TRUE if LED is currently flashing, FALSE otherwise
+* \retval BOOL TRUE if LED is currently flashing, FALSE otherwise
 *  
 * \sa esos_sui_registerLED()
 * \sa esos_sui_turnLEDOn()
@@ -286,9 +273,9 @@ inline BOOL esos_sui_isLEDOneShot (ESOS_SUI_LED_HANDLE   h_led) {
 /**
 * Returns the LED flashing period (in ticks)  as uint16
 * associated with a given LED
-* \param "LED handle" to switch that was returned to user
+* \param h_led "LED handle" to switch that was returned to user
 * when the LED was registered
-* \retval number of ticks that is flashing period
+* \retval uint16_t  number of ticks = h_LED's flashing period
 * 
 * \note a return value of 0 denotes that the LED is not flashing but
 * constantly ON or OFF
@@ -306,9 +293,9 @@ inline uint16_t esos_sui_getLEDFlashPeriod (ESOS_SUI_LED_HANDLE   h_led) {
 /**
 * Returns the system tick value that corresponds to the most recent event
 * associated with a given LED
-* \param "LED handle" to switch that was returned to user
+* \param h_LED "LED handle" to switch that was returned to user
 * when the LED was registered
-* \retval system tick value when the last event occured
+* \retval uint32_t  system tick value when the last LED event occured
 * 
 * \sa esos_sui_registerLED()
 * \hideinitializer
@@ -317,12 +304,11 @@ inline uint32_t esos_sui_getLEDLastEventTime (ESOS_SUI_LED_HANDLE   h_led) {
     return (__ast_esosSuiLEDs[h_led].u32_lastEventTime);
 }
 
-
 /**
 * Returns the first user data word associated with this LED
-* \param "LED handle" to switch that was returned to user
+* \param h_led "LED handle" to switch that was returned to user
 * when the LED was registered
-* \retval uint32 user data word #1
+* \retval uint32 the LED's user data word #1
 * 
 * \note The user data value is set by the user when the LED is
 * registerd in user_init().  User data can not be modified after the
@@ -337,9 +323,9 @@ inline uint32_t esos_sui_getLEDUserData1 (ESOS_SUI_LED_HANDLE   h_led) {
 
 /**
 * Returns the second user data word associated with this LED
-* \param "LED handle" to switch that was returned to user
+* \param h_led "LED handle" to switch that was returned to user
 * when the LED was registered
-* \retval uint32 user data word #2
+* \retval uint32 the LED's user data word #2
 * 
 * \note The user data value is set by the user when the LED is
 * registerd in user_init().  User data can not be modified after the
@@ -357,7 +343,7 @@ inline uint32_t esos_sui_getLEDUserData2 (ESOS_SUI_LED_HANDLE   h_led) {
 //LED ACTUATION *****************************
 /**
 * called by user application to turn a given LED on
-* \param "LED handle" to switch that was returned to user
+* \param h_led "LED handle" to switch that was returned to user
 * when the LED was registered
 * 
 * \sa esos_sui_registerLED()
@@ -373,7 +359,7 @@ inline void esos_sui_turnLEDOn (ESOS_SUI_LED_HANDLE   h_led) {
 
 /**
 * called by user application to turn a given LED off
-* \param "LED handle" to switch that was returned to user
+* \param h_led "LED handle" to switch that was returned to user
 * when the LED was registered
 * 
 * \sa esos_sui_registerLED()
@@ -390,7 +376,7 @@ inline void esos_sui_turnLEDOff (ESOS_SUI_LED_HANDLE   h_led) {
 /**
 * called by user application to toggle a given LED
   ESOS_TASK_BEGIN();
-* \param "LED handle" to switch that was returned to user
+* \param h_led "LED handle" to switch that was returned to user
 * when the LED was registered
 * 
 * \sa esos_sui_registerLED()
@@ -407,9 +393,9 @@ inline void esos_sui_toggleLED (ESOS_SUI_LED_HANDLE   h_led) {
 /**
 * called by user application to start a one-shot flash (illuminate)
 * the given LED for the next u16_period ticks
-* \param "LED handle" to switch that was returned to user
+* \param h_led "LED handle" to switch that was returned to user
 * when the LED was registered
-* \param uint16 values (in ticks) that represents how long the
+* \param u16_period value (in ticks) that represents how long the
 * single illumination of the LED
 * \note if u16_period is zero, the LED will not illuminate
 * \note to cancel a ONE-SHOT in progress, set the LED's "flash period
@@ -432,9 +418,9 @@ inline void esos_sui_oneshotLED (ESOS_SUI_LED_HANDLE   h_led, uint16_t u16_perio
 /**
 * called by user application to flash/toggle a given LED
 * every u16_period ticks
-* \param "LED handle" to switch that was returned to user
+* \param h_led "LED handle" to switch that was returned to user
 * when the LED was registered
-* \param uint16 values (in ticks) that represents the flash
+* \param u16_period  uint16 value (in ticks) that represents the flash
 * period of the LED
 * \note if u16_period is zero, the LED will not flash
 * \sa esos_sui_registerLED()
@@ -453,10 +439,8 @@ inline void esos_sui_flashLED (ESOS_SUI_LED_HANDLE   h_led, uint16_t u16_period)
 
 /**
 * called by user application to toggle a given LED
-* \param "LED handle" to switch that was returned to user
+* \param h_led "LED handle" to switch that was returned to user
 * when the LED was registered
-* \param uint16 values (in ticks) that represents the flash
-* period of the LED
 * \sa esos_sui_registerLED()
 * \sa esos_sui_toggleLED()
 * \sa esos_sui_turnLEDOn()
@@ -475,9 +459,9 @@ inline void esos_sui_stopFlashLED (ESOS_SUI_LED_HANDLE   h_led) {
 * called by user application code to "register" a new
 * LED with the ESOS SUI service
 *
-* \param uint32 for user data 1
-* \param uint32 for user data 2
-* \retval uint8 "handle" that can be used to reference the LED
+* \param u32_d1 uint32 for user data 1
+* \param u32_d2 uint32 for user data 2
+* \retval ESOS_SUI_LED_HANDLE that can be used to reference the LED
 * with ESOS SUI service going foward
 * 
 * \note This routine must be called in user_init()
@@ -515,9 +499,9 @@ ESOS_SUI_LED_HANDLE esos_sui_registerLED(uint32_t u32_d1, uint32_t u32_d2) {
 * called by user application code to "register" a new
 * switch with the ESOS SUI service
 *
-* \param uint32 for user data 1
-* \param uint32 for user data 2
-* \retval uint8 "handle" that can be used to reference the switch
+* \param u32_d1 uint32 for user data 1
+* \param u32_d2 uint32 for user data 2
+* \retval ESOS_SUI_SWITCH_HANDLE that can be used to reference the switch
 * with ESOS SUI service going foward
 * 
 * \note This routine must be called in user_init()
@@ -733,7 +717,7 @@ ESOS_USER_TASK( __esos_sui_task ){
     ESOS_TASK_WAIT_TICKS( __ESOS_SUI_TASK_PERIOD );
   } // end while(TRUE)
   ESOS_TASK_END();
-} // end __esos_sui_task TASK
+} // end __esos_sui_task() TASK
 
 
 /**

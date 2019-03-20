@@ -27,7 +27,7 @@
 
 
 /**
- * \addtogroup ESOS_SimpleUserInterface_Service
+ * \addtogroup ESOS_Simple_User_Interface_Service
  * @{
  */
 
