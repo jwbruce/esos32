@@ -25,16 +25,14 @@
  *
  */
 
-
-/**
- * \addtogroup ESOS_WATCHDOG_Service
- * @{
- */
-
-
 /** \file
  *  This file contains macros, prototypes, and definitions for
  *  relatively hardware-independent interrupts on ESOS
+ */
+
+/**
+ * \addtogroup ESOS_Watchdog_Service
+ * @{
  */
 
 

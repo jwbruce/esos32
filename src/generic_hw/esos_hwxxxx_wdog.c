@@ -25,13 +25,6 @@
  *
  */
 
-
-/**
- * \addtogroup ESOS_WATCHDOG_Service
- * @{
- */
-
-
 // Documentation for this file. If the \file tag isn't present,
 // this file won't be documented.
 /**
@@ -39,6 +32,12 @@
 * \brief Template for creating hardware-specific support for the
 * ESOS32 watchdog service
 */
+
+/**
+ * \addtogroup ESOS_Watchdog_Service
+ * @{
+ */
+
 
 /*** I N C L U D E S *************************************************/
 #include "esos_hwxxx_wdog.h"

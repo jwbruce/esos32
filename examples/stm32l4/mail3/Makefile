@@ -31,7 +31,7 @@ HAL_DIR = /home/jwbruce/STM32Tools/STM32Cube/Repository/STM32Cube_FW_L4_V1.13.0/
 ######################################
 # C sources
 C_SOURCES =  \
-src/swtimer_app.c \
+src/mail3_app.c \
 $(HAL_DIR)/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.c \
 $(HAL_DIR)/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c \
 $(HAL_DIR)/Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rng.c \

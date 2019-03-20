@@ -25,18 +25,15 @@
  *
  */
 
-
-/**
- * \addtogroup ESOS_WATCHDOG_Service
- * @{
+/** \file
+ * \brief Hardware independent code for ESOS32 to support hardware
+ * watchdog timers
+ *
  */
 
-
-
-/** \file
- * \brief Hardware independent code for ESOS32 hardware watchdog
- * timer support
- *
+/**
+ * \addtogroup ESOS_Watchdog_Service
+ * @{
  */
 
 
