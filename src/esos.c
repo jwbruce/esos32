@@ -565,6 +565,14 @@ void __esosInit(void) {
   __esos_InitSUI();
 #endif
 
+
+#ifdef ESOS_USE_WATCHDOG
+  // must be called at the very end so that watchdog doesnt reset
+  // us before the user gets around to feeding the watchdog
+  // We will use a 1000 ms = 1 second watchdog period for now....
+  _esos_wdog_initWatchdog( 1000 );
+#endif
+
 } // end osInit()
 
 main_t main(void) {

@@ -34,13 +34,17 @@
 #ifndef ESOS_WDOG_H
 #define ESOS_WDOG_H
 
+
+#include "esos.h"
+
+
 /* ******************************************************************
  * 
  * Prototypes for all the hardware-independent routines herein
  * 
  * *****************************************************************/
-void    _esos_initWatchdog(uint32_t	u32_ticksBetweenWatchdogResets );
-void  	_esos_feedWatchdog( void );
+void    _esos_wdog_initWatchdog(uint32_t	u32_ticksBetweenWatchdogResets );
+void  	esos_wdog_feedWatchdog( void );
 
 /**
 * Get the ESOS systems ticks value of when the watchdog was last fed (reset)
@@ -48,12 +52,12 @@ void  	_esos_feedWatchdog( void );
 * \retval The uint32_t value ESOS system ticks value of when the
 * watchdog was last "fed" (reset)
 *
-* \sa esos_feedWatchdog()
-* \sa esos_getTicksSinceWatchdogFed() 
+* \sa esos_wdog_feedWatchdog()
+* \sa esos_wdog_getTicksSinceWatchdogFed() 
 * \sa ESOS_USES_WATCHDOG
 * \hideinitializer
 */
-inline uint32_t esos_getWatchdogFedTicks(void);
+uint32_t esos_wdog_getWatchdogFedTicks(void);
 
 /**
 * Get the number of system ticks since the watchdog was last fed (reset)
@@ -61,12 +65,12 @@ inline uint32_t esos_getWatchdogFedTicks(void);
 * \retval The uint32_t value of the number of ESOS system ticks value
 * since the watchdog was last "fed" (reset)
 *
-* \sa esos_feedWatchdog()
-* \sa esos_getWatchdogFedTicks()
+* \sa esos_wdog_feedWatchdog()
+* \sa esos_wdog_getWatchdogFedTicks()
 * \sa ESOS_USES_WATCHDOG
 * \hideinitializer
 */
-inline uint32_t esos_getTicksSinceWatchdogFed(void);
+uint32_t esos_wdog_getTicksSinceWatchdogFed(void);
 
 /**
 * Get the number of system ticks until next watchdog reset
@@ -78,22 +82,38 @@ inline uint32_t esos_getTicksSinceWatchdogFed(void);
 * of execution times through the ESOS scheduler loop and watchdog
 * watchdog hardware is often driven by a less-than-accurate timer.
 * 
-* \sa esos_feedWatchdog()
-* \sa esos_getWatchdogFedTicks()
+* \sa esos_wdog_feedWatchdog()
+* \sa esos_wdog_getWatchdogFedTicks()
 * \sa ESOS_USES_WATCHDOG
 * \hideinitializer
 */
-inline uint32_t esos_getTicksUntilWatchdogReset(void);
+uint32_t esos_wdog_getTicksUntilWatchdogReset(void);
 
-
+/**
+* Get the programmed watchdog period in ESOS system ticks
+*
+* \retval The uint32_t value of the number of ESOS system ticks that
+* is the full watchdog timeout period
+*
+* \note	ESOS user applications should strive to maximize time between
+* watchdog "feedings", but do not push all the way to the limit in
+* case some user tasks is slow to wait/yield control to the scheduler,
+* or the user app has many tasks.
+* 
+* \sa esos_wdog_feedWatchdog()
+* \sa esos_wdog_getWatchdogFedTicks()
+* \sa ESOS_USES_WATCHDOG
+* \hideinitializer
+*/
+uint32_t esos_wdog_getTicksWatchdogPeriod(void);
 
 /* ******************************************************************
  * 
  * Prototypes for all the hardware specific routines we expect
  * 
  * *****************************************************************/
-void esos_initWatchdog(uint32_t	u32_msBetweenWatchdogResets );
-void _esos_hw_feedWatchdog(void);
+void _esos_hw_wdog_initWatchdog(uint32_t	u32_msBetweenWatchdogResets );
+void _esos_hw_wdog_feedWatchdog(void);
  
 // ******** G L O B A L S ***************
 volatile uint32_t		__esos_ticksWatchdogLastFed;

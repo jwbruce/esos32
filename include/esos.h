@@ -89,7 +89,6 @@
 #include    "esos_sui.h"
 #endif      //ESOS_USE_SUI
 
-
 #ifdef  ESOS_RUNS_ON_REAL_OS
 // computers running a host OS (windoze/Linux/etc) expect
 //      their applications to return and return a value
@@ -377,11 +376,11 @@ void 		__esos_hw_set_PRNG_Seed(uint32_t u32_seed);
 
 
 #define		__MILLISECONDS_PER_TICK				1
-#define		MILLISECONDS						*__MILLISECONDS_PER_TICK
-#define		SECONDS								*MILLISECONDS*1000
-#define		MINUTES								*SECONDS*60
-#define		HOURS								*MINUTES*60
-#define		DAYS								*HOURS*24
+#define		MILLISECONDS						__MILLISECONDS_PER_TICK
+#define		SECONDS								MILLISECONDS*1000
+#define		MINUTES								SECONDS*60
+#define		HOURS								MINUTES*60
+#define		DAYS								HOURS*24
 /**
  * Get the current value of the ESOS system tick counter
  * In the current implementation of ESOS, a tick equal 1.0ms.
