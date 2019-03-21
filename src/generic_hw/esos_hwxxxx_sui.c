@@ -54,15 +54,15 @@
 * ESOS callback to user to perform hardware initialization for
 * connected LEDs
 *
-* \param uint8 LED handle to switch that was returned to user
+* \param h_LED ESOS_SUI_LED_HANDLE to switch that was returned to user
 * when the LED was registered
 *
 * \sa esos_sui_registerLED()
-* \sa esos_hw_sui_TurnLEDOn()
-* \sa esos_hw_sui_TurnLEDOff()
+* \sa esos_hw_sui_turnLEDOn()
+* \sa esos_hw_sui_turnLEDOff()
 * \hideinitializer
 */
-void esos_hw_sui_configLED( u8_i ) {
+void esos_hw_sui_configLED( ESOS_SUI_LED_HANDLE h_led )  {
 	// HW Code goes here
 }
 
@@ -71,16 +71,16 @@ void esos_hw_sui_configLED( u8_i ) {
 * ESOS callback to user to do whatever hardware gymnastics is required
 * to turn "ON" a connected LED
 *
-* \param uint8 LED handle to switch that was returned to user
+* \param h_LED ESOS_SUI_LED_HANDLE to switch that was returned to user
 * when the LED was registered
 *
 * \sa esos_sui_registerLED()
 * \sa esos_hw_sui_configLED()
-* \sa esos_hw_sui_TurnLEDOff()
+* \sa esos_hw_sui_turnLEDOff()
 * \hideinitializer
 */
 
-void esos_hw_sui_TurnLEDOn( u8_i )  {
+void esos_hw_sui_turnLEDOn( ESOS_SUI_LED_HANDLE h_led ) {
   // HW code to turn on LED denoted by handle u8_i goes here
 }
 
@@ -89,15 +89,15 @@ void esos_hw_sui_TurnLEDOn( u8_i )  {
 * ESOS callback to user to do whatever hardware gymnastics is required
 * to turn "OFF" a connected LED
 *
-* \param uint8 LED handle to switch that was returned to user
+* \param h_led ESOS_SUI_LED_HANDLE to switch that was returned to user
 * when the LED was registered
 *
 * \sa esos_sui_registerLED()
 * \sa esos_hw_sui_configLED()
-* \sa esos_hw_sui_TurnLEDOn()
+* \sa esos_hw_sui_turnLEDOn()
 * \hideinitializer
 */
-void esos_hw_sui_TurnLEDOff( u8_i ) {
+void esos_hw_sui_turnLEDOff( ESOS_SUI_LED_HANDLE h_led ) {
   // HW code to turn off LED denoted by handle u8_i goes here
 }
 
@@ -105,7 +105,7 @@ void esos_hw_sui_TurnLEDOff( u8_i ) {
 * ESOS callback to user to perform hardware initialization for
 * switches
 *
-* \param uint8 switch handle to switch that was returned to user
+* \param h_sw ESOS_SUI_SWITCH_HANDLE to switch that was returned to user
 * when the switch was registered
 *
 * \sa esos_sui_registerSwitch()
@@ -113,14 +113,14 @@ void esos_hw_sui_TurnLEDOff( u8_i ) {
 * \sa esos_hw_sui_isSwitchReleased()
 * \hideinitializer
 */ 
-void esos_hw_sui_configSwitch( u8_i ) {
+void esos_hw_sui_configSwitch( ESOS_SUI_SWITCH_HANDLE h_sw ) {
 	// HW code goes here
 }
 
 /**
 * ESOS callback to user to answer whether switch is pressed
 *
-* \param uint8 switch handle to switch that was returned to user
+* \param h_sw ESOS_SUI_SWITCH_HANDLE to switch that was returned to user
 * when the switch was registered
 * \retval TRUE if switch is pressed, FALSE if it is not pressed
 *
@@ -129,14 +129,14 @@ void esos_hw_sui_configSwitch( u8_i ) {
 * \sa esos_hw_sui_isSwitchReleased()
 * \hideinitializer
 */
-BOOL esos_hw_sui_isSwitchPressed(u8_i) {
+BOOL esos_hw_sui_isSwitchPressed(ESOS_SUI_SWITCH_HANDLE h_sw) {
 	// HW code goes here
 }
 
 /**
 * ESOS callback to user to answer whether switch is pressed
 *
-* \param uint8 switch handle to switch that was returned to user
+* \param h_sw ESOS_SUI_SWITCH_HANDLE to switch that was returned to user
 * when the switch was registered
 * \retval TRUE if switch is released (not pressed), FALSE if it is pressed
 *
@@ -145,7 +145,7 @@ BOOL esos_hw_sui_isSwitchPressed(u8_i) {
 * \sa esos_hw_sui_isSwitchReleased()
 * \hideinitializer
 */
-BOOL esos_hw_sui_isSwitchReleased(u8_i) {
+BOOL esos_hw_sui_isSwitchReleased(ESOS_SUI_SWITCH_HANDLE h_sw){
 	// HW code goes here
 }
 
