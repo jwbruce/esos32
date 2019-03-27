@@ -30,6 +30,14 @@
  * @{
  */
  
+ 
+/** \file
+*  This file contains function code for the
+*  simple (write-only) LCD services for ESOS tasks.
+*
+*/
+
+ 
 #include <esos.h>
 #include "esos_lcd44780wo.h"
 
@@ -156,11 +164,12 @@ ESOS_USER_TASK( __esos_lcd44780_service )
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(  ESOS_LCD44780_CMD_DISPLAY_ON_OFF + \
 											ESOS_LCD44780_CMD_DISPLAY_ON_OFF_DISPLAYON );
 
-	
-	//ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(  ESOS_LCD44780_CMD_DISPLAY_ON_OFF + \
-    //                                        ESOS_LCD44780_CMD_DISPLAY_ON_OFF_DISPLAYON + \
-    //                                        ESOS_LCD44780_CMD_DISPLAY_ON_OFF_CURSORON + \
-    //                                        ESOS_LCD44780_CMD_DISPLAY_ON_OFF_BLINKCURSOR);
+	/*
+	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(  ESOS_LCD44780_CMD_DISPLAY_ON_OFF + \
+                                            ESOS_LCD44780_CMD_DISPLAY_ON_OFF_DISPLAYON + \
+                                            ESOS_LCD44780_CMD_DISPLAY_ON_OFF_CURSORON + \
+                                            ESOS_LCD44780_CMD_DISPLAY_ON_OFF_BLINKCURSOR);
+    */
 	
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(  ESOS_LCD44780_CMD_ENTRY_MODE_SET |
                                             ESOS_LCD44780_CMD_ENTRY_MODE_SET_INC);
