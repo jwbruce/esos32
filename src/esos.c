@@ -555,6 +555,11 @@ void __esosInit(void) {
   __esos_InitCommSystem();
 #endif
 
+#ifdef ESOS_USE_LCD
+  // Initialize LCD services
+  __esos_lcd44780_init();
+#endif
+
   
   user_init();
 
@@ -564,7 +569,6 @@ void __esosInit(void) {
   // devices
   __esos_InitSUI();
 #endif
-
 
 #ifdef ESOS_USE_WATCHDOG
   // must be called at the very end so that watchdog doesnt reset

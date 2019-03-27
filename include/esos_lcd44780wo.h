@@ -69,13 +69,11 @@
 #define ESOS_TASK_WAIT_ON_LCD44780_REFRESH()		ESOS_TASK_WAIT_UNTIL(esos_lcd44780_isCurrent())
 
 #define ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(u8_cmd) do { \
-  ESOS_ALLOCATE_CHILD_TASK(th_lcd44780_child); \
-  ESOS_TASK_SPAWN_AND_WAIT( th_lcd44780_child, __esos_lcd44780_hw_write_u8, u8_cmd, LCD44780_COMMANDS, TRUE ); \
+    ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE) &__stLCDChildTask, __esos_lcd44780_hw_write_u8, u8_cmd, LCD44780_COMMANDS ); \
 } while(0)
 
 #define ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(u8_cmd) do { \
-  ESOS_ALLOCATE_CHILD_TASK(th_lcd44780_child); \
-  ESOS_TASK_SPAWN_AND_WAIT( th_lcd44780_child, __esos_lcd44780_hw_write_u8, u8_cmd, LCD44780_COMMANDS, TRUE ); \
+    ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE) &__stLCDChildTask, __esos_lcd44780_hw_write_u8, u8_cmd, LCD44780_COMMANDS ); \
 } while(0)
 
 #define ESOS_TASK_WAIT_LCD44780_SET_CG_ADDRESS(u8_addr) \
@@ -85,8 +83,7 @@
     ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND( u8_addr | ESOS_LCD44780_CMD_SET_DDRAM_ADDR )
 
 #define ESOS_TASK_WAIT_LCD44780_WRITE_DATA(u8_data) do { \
-  ESOS_ALLOCATE_CHILD_TASK(th_lcd44780_child); \
-  ESOS_TASK_SPAWN_AND_WAIT( th_lcd44780_child, __esos_lcd44780_hw_write_u8, u8_data, LCD44780_DATA ); \
+    ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE) &__stLCDChildTask, __esos_lcd44780_hw_write_u8, u8_data, LCD44780_DATA ); \
 } while(0)
 
 
@@ -95,13 +92,9 @@ typedef struct {
   uint8_t au8_data[8];
 } esos_lcd44780_char_t;
 
-// allocate space for the child task used by the LCD character module
-//  service.  Only one child should ever be active at a time.
-static ESOS_TASK_HANDLE th_lcd44780_child;
-
 /* P U B L I C  P R O T O T Y P E S *****************************************/
 void esos_lcd44780_configDisplay( void );
-void esos_lcd44780_init( void );
+void __esos_lcd44780_init( void );
 void esos_lcd44780_clearScreen( void );
 void esos_lcd44780_setCursorHome( void );
 void esos_lcd44780_setCursor( uint8_t u8_row, uint8_t u8_column );
@@ -121,6 +114,13 @@ void esos_lcd44780_getCustomChar( uint8_t u8_charSlot, uint8_t *pu8_charData );
 BOOL esos_lcd44780_isCurrent( void );
 
 ESOS_USER_TASK( __esos_lcd44780_service );
-ESOS_CHILD_TASK(__esos_lcd44780_hw_write_u8, uint8_t u8_data, BOOL b_isData);
+
+/* P R O T O T Y P E S  HARDWARE-SPECIFIC ********************************/
+extern ESOS_CHILD_TASK( __esos_lcd44780_hw_write_u8, uint8_t u8_data, BOOL b_isData);
+extern void __esos_lcd44780_hw_config(void);
+
+#ifdef ESOS_USE_LCD_4BIT
+extern void __esos_unsafe_lcd44780_hw_write_u4(uint8_t	u8_u4data, BOOL b_isEnable, BOOL b_isData);
+#endif
 
 #endif  // ESOS_LCDWO_H

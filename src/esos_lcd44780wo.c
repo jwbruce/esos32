@@ -30,9 +30,11 @@
  * @{
  */
  
-#include "esos_lcd44780wo.h"
 #include <esos.h>
-#include <stdlib.h>
+#include "esos_lcd44780wo.h"
+
+// ******** G L O B A L S ***************
+volatile struct    stTask   __stLCDChildTask;
 
 // Main data structure for updating lcd44780
 struct {
@@ -63,39 +65,53 @@ ESOS_USER_TASK( __esos_lcd44780_service )
 	// Also manages the LCD character module got ESOS
 	// The LCD service hidden task will need to maintain a buffer containing the LCD character display
 	ESOS_TASK_BEGIN();
-    ESOS_TASK_WAIT_TICKS(100);			// Wait >15 msec after power is applied
+    ESOS_TASK_WAIT_TICKS(500);			// Wait > 40 msec after power is applied
     
-    #ifdef ESOS_USE_LCD_8BIT
+#ifdef ESOS_USE_LCD_8BIT
 	// TODO: remove the magic numbers in this section
-	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(ESOS_LCD44780_CMD_FUNCTION_SET+ESOS_LCD44780_CMD_CUR_DISP_SHIFT);			\\ 0x30
+	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(ESOS_LCD44780_CMD_FUNCTION_SET+ESOS_LCD44780_CMD_CUR_DISP_SHIFT);			// 0x30
 	ESOS_TASK_WAIT_TICKS(10);			// must wait 5ms, busy flag not available
-	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(ESOS_LCD44780_CMD_FUNCTION_SET+ESOS_LCD44780_CMD_CUR_DISP_SHIFT);			\\ 0x30
+	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(ESOS_LCD44780_CMD_FUNCTION_SET+ESOS_LCD44780_CMD_CUR_DISP_SHIFT);			// 0x30
 	ESOS_TASK_WAIT_TICKS(1);			// must wait 160us, busy flag not available
-	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(ESOS_LCD44780_CMD_FUNCTION_SET+ESOS_LCD44780_CMD_CUR_DISP_SHIFT);			\\ 0x30
+	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND_NOWAIT(ESOS_LCD44780_CMD_FUNCTION_SET+ESOS_LCD44780_CMD_CUR_DISP_SHIFT);			// 0x30
 	ESOS_TASK_WAIT_TICKS(1);			// must wait 160us, busy flag not available
-	#endif
+	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(ESOS_LCD44780_CMD_FUNCTION_SET+ESOS_LCD44780_CMD_DISPLAY_ON_OFF+ESOS_LCD44780_CMD_CUR_DISP_SHIFT);		// 0x38	
+#endif
 
-    #ifdef ESOS_USE_LCD_4BIT
+#ifdef ESOS_USE_LCD_4BIT
 	// TODO: remove the magic numbers in this section
 	// see p.45 figure 23 in hitachi HD44780 datasheet
-	__esos_unsafe_lcd44780_hw_write_u4( 0x03, FALSE) ;		// write a command nibble 0x03
+	__esos_unsafe_lcd44780_hw_write_u4( 0x30, FALSE, FALSE) ;	// write a command (RS=0) nibble 0x30 with E low
 	ESOS_TASK_WAIT_TICKS(5);			// must wait 5ms, busy flag not available
-	__esos_unsafe_lcd44780_hw_write_u4( 0x03, FALSE) ;		// write a command nibble 0x03
+	// Now "clock" in command 0x30
+	__esos_unsafe_lcd44780_hw_write_u4( 0x30, TRUE, FALSE) ;	// write a command (RS=0) nibble 0x30 with E HIGH
+	__esos_unsafe_lcd44780_hw_write_u4( 0x30, FALSE, FALSE) ;	// write a command (RS=0) nibble 0x30 with E LOW
 	ESOS_TASK_WAIT_TICKS(5);			// must wait 5ms, busy flag not available
-	__esos_unsafe_lcd44780_hw_write_u4( 0x03, FALSE) ;		// write a command nibble 0x03
-	ESOS_TASK_WAIT_TICKS(1);			// must wait 160us, busy flag not available
-	__esos_unsafe_lcd44780_hw_write_u4( 0x03, FALSE) ;		// write a command nibble 0x02
-	ESOS_TASK_WAIT_TICKS(1);			// must wait 160us, busy flag not available
-	#endif
+	// Now "clock" in command 0x30 a second time
+	__esos_unsafe_lcd44780_hw_write_u4( 0x30, TRUE, FALSE) ;	// write a command (RS=0) nibble 0x30 with E HIGH
+	__esos_unsafe_lcd44780_hw_write_u4( 0x30, FALSE, FALSE) ;	// write a command (RS=0) nibble 0x30 with E LOW
+	ESOS_TASK_WAIT_TICKS(5);			// must wait 5ms, busy flag not available
+	// Now "clock" in command 0x30 a third
+	__esos_unsafe_lcd44780_hw_write_u4( 0x30, TRUE, FALSE) ;	// write a command (RS=0) nibble 0x30 with E HIGH
+	__esos_unsafe_lcd44780_hw_write_u4( 0x30, FALSE, FALSE) ;	// write a command (RS=0) nibble 0x30 with E LOW
+	ESOS_TASK_WAIT_TICKS(5);			// must wait 5ms, busy flag not available
+	// Now "clock" in command 0x20 to command LCD into 4-bit mode
+	__esos_unsafe_lcd44780_hw_write_u4( 0x20, TRUE, FALSE) ;	// write a command (RS=0) nibble 0x30 with E HIGH
+	__esos_unsafe_lcd44780_hw_write_u4( 0x20, FALSE, FALSE) ;	// write a command (RS=0) nibble 0x30 with E LOW
+	ESOS_TASK_WAIT_TICKS(1);			// wait a smidge
+	// send it 4-bit mode with two lines and font selection
+	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(0x28);		// 0x28
+	
+#endif
 
-	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(ESOS_LCD44780_CMD_FUNCTION_SET+ESOS_LCD44780_CMD_DISPLAY_ON_OFF+ESOS_LCD44780_CMD_CUR_DISP_SHIFT);		\\ 0x38
-	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(ESOS_LCD44780_CMD_CUR_DISP_SHIFT);												\\ 0x10
-	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(ESOS_LCD44780_CMD_DISPLAY_ON_OFF+ ESOS_LCD44780_CMD_DISPLAY_ON_OFF_DISP);			\\ 0x0C
-	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(ESOS_LCD44780_CMD_ENTRY_MODE_SET+ESOS_LCD44780_CMD_ENTRY_MODE_SET_INC);			\\ 0x06
+
+	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(ESOS_LCD44780_CMD_CUR_DISP_SHIFT);												// 0x10
+	//ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(ESOS_LCD44780_CMD_DISPLAY_ON_OFF + ESOS_LCD44780_CMD_DISPLAY_ON_OFF_DISP);		// 0x0C
+	//ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(ESOS_LCD44780_CMD_ENTRY_MODE_SET+ESOS_LCD44780_CMD_ENTRY_MODE_SET_INC);			// 0x06
 
 	// Send startup sequence from datasheet
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(  ESOS_LCD44780_CMD_DISPLAY_ON_OFF);
-	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(  ESOS_LCD44780_CMD_FUNCTION_SET | 0b00011100);
+	//ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(  ESOS_LCD44780_CMD_FUNCTION_SET | 0b00011100);
 	ESOS_TASK_WAIT_LCD44780_WRITE_COMMAND(  ESOS_LCD44780_CMD_DISPLAY_ON_OFF |
                                             ESOS_LCD44780_CMD_DISPLAY_ON_OFF_CUR |
                                             ESOS_LCD44780_CMD_DISPLAY_ON_OFF_DISP);
@@ -187,7 +203,7 @@ void esos_lcd44780_configDisplay( void )
 	}
 }
 
-void esos_lcd44780_init( void )
+void __esos_lcd44780_init( void )
 {
 	// give HW specific code a chance to do anything else to init/config
 	__esos_lcd44780_hw_config();
@@ -244,8 +260,8 @@ void esos_lcd44780_writeBuffer( uint8_t u8_row, uint8_t u8_column, uint8_t *pu8_
         if(u8_column + i >= 8){
             u8_row = !u8_row;
         }
-        esos_lcd44780_vars.aac_lcdBuffer[(u8_row)][(u8_column+i)%8] = pu8_data[i];
-        esos_lcd44780_vars.ab_lcdBufferNeedsUpdate[(u8_row)][(u8_column+i)%8] = TRUE;
+        esos_lcd44780_vars.aac_lcdBuffer[(u8_row)][(u8_column+i)%ESOS_LCD44780_MEM_WIDTH] = pu8_data[i];
+        esos_lcd44780_vars.ab_lcdBufferNeedsUpdate[(u8_row)][(u8_column+i)%ESOS_LCD44780_MEM_WIDTH] = TRUE;
     }
     return;
 } 
@@ -281,8 +297,8 @@ void esos_lcd44780_writeString( uint8_t u8_row, uint8_t u8_column, char *psz_dat
         if(u8_row + i >= ESOS_LCD44780_MEM_WIDTH){
             u8_column = (u8_column + 1) % ESOS_LCD44780_MEM_WIDTH;
         }
-        esos_lcd44780_vars.aac_lcdBuffer[(u8_row)][(u8_column+i)%8] = psz_data[i];
-        esos_lcd44780_vars.ab_lcdBufferNeedsUpdate[(u8_row)][(u8_column+i)%8] = TRUE;
+        esos_lcd44780_vars.aac_lcdBuffer[(u8_row)][(u8_column+i)%ESOS_LCD44780_MEM_WIDTH] = psz_data[i];
+        esos_lcd44780_vars.ab_lcdBufferNeedsUpdate[(u8_row)][(u8_column+i)%ESOS_LCD44780_MEM_WIDTH] = TRUE;
     }
     return;
 }
@@ -313,7 +329,6 @@ BOOL esos_lcd44780_getCursorBlink( void )
 {
     // Return cursor blink state
 	return esos_lcd44780_vars.b_cursorBlink;
-}
 }
 
 void esos_lcd44780_setDisplayVisible( BOOL u8_state )
