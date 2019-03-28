@@ -121,6 +121,6 @@ void _esos_hw_wdog_initWatchdog(uint32_t	u32_msBetweenWatchdogResets );
 void _esos_hw_wdog_feedWatchdog(void);
  
 // ******** G L O B A L S ***************
-volatile uint32_t		__esos_wdog_ticksWatchdogLastFed;
+extern volatile uint32_t		__esos_wdog_ticksWatchdogLastFed;
 
 #endif              // ESOS_WDOG_H

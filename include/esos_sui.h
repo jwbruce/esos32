@@ -62,11 +62,6 @@ typedef struct {
 typedef		uint8_t		ESOS_SUI_LED_HANDLE;
 typedef		uint8_t		ESOS_SUI_SWITCH_HANDLE;
 
-// GLOBAL ESOS SUI values??????
-uint16_t    u16_doubleClickPeriod;
-uint16_t    u16_fastPeriodLowerLimit;
-uint16_t    u16_slowPeriodUpperLimit;
-
 // ENUMERATIONS
 enum esos_sui_switchStates {
   ESOS_SUI_SWSTATE_IDLE,
