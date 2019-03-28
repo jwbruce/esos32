@@ -639,6 +639,9 @@ ESOS_USER_TASK( __esos_sui_task ){
       // ***********************************************************
       for (h_SW=0; h_SW<esos_sui_getNumberOfSwitches(); h_SW++) {
 		b_swState = esos_hw_sui_isSwitchPressed(h_SW);   
+		// update the instantaneous state of the switch's structure
+		//   for apps that want to use that info
+		__ast_esosSuiSwitches[h_SW].b_pressed = b_swState;
         // we case use the switch-case statement here because it
         //    will be completely executed in the current context
         // WARNING:   Do not add any ESOS_TASK_WAIT_xxxx statements
