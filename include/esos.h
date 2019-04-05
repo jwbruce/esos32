@@ -89,6 +89,21 @@
 #include    "esos_sui.h"
 #endif      //ESOS_USE_SUI
 
+#ifdef ESOS_USE_LCD
+/*
+*  user wants to use the LCD interface
+*/
+#include    "esos_lcd44780wo.h"
+#endif      //ESOS_USE_LCD
+
+#if defined (ESOS_USE_I2C_100KBPS) || defined (ESOS_USE_I2C) || defined (ESOS_USE_I2C_400KBPS)
+/*
+*  user wants to use the I2C interface
+*/
+#include	"esos_i2c.h"
+#endif		// ESOS_USE_I2C
+
+
 #ifdef  ESOS_RUNS_ON_REAL_OS
 // computers running a host OS (windoze/Linux/etc) expect
 //      their applications to return and return a value

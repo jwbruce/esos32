@@ -43,7 +43,7 @@
 #include "pc_generic.h"
 #define HELLO_MSG "\n" __FILE__ ", built on " __DATE__ " at " __TIME__ "\n"
 #else
-#warning    Compiling for STM32 L4
+//#warning    Compiling for STM32 L4
 #define HELLO_MSG "\n" __FILE__ ", built on " __DATE__ " at " __TIME__ "\n"
 /*
  * We might need to include pc_generic.h here or write a new one.

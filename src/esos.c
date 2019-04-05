@@ -570,6 +570,20 @@ void __esosInit(void) {
   __esos_InitSUI();
 #endif
 
+#if defined (ESOS_USE_I2C_100KBPS) || defined (ESOS_USE_I2C) || defined (ESOS_USE_I2C_400KBPS)
+  // Cal **AFTER** user_init() because the user might have set
+  // pin directions and peripheral functions in their user_init()
+  // ESOS will call the specific __esos_i2c_hw_config( u32_i2cbps)
+  //  as well.
+#ifdef ESOS_USE_I2C_400KBPS
+  #warning Using 400kbps I2C service.... Can your I2C slaves handle it?
+  __esos_i2c_config(400000L);
+#else
+  __esos_i2c_config(100000L);
+#endif
+#endif
+
+
 #ifdef ESOS_USE_WATCHDOG
   // must be called at the very end so that watchdog doesnt reset
   // us before the user gets around to feeding the watchdog
