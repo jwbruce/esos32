@@ -577,9 +577,9 @@ void __esosInit(void) {
   //  as well.
 #ifdef ESOS_USE_I2C_400KBPS
   #warning Using 400kbps I2C service.... Can your I2C slaves handle it?
-  __esos_i2c_config(400000L);
+  __esos_i2c_config(400000UL);
 #else
-  __esos_i2c_config(100000L);
+  __esos_i2c_config(100000UL);
 #endif
 #endif
 

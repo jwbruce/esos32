@@ -45,7 +45,7 @@
 #include "esos_i2c.h"
 
 /*** G L O B A L S *************************************************/
-struct stTask   	__stChildTaskI2C, __stGrandChildTaskI2C;
+struct stTask   	__stChildTaskI2C;
 uint8_t           	__esos_i2c_dataBytes[2];
 
 /*** T H E   C O D E *************************************************/

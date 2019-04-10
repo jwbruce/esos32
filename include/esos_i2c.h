@@ -114,7 +114,9 @@ Transaction: Write \em u16_cnt bytes stored in buffer \em *pu8_d to I2C slave at
 \hideinitializer
 */
 #define   ESOS_TASK_WAIT_ON_WRITENI2C( u8_addr, pu8_d, u8_cnt )              \
-            ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskI2C, __esos_i2c_hw_writeN, (u8_addr), (pu8_d), (u8_cnt) )
+		do {																\
+            ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskI2C, __esos_i2c_hw_writeN, (u8_addr), (pu8_d), (u8_cnt) );  \
+		} while(0)
 
 /**
 Transaction: Read 1 (ONE) byte from I2C slave at address \em u8_addr, and save to variable \em u8_d1
@@ -163,7 +165,9 @@ As per the I2C standard, a NAK is returned for the last byte read from the slave
 \sa esos_stm32l4_configI2C
 */
 #define   ESOS_TASK_WAIT_ON_READNI2C( u8_addr, pu8_d, u8_cnt )                     \
-            ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskI2C,  __esos_i2c_hw_readN, (u8_addr), (pu8_d), (u8_cnt) )
+		do {																\
+            ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskI2C,  __esos_i2c_hw_readN, (u8_addr), (pu8_d), (u8_cnt) );	\
+		} while (0)
 
 /* S T R U C T U R E S ******************************************************/
 
