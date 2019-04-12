@@ -81,7 +81,7 @@ ESOS_CHILD_TASK(__esos_lcd44780_hw_write_u8, uint8_t u8_data, BOOL b_isData)
 * \hideinitializer
 */
 #ifdef ESOS_USE_LCD_4BIT
-void __esos_unsafe_lcd44780_hw_write_u4(uint8_t	u8_u4data, BOOL b_isData)
+void __esos_unsafe_lcd44780_hw_write_u4(uint8_t	u8_u4data, BOOL b_isEnable, BOOL b_isData)
 {
 // hardware-specific code for writing a single nibble to display goes here
 }
