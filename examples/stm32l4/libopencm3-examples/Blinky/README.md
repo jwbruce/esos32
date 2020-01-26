@@ -14,7 +14,7 @@ This code does not use the ESOS32 system in any regard. Additionally, the makefi
     -When ESOS is added in, add the ESOS files to the C-source section of the makefile in the format:
      (ESOS_DIR)/src/blahblahblah.c which needs to be added for each of the esos src files.
     -You will need to add a ESOS_DIR that points to the esos directory to the top of the makefile
-     *You will need to add the include and lib as well, in the C-include section. Follow the CM3 setup, or ESOSCM3 makefiles in armdev*
+    -You will need to add the include and lib as well, in the C-include section.
      
 **These makefiles will not compile in msys. Msys is necessary to compile anything with libopencm. Use mingw32-make for all other cases that do not involve a libopencm3-made makefile**
 
