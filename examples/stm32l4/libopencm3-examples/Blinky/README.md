@@ -7,7 +7,7 @@ This code does not use the ESOS32 system in any regard. Additionally, the makefi
     -Run mingw32-make to generate hex file
     -Use STMCubeProgrammer to upload hex file to board
 
-**Note: this example can serve as a foundation for labs. The only modifications that need to be changed are as follows**
+**Note: this example can serve as a foundation for labs.**
 -----------------------------------
     -Change the target to match that of your file with your main loop
     -In C-source, add all files that are found in you ./src/ folder 
