@@ -8,6 +8,7 @@ This code does not use the ESOS32 system in any regard. Additionally, the makefi
     -Use STMCubeProgrammer to upload hex file to board
 
 **Note: this example can serve as a foundation for labs. The only modifications that need to be changed are as follows**
+-----------------------------------
     -Change the target to match that of your file with your main loop
     -In C-source, add all files that are found in you ./src/ folder 
     -When ESOS is added in, add the ESOS files to the C-source section of the makefile in the format:
