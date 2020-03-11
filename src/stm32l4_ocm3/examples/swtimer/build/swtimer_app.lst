@@ -1,0 +1,777 @@
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"swtimer_app.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.swTimerLED,"ax",%progbits
+  18              		.align	1
+  19              		.global	swTimerLED
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	swTimerLED:
+  27              	.LFB0:
+  28              		.file 1 "src/swtimer_app.c"
+   1:src/swtimer_app.c **** /*
+   2:src/swtimer_app.c ****  * "Copyright (c) 2019 J. W. Bruce ("AUTHOR(S)")"
+   3:src/swtimer_app.c ****  * All rights reserved.
+   4:src/swtimer_app.c ****  * (J. W. Bruce, jwbruce_AT_tntech.edu, Tennessee Tech University)
+   5:src/swtimer_app.c ****  *
+   6:src/swtimer_app.c ****  * Permission to use, copy, modify, and distribute this software and its
+   7:src/swtimer_app.c ****  * documentation for any purpose, without fee, and without written agreement is
+   8:src/swtimer_app.c ****  * hereby granted, provided that the above copyright notice, the following
+   9:src/swtimer_app.c ****  * two paragraphs and the authors appear in all copies of this software.
+  10:src/swtimer_app.c ****  *
+  11:src/swtimer_app.c ****  * IN NO EVENT SHALL THE "AUTHORS" BE LIABLE TO ANY PARTY FOR
+  12:src/swtimer_app.c ****  * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT
+  13:src/swtimer_app.c ****  * OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE "AUTHORS"
+  14:src/swtimer_app.c ****  * HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  15:src/swtimer_app.c ****  *
+  16:src/swtimer_app.c ****  * THE "AUTHORS" SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+  17:src/swtimer_app.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+  18:src/swtimer_app.c ****  * AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS
+  19:src/swtimer_app.c ****  * ON AN "AS IS" BASIS, AND THE "AUTHORS" HAS NO OBLIGATION TO
+  20:src/swtimer_app.c ****  * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
+  21:src/swtimer_app.c ****  *
+  22:src/swtimer_app.c ****  * Please maintain this header in its entirety when copying/modifying
+  23:src/swtimer_app.c ****  * these files.
+  24:src/swtimer_app.c ****  *
+  25:src/swtimer_app.c ****  *
+  26:src/swtimer_app.c ****  */
+  27:src/swtimer_app.c **** 
+  28:src/swtimer_app.c **** // #define ESOS_USE_IRQS
+  29:src/swtimer_app.c **** 
+  30:src/swtimer_app.c **** // INCLUDEs go here  (First include the main esos.h file)
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s 			page 2
+
+
+  31:src/swtimer_app.c **** //      After that, the user can include what they need
+  32:src/swtimer_app.c **** #include    "esos.h"
+  33:src/swtimer_app.c **** #include  "user_app.h"
+  34:src/swtimer_app.c **** #ifdef __linux
+  35:src/swtimer_app.c **** #include    "esos_pc.h"
+  36:src/swtimer_app.c **** #include    "esos_pc_stdio.h"
+  37:src/swtimer_app.c **** // INCLUDE these so our printf and other PC hacks work
+  38:src/swtimer_app.c **** #include <stdio.h>
+  39:src/swtimer_app.c **** #include <sys/select.h>
+  40:src/swtimer_app.c **** #include <termios.h>
+  41:src/swtimer_app.c **** #include <unistd.h>
+  42:src/swtimer_app.c **** #else
+  43:src/swtimer_app.c **** #include    "esos_stm32l4.h"
+  44:src/swtimer_app.c **** #include    "esos_stm32l4_rs232.h"
+  45:src/swtimer_app.c **** #endif
+  46:src/swtimer_app.c **** 
+  47:src/swtimer_app.c **** 
+  48:src/swtimer_app.c **** // DEFINEs go here
+  49:src/swtimer_app.c **** 
+  50:src/swtimer_app.c **** /*
+  51:src/swtimer_app.c ****  * PROTOTYPEs go here
+  52:src/swtimer_app.c ****  *
+  53:src/swtimer_app.c ****  */
+  54:src/swtimer_app.c **** void __user_init_hw( void );
+  55:src/swtimer_app.c **** 
+  56:src/swtimer_app.c **** 
+  57:src/swtimer_app.c **** // GLOBALs go here
+  58:src/swtimer_app.c **** //  Generally, the user-created semaphores will be defined/allocated here
+  59:src/swtimer_app.c **** //static uint8_t psz_CRNL[3]= {0x0D, 0x0A, 0};
+  60:src/swtimer_app.c **** 
+  61:src/swtimer_app.c **** // timer globals
+  62:src/swtimer_app.c **** 
+  63:src/swtimer_app.c **** #ifdef _linux
+  64:src/swtimer_app.c **** /*
+  65:src/swtimer_app.c ****  * Simulate the timer ISR found on a MCU
+  66:src/swtimer_app.c ****  *   The PC doesn't have a timer ISR, so this task will periodically
+  67:src/swtimer_app.c ****  *   call the timer services callback instead.
+  68:src/swtimer_app.c ****  *   USED ONLY FOR DEVELOPMENT AND TESTING ON PC.
+  69:src/swtimer_app.c ****  *   Real MCU hardware doesn't need this task
+  70:src/swtimer_app.c ****  */
+  71:src/swtimer_app.c **** ESOS_USER_TASK( __simulated_isr ) {
+  72:src/swtimer_app.c ****   ESOS_TASK_BEGIN();
+  73:src/swtimer_app.c ****   while (TRUE) {
+  74:src/swtimer_app.c ****     // call the ESOS timer services callback just like a real H/W ISR would
+  75:src/swtimer_app.c ****     __esos_tmrSvcsExecute();
+  76:src/swtimer_app.c ****     ESOS_TASK_WAIT_TICKS(  1 );
+  77:src/swtimer_app.c **** 
+  78:src/swtimer_app.c ****   } // endof while(TRUE)
+  79:src/swtimer_app.c ****   ESOS_TASK_END();
+  80:src/swtimer_app.c **** } // end child_task
+  81:src/swtimer_app.c **** #endif
+  82:src/swtimer_app.c **** 
+  83:src/swtimer_app.c **** 
+  84:src/swtimer_app.c **** // user-created timer callback
+  85:src/swtimer_app.c **** ESOS_USER_TIMER( swTimerLED ) {
+  29              		.loc 1 85 31 view -0
+  30              		.cfi_startproc
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s 			page 3
+
+
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+  37              		.cfi_offset 14, -4
+  86:src/swtimer_app.c ****   gpio_toggle(LED2_GPIO_Port,LED2_Pin);
+  38              		.loc 1 86 3 view .LVU1
+  39 0002 2021     		movs	r1, #32
+  40 0004 4FF09040 		mov	r0, #1207959552
+  41 0008 FFF7FEFF 		bl	gpio_toggle
+  42              	.LVL0:
+  87:src/swtimer_app.c **** } //endof swTimerLED
+  43              		.loc 1 87 1 is_stmt 0 view .LVU2
+  44 000c 08BD     		pop	{r3, pc}
+  45              		.cfi_endproc
+  46              	.LFE0:
+  48              		.section	.text.echo,"ax",%progbits
+  49              		.align	1
+  50              		.global	echo
+  51              		.syntax unified
+  52              		.thumb
+  53              		.thumb_func
+  54              		.fpu fpv4-sp-d16
+  56              	echo:
+  57              	.LVL1:
+  58              	.LFB1:
+  88:src/swtimer_app.c **** 
+  89:src/swtimer_app.c **** 
+  90:src/swtimer_app.c **** ESOS_USER_TASK( echo ) {
+  59              		.loc 1 90 24 is_stmt 1 view -0
+  60              		.cfi_startproc
+  61              		@ args = 0, pretend = 0, frame = 0
+  62              		@ frame_needed = 0, uses_anonymous_args = 0
+  63              		.loc 1 90 24 is_stmt 0 view .LVU4
+  64 0000 38B5     		push	{r3, r4, r5, lr}
+  65              	.LCFI1:
+  66              		.cfi_def_cfa_offset 16
+  67              		.cfi_offset 3, -16
+  68              		.cfi_offset 4, -12
+  69              		.cfi_offset 5, -8
+  70              		.cfi_offset 14, -4
+  71 0002 0446     		mov	r4, r0
+  91:src/swtimer_app.c ****   static uint8_t    u8_incoming;
+  72              		.loc 1 91 3 is_stmt 1 view .LVU5
+  92:src/swtimer_app.c **** 
+  93:src/swtimer_app.c ****   ESOS_TASK_BEGIN();
+  73              		.loc 1 93 3 view .LVU6
+  74 0004 8378     		ldrb	r3, [r0, #2]	@ zero_extendqisi2
+  75 0006 63F07F03 		orn	r3, r3, #127
+  76 000a 8370     		strb	r3, [r0, #2]
+  77              		.loc 1 93 3 view .LVU7
+  78 000c 0388     		ldrh	r3, [r0]
+  79 000e 002B     		cmp	r3, #0
+  80 0010 56D0     		beq	.L4
+  81 0012 6A2B     		cmp	r3, #106
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s 			page 4
+
+
+  82 0014 00F2AB80 		bhi	.L5
+  83 0018 5F2B     		cmp	r3, #95
+  84 001a C0F0A880 		bcc	.L5
+  85 001e 5F3B     		subs	r3, r3, #95
+  86 0020 0B2B     		cmp	r3, #11
+  87 0022 00F2A480 		bhi	.L5
+  88 0026 DFE803F0 		tbb	[pc, r3]
+  89              	.L7:
+  90 002a 4D       		.byte	(.L10-.L7)/2
+  91 002b 67       		.byte	(.L9-.L7)/2
+  92 002c A2       		.byte	(.L5-.L7)/2
+  93 002d A2       		.byte	(.L5-.L7)/2
+  94 002e A2       		.byte	(.L5-.L7)/2
+  95 002f A2       		.byte	(.L5-.L7)/2
+  96 0030 A2       		.byte	(.L5-.L7)/2
+  97 0031 A2       		.byte	(.L5-.L7)/2
+  98 0032 A2       		.byte	(.L5-.L7)/2
+  99 0033 A2       		.byte	(.L5-.L7)/2
+ 100 0034 19       		.byte	(.L8-.L7)/2
+ 101 0035 33       		.byte	(.L6-.L7)/2
+ 102              	.LVL2:
+ 103              		.p2align 1
+ 104              	.L28:
+  94:src/swtimer_app.c ****   while (TRUE) {
+  95:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_AVAILABLE_IN_COMM();
+ 105              		.loc 1 95 5 discriminator 2 view .LVU8
+ 106 0036 0423     		movs	r3, #4
+ 107 0038 A370     		strb	r3, [r4, #2]
+ 108              		.loc 1 95 5 discriminator 2 view .LVU9
+ 109 003a 0325     		movs	r5, #3
+ 110 003c 9CE0     		b	.L12
+ 111              	.L13:
+ 112              		.loc 1 95 5 discriminator 5 view .LVU10
+ 113 003e 43F00103 		orr	r3, r3, #1
+ 114 0042 A370     		strb	r3, [r4, #2]
+ 115 0044 4AE0     		b	.L14
+ 116              	.L29:
+  96:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_GET_UINT8( u8_incoming );
+ 117              		.loc 1 96 5 discriminator 2 view .LVU11
+ 118 0046 0423     		movs	r3, #4
+ 119 0048 A370     		strb	r3, [r4, #2]
+ 120              		.loc 1 96 5 discriminator 2 view .LVU12
+ 121 004a 0325     		movs	r5, #3
+ 122 004c 94E0     		b	.L12
+ 123              	.L16:
+ 124              		.loc 1 96 5 discriminator 5 view .LVU13
+ 125 004e A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 126 0050 43F00103 		orr	r3, r3, #1
+ 127 0054 A370     		strb	r3, [r4, #2]
+ 128 0056 5EE0     		b	.L17
+ 129              	.L18:
+  97:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM();
+  98:src/swtimer_app.c **** 
+  99:src/swtimer_app.c ****     if(gpio_get(SW1_GPIO_Port,SW1_Pin) == 0)
+ 100:src/swtimer_app.c ****     {
+ 101:src/swtimer_app.c ****       if (u8_incoming >= 'a' && u8_incoming <='z')
+ 102:src/swtimer_app.c ****         u8_incoming = u8_incoming - 'a' + 'A';
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s 			page 5
+
+
+ 103:src/swtimer_app.c ****     }
+ 104:src/swtimer_app.c **** 
+ 105:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
+ 130              		.loc 1 105 5 view .LVU14
+ 131              		.loc 1 105 5 view .LVU15
+ 132 0058 6923     		movs	r3, #105
+ 133 005a 2380     		strh	r3, [r4]	@ movhi
+ 134              	.L8:
+ 135              		.loc 1 105 5 discriminator 1 view .LVU16
+ 136              		.loc 1 105 5 discriminator 1 view .LVU17
+ 137 005c A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 138 005e 13F00405 		ands	r5, r3, #4
+ 139 0062 73D1     		bne	.L26
+ 140              		.loc 1 105 5 discriminator 3 view .LVU18
+ 141 0064 454A     		ldr	r2, .L30
+ 142 0066 1268     		ldr	r2, [r2]
+ 143 0068 12F0040F 		tst	r2, #4
+ 144 006c 72D1     		bne	.L20
+ 145              		.loc 1 105 5 discriminator 4 view .LVU19
+ 146 006e 23F00103 		bic	r3, r3, #1
+ 147 0072 A370     		strb	r3, [r4, #2]
+ 148              	.L21:
+ 149              		.loc 1 105 5 discriminator 7 view .LVU20
+ 150 0074 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 151 0076 13F0010F 		tst	r3, #1
+ 152 007a 7DD1     		bne	.L12
+ 153              		.loc 1 105 5 discriminator 9 view .LVU21
+ 154              		.loc 1 105 5 discriminator 9 view .LVU22
+ 155 007c 3F4A     		ldr	r2, .L30
+ 156 007e 1368     		ldr	r3, [r2]
+ 157 0080 43F00403 		orr	r3, r3, #4
+ 158 0084 1360     		str	r3, [r2]
+ 106:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8( u8_incoming );
+ 159              		.loc 1 106 5 discriminator 9 view .LVU23
+ 160              		.loc 1 106 5 discriminator 9 view .LVU24
+ 161 0086 3E4B     		ldr	r3, .L30+4
+ 162 0088 0022     		movs	r2, #0
+ 163 008a 1A80     		strh	r2, [r3]	@ movhi
+ 164              		.loc 1 106 5 discriminator 9 view .LVU25
+ 165              		.loc 1 106 5 discriminator 9 view .LVU26
+ 166              		.loc 1 106 5 discriminator 9 view .LVU27
+ 167              		.loc 1 106 5 discriminator 9 view .LVU28
+ 168 008c 6A23     		movs	r3, #106
+ 169 008e 2380     		strh	r3, [r4]	@ movhi
+ 170              	.L6:
+ 171              		.loc 1 106 5 discriminator 1 view .LVU29
+ 172              		.loc 1 106 5 discriminator 1 view .LVU30
+ 173 0090 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 174 0092 15F00405 		ands	r5, r5, #4
+ 175 0096 61D1     		bne	.L27
+ 176              		.loc 1 106 5 discriminator 3 view .LVU31
+ 177 0098 3A4B     		ldr	r3, .L30+8
+ 178 009a 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 179 009c 3848     		ldr	r0, .L30+4
+ 180 009e FFF7FEFF 		bl	__esos_OutChar
+ 181              	.LVL3:
+ 182 00a2 0228     		cmp	r0, #2
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s 			page 6
+
+
+ 183 00a4 5ED9     		bls	.L23
+ 184              		.loc 1 106 5 discriminator 4 view .LVU32
+ 185 00a6 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 186 00a8 23F00103 		bic	r3, r3, #1
+ 187 00ac A370     		strb	r3, [r4, #2]
+ 188              	.L24:
+ 189              		.loc 1 106 5 discriminator 7 view .LVU33
+ 190 00ae A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 191 00b0 13F0010F 		tst	r3, #1
+ 192 00b4 60D1     		bne	.L12
+ 193              		.loc 1 106 5 discriminator 9 view .LVU34
+ 194              		.loc 1 106 5 discriminator 9 view .LVU35
+ 107:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 195              		.loc 1 107 5 discriminator 9 view .LVU36
+ 196 00b6 314A     		ldr	r2, .L30
+ 197 00b8 1368     		ldr	r3, [r2]
+ 198 00ba 23F00403 		bic	r3, r3, #4
+ 199 00be 1360     		str	r3, [r2]
+  94:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_AVAILABLE_IN_COMM();
+ 200              		.loc 1 94 9 discriminator 9 view .LVU37
+ 201              	.L4:
+  93:src/swtimer_app.c ****   while (TRUE) {
+ 202              		.loc 1 93 20 discriminator 1 view .LVU38
+  94:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_AVAILABLE_IN_COMM();
+ 203              		.loc 1 94 3 discriminator 1 view .LVU39
+  95:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_GET_UINT8( u8_incoming );
+ 204              		.loc 1 95 5 discriminator 1 view .LVU40
+  95:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_GET_UINT8( u8_incoming );
+ 205              		.loc 1 95 5 discriminator 1 view .LVU41
+ 206 00c0 5F23     		movs	r3, #95
+ 207 00c2 2380     		strh	r3, [r4]	@ movhi
+ 208              	.L10:
+  95:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_GET_UINT8( u8_incoming );
+ 209              		.loc 1 95 5 discriminator 1 view .LVU42
+  95:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_GET_UINT8( u8_incoming );
+ 210              		.loc 1 95 5 discriminator 1 view .LVU43
+ 211 00c4 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 212 00c6 13F00405 		ands	r5, r3, #4
+ 213 00ca B4D1     		bne	.L28
+  95:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_GET_UINT8( u8_incoming );
+ 214              		.loc 1 95 5 discriminator 3 view .LVU44
+ 215 00cc 2B4A     		ldr	r2, .L30
+ 216 00ce 1268     		ldr	r2, [r2]
+ 217 00d0 12F0080F 		tst	r2, #8
+ 218 00d4 B3D1     		bne	.L13
+  95:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_GET_UINT8( u8_incoming );
+ 219              		.loc 1 95 5 discriminator 4 view .LVU45
+ 220 00d6 23F00103 		bic	r3, r3, #1
+ 221 00da A370     		strb	r3, [r4, #2]
+ 222              	.L14:
+  95:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_GET_UINT8( u8_incoming );
+ 223              		.loc 1 95 5 discriminator 7 view .LVU46
+ 224 00dc A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 225 00de 13F0010F 		tst	r3, #1
+ 226 00e2 49D1     		bne	.L12
+  95:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_GET_UINT8( u8_incoming );
+ 227              		.loc 1 95 5 discriminator 9 view .LVU47
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s 			page 7
+
+
+  95:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_GET_UINT8( u8_incoming );
+ 228              		.loc 1 95 5 discriminator 9 view .LVU48
+ 229 00e4 254A     		ldr	r2, .L30
+ 230 00e6 1368     		ldr	r3, [r2]
+ 231 00e8 43F00803 		orr	r3, r3, #8
+ 232 00ec 1360     		str	r3, [r2]
+  96:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM();
+ 233              		.loc 1 96 5 discriminator 9 view .LVU49
+  96:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM();
+ 234              		.loc 1 96 5 discriminator 9 view .LVU50
+ 235 00ee 264B     		ldr	r3, .L30+12
+ 236 00f0 0022     		movs	r2, #0
+ 237 00f2 1A80     		strh	r2, [r3]	@ movhi
+  96:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM();
+ 238              		.loc 1 96 5 discriminator 9 view .LVU51
+  96:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM();
+ 239              		.loc 1 96 5 discriminator 9 view .LVU52
+  96:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM();
+ 240              		.loc 1 96 5 discriminator 9 view .LVU53
+  96:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM();
+ 241              		.loc 1 96 5 discriminator 9 view .LVU54
+ 242 00f4 6023     		movs	r3, #96
+ 243 00f6 2380     		strh	r3, [r4]	@ movhi
+ 244              	.L9:
+  96:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM();
+ 245              		.loc 1 96 5 discriminator 1 view .LVU55
+  96:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM();
+ 246              		.loc 1 96 5 discriminator 1 view .LVU56
+ 247 00f8 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 248 00fa 15F00405 		ands	r5, r5, #4
+ 249 00fe A2D1     		bne	.L29
+  96:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM();
+ 250              		.loc 1 96 5 discriminator 3 view .LVU57
+ 251 0100 0122     		movs	r2, #1
+ 252 0102 2049     		ldr	r1, .L30+8
+ 253 0104 2048     		ldr	r0, .L30+12
+ 254 0106 FFF7FEFF 		bl	__esos_getBuffer
+ 255              	.LVL4:
+ 256 010a 0228     		cmp	r0, #2
+ 257 010c 9FD9     		bls	.L16
+  96:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM();
+ 258              		.loc 1 96 5 discriminator 4 view .LVU58
+ 259 010e A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 260 0110 23F00103 		bic	r3, r3, #1
+ 261 0114 A370     		strb	r3, [r4, #2]
+ 262              	.L17:
+  96:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM();
+ 263              		.loc 1 96 5 discriminator 7 view .LVU59
+ 264 0116 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 265 0118 13F0010F 		tst	r3, #1
+ 266 011c 2CD1     		bne	.L12
+  96:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM();
+ 267              		.loc 1 96 5 discriminator 9 view .LVU60
+  96:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_IN_COMM();
+ 268              		.loc 1 96 5 discriminator 9 view .LVU61
+  97:src/swtimer_app.c **** 
+ 269              		.loc 1 97 5 discriminator 9 view .LVU62
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s 			page 8
+
+
+ 270 011e 174A     		ldr	r2, .L30
+ 271 0120 1368     		ldr	r3, [r2]
+ 272 0122 23F00803 		bic	r3, r3, #8
+ 273 0126 1360     		str	r3, [r2]
+  99:src/swtimer_app.c ****     {
+ 274              		.loc 1 99 5 discriminator 9 view .LVU63
+  99:src/swtimer_app.c ****     {
+ 275              		.loc 1 99 8 is_stmt 0 discriminator 9 view .LVU64
+ 276 0128 4FF40051 		mov	r1, #8192
+ 277 012c 1748     		ldr	r0, .L30+16
+ 278 012e FFF7FEFF 		bl	gpio_get
+ 279              	.LVL5:
+  99:src/swtimer_app.c ****     {
+ 280              		.loc 1 99 7 discriminator 9 view .LVU65
+ 281 0132 0028     		cmp	r0, #0
+ 282 0134 90D1     		bne	.L18
+ 101:src/swtimer_app.c ****         u8_incoming = u8_incoming - 'a' + 'A';
+ 283              		.loc 1 101 7 is_stmt 1 view .LVU66
+ 101:src/swtimer_app.c ****         u8_incoming = u8_incoming - 'a' + 'A';
+ 284              		.loc 1 101 30 is_stmt 0 view .LVU67
+ 285 0136 134B     		ldr	r3, .L30+8
+ 286 0138 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 287 013a A2F16103 		sub	r3, r2, #97
+ 288 013e DBB2     		uxtb	r3, r3
+ 101:src/swtimer_app.c ****         u8_incoming = u8_incoming - 'a' + 'A';
+ 289              		.loc 1 101 10 view .LVU68
+ 290 0140 192B     		cmp	r3, #25
+ 291 0142 89D8     		bhi	.L18
+ 102:src/swtimer_app.c ****     }
+ 292              		.loc 1 102 9 is_stmt 1 view .LVU69
+ 102:src/swtimer_app.c ****     }
+ 293              		.loc 1 102 41 is_stmt 0 view .LVU70
+ 294 0144 203A     		subs	r2, r2, #32
+ 102:src/swtimer_app.c ****     }
+ 295              		.loc 1 102 21 view .LVU71
+ 296 0146 0F4B     		ldr	r3, .L30+8
+ 297 0148 1A70     		strb	r2, [r3]
+ 298 014a 85E7     		b	.L18
+ 299              	.L26:
+ 105:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8( u8_incoming );
+ 300              		.loc 1 105 5 is_stmt 1 discriminator 2 view .LVU72
+ 301 014c 0423     		movs	r3, #4
+ 302 014e A370     		strb	r3, [r4, #2]
+ 105:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8( u8_incoming );
+ 303              		.loc 1 105 5 discriminator 2 view .LVU73
+ 304 0150 0325     		movs	r5, #3
+ 305 0152 11E0     		b	.L12
+ 306              	.L20:
+ 105:src/swtimer_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8( u8_incoming );
+ 307              		.loc 1 105 5 discriminator 5 view .LVU74
+ 308 0154 43F00103 		orr	r3, r3, #1
+ 309 0158 A370     		strb	r3, [r4, #2]
+ 310 015a 8BE7     		b	.L21
+ 311              	.L27:
+ 106:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 312              		.loc 1 106 5 discriminator 2 view .LVU75
+ 313 015c 0423     		movs	r3, #4
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s 			page 9
+
+
+ 314 015e A370     		strb	r3, [r4, #2]
+ 106:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 315              		.loc 1 106 5 discriminator 2 view .LVU76
+ 316 0160 0325     		movs	r5, #3
+ 317 0162 09E0     		b	.L12
+ 318              	.L23:
+ 106:src/swtimer_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 319              		.loc 1 106 5 discriminator 5 view .LVU77
+ 320 0164 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 321 0166 43F00103 		orr	r3, r3, #1
+ 322 016a A370     		strb	r3, [r4, #2]
+ 323 016c 9FE7     		b	.L24
+ 324              	.LVL6:
+ 325              	.L5:
+ 108:src/swtimer_app.c **** 
+ 109:src/swtimer_app.c ****   } // endof while(TRUE)
+ 110:src/swtimer_app.c ****   ESOS_TASK_END();
+ 326              		.loc 1 110 3 view .LVU78
+ 327              		.loc 1 110 3 view .LVU79
+ 328 016e 0823     		movs	r3, #8
+ 329 0170 A370     		strb	r3, [r4, #2]
+ 330              		.loc 1 110 3 view .LVU80
+ 331 0172 0023     		movs	r3, #0
+ 332 0174 2380     		strh	r3, [r4]	@ movhi
+ 333              		.loc 1 110 3 view .LVU81
+ 334              		.loc 1 110 3 view .LVU82
+ 335              		.loc 1 110 3 view .LVU83
+ 336 0176 0325     		movs	r5, #3
+ 337              	.LVL7:
+ 338              	.L12:
+ 339              		.loc 1 110 18 discriminator 1 view .LVU84
+ 111:src/swtimer_app.c **** } // end echo()
+ 340              		.loc 1 111 1 is_stmt 0 discriminator 1 view .LVU85
+ 341 0178 2846     		mov	r0, r5
+ 342 017a 38BD     		pop	{r3, r4, r5, pc}
+ 343              	.LVL8:
+ 344              	.L31:
+ 345              		.loc 1 111 1 discriminator 1 view .LVU86
+ 346              		.align	2
+ 347              	.L30:
+ 348 017c 00000000 		.word	__esos_u32SystemFlags
+ 349 0180 00000000 		.word	__stChildTaskTx
+ 350 0184 00000000 		.word	.LANCHOR0
+ 351 0188 00000000 		.word	__stChildTaskRx
+ 352 018c 00080048 		.word	1207961600
+ 353              		.cfi_endproc
+ 354              	.LFE1:
+ 356              		.section	.text.__user_init_hw,"ax",%progbits
+ 357              		.align	1
+ 358              		.global	__user_init_hw
+ 359              		.syntax unified
+ 360              		.thumb
+ 361              		.thumb_func
+ 362              		.fpu fpv4-sp-d16
+ 364              	__user_init_hw:
+ 365              	.LFB2:
+ 112:src/swtimer_app.c **** 
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s 			page 10
+
+
+ 113:src/swtimer_app.c **** /************************************************************************
+ 114:src/swtimer_app.c ****  * User supplied functions
+ 115:src/swtimer_app.c ****  ************************************************************************
+ 116:src/swtimer_app.c ****  */
+ 117:src/swtimer_app.c **** void __user_init_hw(void) {
+ 366              		.loc 1 117 27 is_stmt 1 view -0
+ 367              		.cfi_startproc
+ 368              		@ args = 0, pretend = 0, frame = 0
+ 369              		@ frame_needed = 0, uses_anonymous_args = 0
+ 370 0000 08B5     		push	{r3, lr}
+ 371              	.LCFI2:
+ 372              		.cfi_def_cfa_offset 8
+ 373              		.cfi_offset 3, -8
+ 374              		.cfi_offset 14, -4
+ 118:src/swtimer_app.c ****   /* GPIO Ports Clock Enable */
+ 119:src/swtimer_app.c ****   rcc_periph_clock_enable(GPIOA);
+ 375              		.loc 1 119 3 view .LVU88
+ 376 0002 0020     		movs	r0, #0
+ 377 0004 FFF7FEFF 		bl	rcc_periph_clock_enable
+ 378              	.LVL9:
+ 120:src/swtimer_app.c ****   rcc_periph_clock_enable(GPIOC);
+ 379              		.loc 1 120 3 view .LVU89
+ 380 0008 4FF40060 		mov	r0, #2048
+ 381 000c FFF7FEFF 		bl	rcc_periph_clock_enable
+ 382              	.LVL10:
+ 121:src/swtimer_app.c **** 
+ 122:src/swtimer_app.c ****   /*Configure GPIO pin : PC13 */
+ 123:src/swtimer_app.c ****  gpio_mode_setup(SW1_GPIO_Port, GPIO_MODE_INPUT, GPIO_PUPD_NONE, SW1_Pin);
+ 383              		.loc 1 123 2 view .LVU90
+ 384 0010 4FF40053 		mov	r3, #8192
+ 385 0014 0022     		movs	r2, #0
+ 386 0016 1146     		mov	r1, r2
+ 387 0018 0548     		ldr	r0, .L34
+ 388 001a FFF7FEFF 		bl	gpio_mode_setup
+ 389              	.LVL11:
+ 124:src/swtimer_app.c **** 
+ 125:src/swtimer_app.c ****   /*Configure GPIO pin : LED2_Pin */
+ 126:src/swtimer_app.c ****  gpio_mode_setup(LED2_GPIO_Port, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, LED2_Pin);
+ 390              		.loc 1 126 2 view .LVU91
+ 391 001e 2023     		movs	r3, #32
+ 392 0020 0022     		movs	r2, #0
+ 393 0022 0121     		movs	r1, #1
+ 394 0024 4FF09040 		mov	r0, #1207959552
+ 395 0028 FFF7FEFF 		bl	gpio_mode_setup
+ 396              	.LVL12:
+ 127:src/swtimer_app.c **** 
+ 128:src/swtimer_app.c **** }
+ 397              		.loc 1 128 1 is_stmt 0 view .LVU92
+ 398 002c 08BD     		pop	{r3, pc}
+ 399              	.L35:
+ 400 002e 00BF     		.align	2
+ 401              	.L34:
+ 402 0030 00080048 		.word	1207961600
+ 403              		.cfi_endproc
+ 404              	.LFE2:
+ 406              		.section	.rodata.user_init.str1.4,"aMS",%progbits,1
+ 407              		.align	2
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s 			page 11
+
+
+ 408              	.LC0:
+ 409 0000 0A737263 		.ascii	"\012src/swtimer_app.c, built on Mar 10 2020 at 23:2"
+ 409      2F737774 
+ 409      696D6572 
+ 409      5F617070 
+ 409      2E632C20 
+ 410 0030 393A3232 		.ascii	"9:22\012\000"
+ 410      0A00
+ 411              		.section	.text.user_init,"ax",%progbits
+ 412              		.align	1
+ 413              		.global	user_init
+ 414              		.syntax unified
+ 415              		.thumb
+ 416              		.thumb_func
+ 417              		.fpu fpv4-sp-d16
+ 419              	user_init:
+ 420              	.LFB3:
+ 129:src/swtimer_app.c **** 
+ 130:src/swtimer_app.c **** 
+ 131:src/swtimer_app.c **** 
+ 132:src/swtimer_app.c **** /******************************************************************************
+ 133:src/swtimer_app.c ****  * Function:        void user_init(void)
+ 134:src/swtimer_app.c ****  *
+ 135:src/swtimer_app.c ****  * PreCondition:    None
+ 136:src/swtimer_app.c ****  *
+ 137:src/swtimer_app.c ****  * Input:           None
+ 138:src/swtimer_app.c ****  *
+ 139:src/swtimer_app.c ****  * Output:          None
+ 140:src/swtimer_app.c ****  *
+ 141:src/swtimer_app.c ****  * Side Effects:    None
+ 142:src/swtimer_app.c ****  *
+ 143:src/swtimer_app.c ****  * Overview:        user_init is a centralized initialization routine where
+ 144:src/swtimer_app.c ****  *                  the user can setup their application.   It is called
+ 145:src/swtimer_app.c ****  *                  automagically by ES_OS during the operating system
+ 146:src/swtimer_app.c ****  *                  initialization.
+ 147:src/swtimer_app.c ****  *
+ 148:src/swtimer_app.c ****  * Note:            The user should set up any state machines and init
+ 149:src/swtimer_app.c ****  *                  all application variables.  They can also turn on
+ 150:src/swtimer_app.c ****  *                  any needed peripherals here.
+ 151:src/swtimer_app.c ****  *
+ 152:src/swtimer_app.c ****  *                  The user SHALL NOT mess with the interrupt hardware
+ 153:src/swtimer_app.c ****  *                  directly!!!  The ES_OS must be aware of the interrupts
+ 154:src/swtimer_app.c ****  *                  and provides osXXXXXXX functions for the user to use.
+ 155:src/swtimer_app.c ****  *                  Using these ES_OS-provided functions, the user may
+ 156:src/swtimer_app.c ****  *                  (and probably should) initialize, register, and enable
+ 157:src/swtimer_app.c ****  *                  interrupts in this routine.
+ 158:src/swtimer_app.c ****  *
+ 159:src/swtimer_app.c ****  *                  Furthermore, the user should register AT LEAST one
+ 160:src/swtimer_app.c ****  *                  user application task here (via esos_RegisterTask) or
+ 161:src/swtimer_app.c ****  *                  the ES_OS scheduler will have nothing to schedule
+ 162:src/swtimer_app.c ****  *                  to run when this function returns.
+ 163:src/swtimer_app.c ****  *
+ 164:src/swtimer_app.c ****  *****************************************************************************/
+ 165:src/swtimer_app.c **** void user_init(void) {
+ 421              		.loc 1 165 22 is_stmt 1 view -0
+ 422              		.cfi_startproc
+ 423              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s 			page 12
+
+
+ 424              		@ frame_needed = 0, uses_anonymous_args = 0
+ 425 0000 08B5     		push	{r3, lr}
+ 426              	.LCFI3:
+ 427              		.cfi_def_cfa_offset 8
+ 428              		.cfi_offset 3, -8
+ 429              		.cfi_offset 14, -4
+ 166:src/swtimer_app.c **** 
+ 167:src/swtimer_app.c ****   // setup our software structures here
+ 168:src/swtimer_app.c ****   
+ 169:src/swtimer_app.c ****   // call our function to setup the hardware we like it.
+ 170:src/swtimer_app.c ****   __user_init_hw();
+ 430              		.loc 1 170 3 view .LVU94
+ 431 0002 FFF7FEFF 		bl	__user_init_hw
+ 432              	.LVL13:
+ 171:src/swtimer_app.c **** 
+ 172:src/swtimer_app.c ****   // Drive the UART directly.....  to print the HELLO_MSG
+ 173:src/swtimer_app.c ****   __esos_unsafe_PutString( HELLO_MSG );
+ 433              		.loc 1 173 3 view .LVU95
+ 434 0006 0548     		ldr	r0, .L38
+ 435 0008 FFF7FEFF 		bl	__esos_unsafe_PutString
+ 436              	.LVL14:
+ 174:src/swtimer_app.c **** 
+ 175:src/swtimer_app.c ****   /*
+ 176:src/swtimer_app.c ****    * Now, let's get down and dirty with ESOS and our user tasks
+ 177:src/swtimer_app.c ****    *
+ 178:src/swtimer_app.c ****    *   Once tasks are registered, they will start executing in
+ 179:src/swtimer_app.c ****    *   the ESOS scheduler.
+ 180:src/swtimer_app.c ****    */
+ 181:src/swtimer_app.c ****   esos_RegisterTask( echo );
+ 437              		.loc 1 181 3 view .LVU96
+ 438 000c 0448     		ldr	r0, .L38+4
+ 439 000e FFF7FEFF 		bl	esos_RegisterTask
+ 440              	.LVL15:
+ 182:src/swtimer_app.c **** 
+ 183:src/swtimer_app.c ****   // register our callback function with ESOS to create a software timer
+ 184:src/swtimer_app.c ****   //  call our software timer callback every 250ms
+ 185:src/swtimer_app.c ****   esos_RegisterTimer( swTimerLED, 250 );
+ 441              		.loc 1 185 3 view .LVU97
+ 442 0012 FA21     		movs	r1, #250
+ 443 0014 0348     		ldr	r0, .L38+8
+ 444 0016 FFF7FEFF 		bl	esos_RegisterTimer
+ 445              	.LVL16:
+ 186:src/swtimer_app.c **** 
+ 187:src/swtimer_app.c **** 
+ 188:src/swtimer_app.c **** } // end user_init()
+ 446              		.loc 1 188 1 is_stmt 0 view .LVU98
+ 447 001a 08BD     		pop	{r3, pc}
+ 448              	.L39:
+ 449              		.align	2
+ 450              	.L38:
+ 451 001c 00000000 		.word	.LC0
+ 452 0020 00000000 		.word	echo
+ 453 0024 00000000 		.word	swTimerLED
+ 454              		.cfi_endproc
+ 455              	.LFE3:
+ 457              		.section	.bss.u8_incoming.6745,"aw",%nobits
+ 458              		.set	.LANCHOR0,. + 0
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s 			page 13
+
+
+ 461              	u8_incoming.6745:
+ 462 0000 00       		.space	1
+ 463              		.text
+ 464              	.Letext0:
+ 465              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 466              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 467              		.file 4 "C:/MinGW/msys/1.0/esos32/include/lc-switch.h"
+ 468              		.file 5 "C:/MinGW/msys/1.0/esos32/include/esos_cb.h"
+ 469              		.file 6 "C:/MinGW/msys/1.0/esos32/include/esos_mail.h"
+ 470              		.file 7 "C:/MinGW/msys/1.0/esos32/include/esos_task.h"
+ 471              		.file 8 "C:/MinGW/msys/1.0/esos32/include/esos_utils.h"
+ 472              		.file 9 "C:/MinGW/msys/1.0/esos32/include/esos_comm.h"
+ 473              		.file 10 "C:/MinGW/msys/1.0/esos32/include/esos.h"
+ 474              		.file 11 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/l4/rcc.h"
+ 475              		.file 12 "C:/MinGW/msys/1.0/esos32/include/stm32l4_ocm3/esos_stm32l4_rs232.h"
+ 476              		.file 13 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/common/rc
+ 477              		.file 14 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/common/gp
+ 478              		.file 15 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/common/gp
+ 479              		.file 16 "C:/MinGW/msys/1.0/esos32/include/all_generic.h"
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s 			page 14
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 swtimer_app.c
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:18     .text.swTimerLED:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:26     .text.swTimerLED:00000000 swTimerLED
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:49     .text.echo:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:56     .text.echo:00000000 echo
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:90     .text.echo:0000002a $d
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:103    .text.echo:00000036 $t
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:348    .text.echo:0000017c $d
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:357    .text.__user_init_hw:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:364    .text.__user_init_hw:00000000 __user_init_hw
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:402    .text.__user_init_hw:00000030 $d
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:407    .rodata.user_init.str1.4:00000000 $d
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:412    .text.user_init:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:419    .text.user_init:00000000 user_init
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:451    .text.user_init:0000001c $d
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:461    .bss.u8_incoming.6745:00000000 u8_incoming.6745
+C:\Users\Travis\AppData\Local\Temp\ccKDyVtc.s:462    .bss.u8_incoming.6745:00000000 $d
+
+UNDEFINED SYMBOLS
+gpio_toggle
+__esos_OutChar
+__esos_getBuffer
+gpio_get
+__esos_u32SystemFlags
+__stChildTaskTx
+__stChildTaskRx
+rcc_periph_clock_enable
+gpio_mode_setup
+__esos_unsafe_PutString
+esos_RegisterTask
+esos_RegisterTimer

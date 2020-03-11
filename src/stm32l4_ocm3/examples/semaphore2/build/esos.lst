@@ -1,0 +1,2572 @@
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"esos.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.esos_RegisterTask,"ax",%progbits
+  18              		.align	1
+  19              		.global	esos_RegisterTask
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	esos_RegisterTask:
+  27              	.LVL0:
+  28              	.LFB0:
+  29              		.file 1 "C:/MinGW/msys/1.0/esos32/src/esos.c"
+   1:C:/MinGW/msys/1.0/esos32/src\esos.c **** /*
+   2:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * "Copyright (c) 2019 J. W. Bruce ("AUTHOR(S)")"
+   3:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * All rights reserved.
+   4:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * (J. W. Bruce, jwbruce_AT_tntech.edu, Tennessee Tech University)
+   5:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *
+   6:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * Permission to use, copy, modify, and distribute this software and its
+   7:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * documentation for any purpose, without fee, and without written agreement is
+   8:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * hereby granted, provided that the above copyright notice, the following
+   9:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * two paragraphs and the authors appear in all copies of this software.
+  10:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *
+  11:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * IN NO EVENT SHALL THE "AUTHORS" BE LIABLE TO ANY PARTY FOR
+  12:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT
+  13:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE "AUTHORS"
+  14:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  15:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *
+  16:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * THE "AUTHORS" SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+  17:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+  18:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS
+  19:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * ON AN "AS IS" BASIS, AND THE "AUTHORS" HAS NO OBLIGATION TO
+  20:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
+  21:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *
+  22:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * Please maintain this header in its entirety when copying/modifying
+  23:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * these files.
+  24:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *
+  25:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *
+  26:C:/MinGW/msys/1.0/esos32/src\esos.c ****  */
+  27:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+  28:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+  29:C:/MinGW/msys/1.0/esos32/src\esos.c **** // Documentation for this file. If the \file tag isn't present,
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 2
+
+
+  30:C:/MinGW/msys/1.0/esos32/src\esos.c **** // this file won't be documented.
+  31:C:/MinGW/msys/1.0/esos32/src\esos.c **** /** \file
+  32:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \brief Central code for Embedded Systems Operating System 32-bit (ESOS32)
+  33:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *
+  34:C:/MinGW/msys/1.0/esos32/src\esos.c ****  */
+  35:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+  36:C:/MinGW/msys/1.0/esos32/src\esos.c **** /*! \mainpage Embedded Systems Operating System 32-bit (ESOS32)
+  37:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *
+  38:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \section intro_sec Introduction
+  39:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *
+  40:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * Embedded Systems Operating Systems 32-bit (ESOS32) is a continuation
+  41:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * of the line of ESOS operating systems which have include ports for
+  42:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * 8-bit and 16-bit microcontrollers, predominantly the Microchip 
+  43:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * architectures.
+  44:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * 
+  45:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * The initial port of ESOS32 is aimed at the ARM-Cortex M4 chips from
+  46:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * STMicroelectronics. The first specific target processor is the
+  47:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * STM32L452 processor hosted on the Nucleo64 development board.
+  48:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *
+  49:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \section install_sec Installation
+  50:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * 
+  51:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * The public repository for ESOS32 is hosted by
+  52:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * [Bitbucket](http://bitbucket.org/).
+  53:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * Source code can be found at 
+  54:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * [ESOS32 public repo](https://bitbucket.org/jwbruce/esos32).
+  55:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *
+  56:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \section using_dox Using this documentation
+  57:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *
+  58:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * A good jumping off point in this documentation is to visit
+  59:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * the "Modules" page via the link above.  This page will give the
+  60:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * reader a high-level overview of the major systems and services
+  61:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * provided by ESOS32.
+  62:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * 
+  63:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * As the reader becomes more familiar with ESOS32, then venturing
+  64:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * into the structures, macros, and source code is the next step.
+  65:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * 
+  66:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * Of course, the provided example ESOS32 applications should give
+  67:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * great insight into the structure and use of ESOS32.
+  68:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * 
+  69:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * **Enjoy!**
+  70:C:/MinGW/msys/1.0/esos32/src\esos.c ****  */
+  71:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+  72:C:/MinGW/msys/1.0/esos32/src\esos.c **** #include    "esos.h"
+  73:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+  74:C:/MinGW/msys/1.0/esos32/src\esos.c **** //**********************************************************
+  75:C:/MinGW/msys/1.0/esos32/src\esos.c **** // GLOBAL variables for ESOS to use/maintain
+  76:C:/MinGW/msys/1.0/esos32/src\esos.c **** //**********************************************************
+  77:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+  78:C:/MinGW/msys/1.0/esos32/src\esos.c **** // Tasks management variables
+  79:C:/MinGW/msys/1.0/esos32/src\esos.c **** struct stTask       __astUserTaskPool[MAX_NUM_USER_TASKS];
+  80:C:/MinGW/msys/1.0/esos32/src\esos.c **** uint8_t               __au8UserTaskStructIndex[MAX_NUM_USER_TASKS];
+  81:C:/MinGW/msys/1.0/esos32/src\esos.c **** struct stTask       __astChildTaskPool[MAX_NUM_CHILD_TASKS];
+  82:C:/MinGW/msys/1.0/esos32/src\esos.c **** uint8_t               __u8UserTasksRegistered;
+  83:C:/MinGW/msys/1.0/esos32/src\esos.c **** uint8_t               __u8ChildTasksRegistered;
+  84:C:/MinGW/msys/1.0/esos32/src\esos.c **** uint16_t              __u16NumTasksEverCreated;
+  85:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+  86:C:/MinGW/msys/1.0/esos32/src\esos.c **** // ESOS timer managmentment variables
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 3
+
+
+  87:C:/MinGW/msys/1.0/esos32/src\esos.c **** struct stTimer        __astTmrSvcs[MAX_NUM_TMRS];
+  88:C:/MinGW/msys/1.0/esos32/src\esos.c **** uint8_t                 __esos_u8TmrSvcsRegistered;
+  89:C:/MinGW/msys/1.0/esos32/src\esos.c **** uint32_t                __esos_u32TmrActiveFlags;
+  90:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+  91:C:/MinGW/msys/1.0/esos32/src\esos.c **** #ifdef ESOS_USE_BULK_CDC_USB
+  92:C:/MinGW/msys/1.0/esos32/src\esos.c **** static struct stTask        __stUsbCommSystem;
+  93:C:/MinGW/msys/1.0/esos32/src\esos.c **** #endif
+  94:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+  95:C:/MinGW/msys/1.0/esos32/src\esos.c **** // ESOS task mail services
+  96:C:/MinGW/msys/1.0/esos32/src\esos.c **** MAILBOX     __astMailbox[MAX_NUM_USER_TASKS];
+  97:C:/MinGW/msys/1.0/esos32/src\esos.c **** uint8_t       __au8_MBData[MAX_NUM_USER_TASKS][MAX_SIZE_TASK_MAILBOX];
+  98:C:/MinGW/msys/1.0/esos32/src\esos.c **** CBUFFER     __astCircularBuffers[MAX_NUM_USER_TASKS];
+  99:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 100:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 101:C:/MinGW/msys/1.0/esos32/src\esos.c **** // misc ESOS variables
+ 102:C:/MinGW/msys/1.0/esos32/src\esos.c **** uint32_t      __esos_u32UserFlags, __esos_u32SystemFlags;
+ 103:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 104:C:/MinGW/msys/1.0/esos32/src\esos.c **** /****************************************************************
+ 105:C:/MinGW/msys/1.0/esos32/src\esos.c **** ** Embedded Systems Operating System (ESOS) code
+ 106:C:/MinGW/msys/1.0/esos32/src\esos.c **** ****************************************************************/
+ 107:C:/MinGW/msys/1.0/esos32/src\esos.c **** /**
+ 108:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * Adds a task to the scheduler.  Task will start executing at the
+ 109:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * next opportunity. (almost immediately)
+ 110:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \param taskname name of task (argument to \ref ESOS_USER_TASK declaration
+ 111:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval NULLPTR   if no more tasks can execute at this time (scheduler is full)
+ 112:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval TaskHandle the handle of the just registered and scheduled task
+ 113:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *  \sa ESOS_USER_TASK
+ 114:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *  \sa esos_UnregisterTask
+ 115:C:/MinGW/msys/1.0/esos32/src\esos.c **** */
+ 116:C:/MinGW/msys/1.0/esos32/src\esos.c **** ESOS_TASK_HANDLE    esos_RegisterTask( uint8_t (*taskname)(ESOS_TASK_HANDLE pstTask) ) {
+  30              		.loc 1 116 88 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  35              		.loc 1 116 88 is_stmt 0 view .LVU1
+  36 0000 F0B4     		push	{r4, r5, r6, r7}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 16
+  39              		.cfi_offset 4, -16
+  40              		.cfi_offset 5, -12
+  41              		.cfi_offset 6, -8
+  42              		.cfi_offset 7, -4
+ 117:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t     u8_i;
+  43              		.loc 1 117 3 is_stmt 1 view .LVU2
+ 118:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t     u8_FoundFcn = FALSE;
+  44              		.loc 1 118 3 view .LVU3
+  45              	.LVL1:
+ 119:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t     u8_IndexFcn;
+  46              		.loc 1 119 3 view .LVU4
+ 120:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t     u8_IndexFree=0;
+  47              		.loc 1 120 3 view .LVU5
+ 121:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t     u8_FoundFree = FALSE;
+  48              		.loc 1 121 3 view .LVU6
+ 122:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 123:C:/MinGW/msys/1.0/esos32/src\esos.c ****   if (__u8UserTasksRegistered < MAX_NUM_USER_TASKS) {
+  49              		.loc 1 123 3 view .LVU7
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 4
+
+
+  50              		.loc 1 123 31 is_stmt 0 view .LVU8
+  51 0002 314B     		ldr	r3, .L16
+  52 0004 1F78     		ldrb	r7, [r3]	@ zero_extendqisi2
+  53              		.loc 1 123 6 view .LVU9
+  54 0006 1F2F     		cmp	r7, #31
+  55 0008 03D8     		bhi	.L14
+ 121:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t     u8_FoundFree = FALSE;
+  56              		.loc 1 121 15 view .LVU10
+  57 000a 0025     		movs	r5, #0
+ 120:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t     u8_FoundFree = FALSE;
+  58              		.loc 1 120 15 view .LVU11
+  59 000c 2E46     		mov	r6, r5
+ 124:C:/MinGW/msys/1.0/esos32/src\esos.c ****     /* First, we will look to see if the request task
+ 125:C:/MinGW/msys/1.0/esos32/src\esos.c ****        has already been allocated to a task from the pool.
+ 126:C:/MinGW/msys/1.0/esos32/src\esos.c ****        If so, then let's just reactivate/reset/etc the task.
+ 127:C:/MinGW/msys/1.0/esos32/src\esos.c ****     */
+ 128:C:/MinGW/msys/1.0/esos32/src\esos.c ****     for (u8_i=0; u8_i<MAX_NUM_USER_TASKS; u8_i++) {
+  60              		.loc 1 128 14 view .LVU12
+  61 000e 2B46     		mov	r3, r5
+  62 0010 03E0     		b	.L2
+  63              	.L14:
+ 129:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (__astUserTaskPool[u8_i].pfn == taskname) {
+ 130:C:/MinGW/msys/1.0/esos32/src\esos.c ****         u8_FoundFcn = TRUE;
+ 131:C:/MinGW/msys/1.0/esos32/src\esos.c ****         u8_IndexFcn = u8_i;
+ 132:C:/MinGW/msys/1.0/esos32/src\esos.c ****         break;
+ 133:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // endof if()
+ 134:C:/MinGW/msys/1.0/esos32/src\esos.c ****       /* While we are looping through, take note of the first unused task
+ 135:C:/MinGW/msys/1.0/esos32/src\esos.c ****          we find in the pool.  We will assign this slot to the new task if
+ 136:C:/MinGW/msys/1.0/esos32/src\esos.c ****          we can't find it already allocated a (dead) slot
+ 137:C:/MinGW/msys/1.0/esos32/src\esos.c ****       */
+ 138:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if ((!u8_FoundFree) && (__astUserTaskPool[u8_i].pfn == NULLPTR)) {
+ 139:C:/MinGW/msys/1.0/esos32/src\esos.c ****         u8_FoundFree = TRUE;
+ 140:C:/MinGW/msys/1.0/esos32/src\esos.c ****         u8_IndexFree = u8_i;
+ 141:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // endof if()
+ 142:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } // endof for()
+ 143:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 144:C:/MinGW/msys/1.0/esos32/src\esos.c ****     /* OK. We looked at all the tasks in the pool.  We either
+ 145:C:/MinGW/msys/1.0/esos32/src\esos.c ****        * found the new task already allocated (u8_FoundFcn),
+ 146:C:/MinGW/msys/1.0/esos32/src\esos.c ****        OR
+ 147:C:/MinGW/msys/1.0/esos32/src\esos.c ****        * we did not.  In this case, there are two cases:
+ 148:C:/MinGW/msys/1.0/esos32/src\esos.c ****           # We found a dead/free task slot in our search (u8_FoundFree),
+ 149:C:/MinGW/msys/1.0/esos32/src\esos.c ****           OR
+ 150:C:/MinGW/msys/1.0/esos32/src\esos.c ****           # we did not.  (All slots are already being used.  WE ARE IN TROUBLE!)
+ 151:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 152:C:/MinGW/msys/1.0/esos32/src\esos.c ****        If we found the new task already (dead but allocated) in the pool, then we need to
+ 153:C:/MinGW/msys/1.0/esos32/src\esos.c ****          1) initialize the task, its flags, and its mailbox, and
+ 154:C:/MinGW/msys/1.0/esos32/src\esos.c ****          2) add the task to the task rotation
+ 155:C:/MinGW/msys/1.0/esos32/src\esos.c ****     */
+ 156:C:/MinGW/msys/1.0/esos32/src\esos.c ****     if (u8_FoundFcn) {
+ 157:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __ESOS_INIT_TASK( &__astUserTaskPool[u8_IndexFcn]);                 // reset the task state
+ 158:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFcn].flags = 0;                           // reset the task flags
+ 159:C:/MinGW/msys/1.0/esos32/src\esos.c ****       ESOS_TASK_FLUSH_TASK_MAILBOX(&__astUserTaskPool[u8_IndexFcn]);      // reset the task mailbox
+ 160:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __au8UserTaskStructIndex[__u8UserTasksRegistered] = u8_IndexFcn;
+ 161:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __u8UserTasksRegistered++;
+ 162:C:/MinGW/msys/1.0/esos32/src\esos.c ****       // make sure this task has a non-zero task identifier
+ 163:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if ( __astUserTaskPool[u8_IndexFree].u16_taskID == 0 ) {
+ 164:C:/MinGW/msys/1.0/esos32/src\esos.c ****         // we will simply assign a sequential task ID number (sorta like unix does for PIDs)
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 5
+
+
+ 165:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __u16NumTasksEverCreated++;
+ 166:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astUserTaskPool[u8_IndexFree].u16_taskID = __u16NumTasksEverCreated;
+ 167:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // endif
+ 168:C:/MinGW/msys/1.0/esos32/src\esos.c ****       return &__astUserTaskPool[u8_IndexFcn];
+ 169:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } // endof if
+ 170:C:/MinGW/msys/1.0/esos32/src\esos.c ****     /* We did NOT find our task already in the pool, so allocate a new struct
+ 171:C:/MinGW/msys/1.0/esos32/src\esos.c ****        It has never been registered before, or it's location was garbage collected at some
+ 172:C:/MinGW/msys/1.0/esos32/src\esos.c ****        point.
+ 173:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 174:C:/MinGW/msys/1.0/esos32/src\esos.c ****        If we found a free task slot in the pool, then give this free slot to the new task.
+ 175:C:/MinGW/msys/1.0/esos32/src\esos.c ****     */
+ 176:C:/MinGW/msys/1.0/esos32/src\esos.c ****     if (u8_FoundFree) {
+ 177:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFree].pfn = taskname;                   // attach task to the free 
+ 178:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __ESOS_INIT_TASK(&__astUserTaskPool[u8_IndexFree]);               // reset the task state
+ 179:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFree].flags = 0;                        // reset the task flags
+ 180:C:/MinGW/msys/1.0/esos32/src\esos.c ****       ESOS_TASK_FLUSH_TASK_MAILBOX(&__astUserTaskPool[u8_IndexFree]);   // reset the task mailbox
+ 181:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __au8UserTaskStructIndex[__u8UserTasksRegistered] = u8_IndexFree;
+ 182:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __u8UserTasksRegistered++;
+ 183:C:/MinGW/msys/1.0/esos32/src\esos.c ****       // Since this is a "new" task, give it a new task ID number
+ 184:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __u16NumTasksEverCreated++;
+ 185:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFree].u16_taskID = __u16NumTasksEverCreated;
+ 186:C:/MinGW/msys/1.0/esos32/src\esos.c ****       return &__astUserTaskPool[u8_IndexFree];
+ 187:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } // endof if
+ 188:C:/MinGW/msys/1.0/esos32/src\esos.c ****     /*  we did NOT find our function in the pool OR a free struct to use, so
+ 189:C:/MinGW/msys/1.0/esos32/src\esos.c ****         we will return a NULLPTR for now.  In the future, maybe the garbage can be called here
+ 190:C:/MinGW/msys/1.0/esos32/src\esos.c ****         to find some space by looking for killed/dead tasks.  (Current dead tasks are garbaged
+ 191:C:/MinGW/msys/1.0/esos32/src\esos.c ****         at the end of a complete pool rotation.  Possibly we can do an early garbage collection
+ 192:C:/MinGW/msys/1.0/esos32/src\esos.c ****         here, but it will only help in very rare circumstances.)
+ 193:C:/MinGW/msys/1.0/esos32/src\esos.c ****     */
+ 194:C:/MinGW/msys/1.0/esos32/src\esos.c ****     return NULLPTR;
+ 195:C:/MinGW/msys/1.0/esos32/src\esos.c ****   } else {
+ 196:C:/MinGW/msys/1.0/esos32/src\esos.c ****     return NULLPTR;
+  64              		.loc 1 196 12 view .LVU13
+  65 0012 0020     		movs	r0, #0
+  66              	.LVL2:
+  67              		.loc 1 196 12 view .LVU14
+  68 0014 39E0     		b	.L1
+  69              	.LVL3:
+  70              	.L5:
+ 128:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (__astUserTaskPool[u8_i].pfn == taskname) {
+  71              		.loc 1 128 43 is_stmt 1 discriminator 2 view .LVU15
+ 128:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (__astUserTaskPool[u8_i].pfn == taskname) {
+  72              		.loc 1 128 47 is_stmt 0 discriminator 2 view .LVU16
+  73 0016 0133     		adds	r3, r3, #1
+  74              	.LVL4:
+ 128:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (__astUserTaskPool[u8_i].pfn == taskname) {
+  75              		.loc 1 128 47 discriminator 2 view .LVU17
+  76 0018 DBB2     		uxtb	r3, r3
+  77              	.LVL5:
+  78              	.L2:
+ 128:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (__astUserTaskPool[u8_i].pfn == taskname) {
+  79              		.loc 1 128 18 is_stmt 1 discriminator 1 view .LVU18
+ 128:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (__astUserTaskPool[u8_i].pfn == taskname) {
+  80              		.loc 1 128 5 is_stmt 0 discriminator 1 view .LVU19
+  81 001a 1F2B     		cmp	r3, #31
+  82 001c 37D8     		bhi	.L15
+ 129:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (__astUserTaskPool[u8_i].pfn == taskname) {
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 6
+
+
+  83              		.loc 1 129 7 is_stmt 1 view .LVU20
+ 129:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (__astUserTaskPool[u8_i].pfn == taskname) {
+  84              		.loc 1 129 34 is_stmt 0 view .LVU21
+  85 001e 03EB4302 		add	r2, r3, r3, lsl #1
+  86 0022 2A49     		ldr	r1, .L16+4
+  87 0024 01EBC202 		add	r2, r1, r2, lsl #3
+  88 0028 5268     		ldr	r2, [r2, #4]
+ 129:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (__astUserTaskPool[u8_i].pfn == taskname) {
+  89              		.loc 1 129 10 view .LVU22
+  90 002a 8242     		cmp	r2, r0
+  91 002c 06D0     		beq	.L4
+ 138:C:/MinGW/msys/1.0/esos32/src\esos.c ****         u8_FoundFree = TRUE;
+  92              		.loc 1 138 7 is_stmt 1 view .LVU23
+ 138:C:/MinGW/msys/1.0/esos32/src\esos.c ****         u8_FoundFree = TRUE;
+  93              		.loc 1 138 10 is_stmt 0 view .LVU24
+  94 002e 002D     		cmp	r5, #0
+  95 0030 F1D1     		bne	.L5
+ 138:C:/MinGW/msys/1.0/esos32/src\esos.c ****         u8_FoundFree = TRUE;
+  96              		.loc 1 138 27 discriminator 1 view .LVU25
+  97 0032 002A     		cmp	r2, #0
+  98 0034 EFD1     		bne	.L5
+ 140:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // endof if()
+  99              		.loc 1 140 22 view .LVU26
+ 100 0036 1E46     		mov	r6, r3
+ 101              	.LVL6:
+ 139:C:/MinGW/msys/1.0/esos32/src\esos.c ****         u8_IndexFree = u8_i;
+ 102              		.loc 1 139 22 view .LVU27
+ 103 0038 0125     		movs	r5, #1
+ 104              	.LVL7:
+ 139:C:/MinGW/msys/1.0/esos32/src\esos.c ****         u8_IndexFree = u8_i;
+ 105              		.loc 1 139 22 view .LVU28
+ 106 003a ECE7     		b	.L5
+ 107              	.LVL8:
+ 108              	.L4:
+ 130:C:/MinGW/msys/1.0/esos32/src\esos.c ****         u8_IndexFcn = u8_i;
+ 109              		.loc 1 130 9 is_stmt 1 view .LVU29
+ 131:C:/MinGW/msys/1.0/esos32/src\esos.c ****         break;
+ 110              		.loc 1 131 9 view .LVU30
+ 132:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // endof if()
+ 111              		.loc 1 132 9 view .LVU31
+ 156:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __ESOS_INIT_TASK( &__astUserTaskPool[u8_IndexFcn]);                 // reset the task state
+ 112              		.loc 1 156 5 view .LVU32
+ 157:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFcn].flags = 0;                           // reset the task flags
+ 113              		.loc 1 157 7 view .LVU33
+ 114 003c 234A     		ldr	r2, .L16+4
+ 115 003e 03EB4301 		add	r1, r3, r3, lsl #1
+ 116 0042 CD00     		lsls	r5, r1, #3
+ 117              	.LVL9:
+ 157:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFcn].flags = 0;                           // reset the task flags
+ 118              		.loc 1 157 7 is_stmt 0 view .LVU34
+ 119 0044 02EBC101 		add	r1, r2, r1, lsl #3
+ 120 0048 0020     		movs	r0, #0
+ 121              	.LVL10:
+ 157:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFcn].flags = 0;                           // reset the task flags
+ 122              		.loc 1 157 7 view .LVU35
+ 123 004a 5053     		strh	r0, [r2, r5]	@ movhi
+ 157:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFcn].flags = 0;                           // reset the task flags
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 7
+
+
+ 124              		.loc 1 157 7 is_stmt 1 view .LVU36
+ 157:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFcn].flags = 0;                           // reset the task flags
+ 125              		.loc 1 157 57 view .LVU37
+ 158:C:/MinGW/msys/1.0/esos32/src\esos.c ****       ESOS_TASK_FLUSH_TASK_MAILBOX(&__astUserTaskPool[u8_IndexFcn]);      // reset the task mailbox
+ 126              		.loc 1 158 7 view .LVU38
+ 158:C:/MinGW/msys/1.0/esos32/src\esos.c ****       ESOS_TASK_FLUSH_TASK_MAILBOX(&__astUserTaskPool[u8_IndexFcn]);      // reset the task mailbox
+ 127              		.loc 1 158 44 is_stmt 0 view .LVU39
+ 128 004c 8870     		strb	r0, [r1, #2]
+ 159:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __au8UserTaskStructIndex[__u8UserTasksRegistered] = u8_IndexFcn;
+ 129              		.loc 1 159 7 is_stmt 1 view .LVU40
+ 130 004e 4969     		ldr	r1, [r1, #20]
+ 131 0050 0968     		ldr	r1, [r1]
+ 132 0052 8880     		strh	r0, [r1, #4]	@ movhi
+ 160:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __u8UserTasksRegistered++;
+ 133              		.loc 1 160 7 view .LVU41
+ 160:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __u8UserTasksRegistered++;
+ 134              		.loc 1 160 57 is_stmt 0 view .LVU42
+ 135 0054 1E49     		ldr	r1, .L16+8
+ 136 0056 CB55     		strb	r3, [r1, r7]
+ 161:C:/MinGW/msys/1.0/esos32/src\esos.c ****       // make sure this task has a non-zero task identifier
+ 137              		.loc 1 161 7 is_stmt 1 view .LVU43
+ 161:C:/MinGW/msys/1.0/esos32/src\esos.c ****       // make sure this task has a non-zero task identifier
+ 138              		.loc 1 161 30 is_stmt 0 view .LVU44
+ 139 0058 0137     		adds	r7, r7, #1
+ 140 005a 1B49     		ldr	r1, .L16
+ 141 005c 0F70     		strb	r7, [r1]
+ 163:C:/MinGW/msys/1.0/esos32/src\esos.c ****         // we will simply assign a sequential task ID number (sorta like unix does for PIDs)
+ 142              		.loc 1 163 7 is_stmt 1 view .LVU45
+ 163:C:/MinGW/msys/1.0/esos32/src\esos.c ****         // we will simply assign a sequential task ID number (sorta like unix does for PIDs)
+ 143              		.loc 1 163 43 is_stmt 0 view .LVU46
+ 144 005e 06EB4601 		add	r1, r6, r6, lsl #1
+ 145 0062 02EBC102 		add	r2, r2, r1, lsl #3
+ 146 0066 128A     		ldrh	r2, [r2, #16]
+ 163:C:/MinGW/msys/1.0/esos32/src\esos.c ****         // we will simply assign a sequential task ID number (sorta like unix does for PIDs)
+ 147              		.loc 1 163 10 view .LVU47
+ 148 0068 52B9     		cbnz	r2, .L8
+ 165:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astUserTaskPool[u8_IndexFree].u16_taskID = __u16NumTasksEverCreated;
+ 149              		.loc 1 165 9 is_stmt 1 view .LVU48
+ 165:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astUserTaskPool[u8_IndexFree].u16_taskID = __u16NumTasksEverCreated;
+ 150              		.loc 1 165 33 is_stmt 0 view .LVU49
+ 151 006a 1A49     		ldr	r1, .L16+12
+ 152 006c 0A88     		ldrh	r2, [r1]
+ 153 006e 0132     		adds	r2, r2, #1
+ 154 0070 92B2     		uxth	r2, r2
+ 155 0072 0A80     		strh	r2, [r1]	@ movhi
+ 166:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // endif
+ 156              		.loc 1 166 9 is_stmt 1 view .LVU50
+ 166:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // endif
+ 157              		.loc 1 166 52 is_stmt 0 view .LVU51
+ 158 0074 06EB4606 		add	r6, r6, r6, lsl #1
+ 159              	.LVL11:
+ 166:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // endif
+ 160              		.loc 1 166 52 view .LVU52
+ 161 0078 1449     		ldr	r1, .L16+4
+ 162 007a 01EBC606 		add	r6, r1, r6, lsl #3
+ 163 007e 3282     		strh	r2, [r6, #16]	@ movhi
+ 164              	.L8:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 8
+
+
+ 168:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } // endof if
+ 165              		.loc 1 168 7 is_stmt 1 view .LVU53
+ 168:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } // endof if
+ 166              		.loc 1 168 14 is_stmt 0 view .LVU54
+ 167 0080 03EB4303 		add	r3, r3, r3, lsl #1
+ 168              	.LVL12:
+ 168:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } // endof if
+ 169              		.loc 1 168 14 view .LVU55
+ 170 0084 1148     		ldr	r0, .L16+4
+ 171 0086 00EBC300 		add	r0, r0, r3, lsl #3
+ 172              	.LVL13:
+ 173              	.L1:
+ 197:C:/MinGW/msys/1.0/esos32/src\esos.c ****   } //end of if-else
+ 198:C:/MinGW/msys/1.0/esos32/src\esos.c **** }// end esos_RegisterTask()
+ 174              		.loc 1 198 1 view .LVU56
+ 175 008a F0BC     		pop	{r4, r5, r6, r7}
+ 176              	.LCFI1:
+ 177              		.cfi_remember_state
+ 178              		.cfi_restore 7
+ 179              		.cfi_restore 6
+ 180              		.cfi_restore 5
+ 181              		.cfi_restore 4
+ 182              		.cfi_def_cfa_offset 0
+ 183 008c 7047     		bx	lr
+ 184              	.LVL14:
+ 185              	.L15:
+ 186              	.LCFI2:
+ 187              		.cfi_restore_state
+ 156:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __ESOS_INIT_TASK( &__astUserTaskPool[u8_IndexFcn]);                 // reset the task state
+ 188              		.loc 1 156 5 is_stmt 1 view .LVU57
+ 176:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFree].pfn = taskname;                   // attach task to the free 
+ 189              		.loc 1 176 5 view .LVU58
+ 176:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFree].pfn = taskname;                   // attach task to the free 
+ 190              		.loc 1 176 8 is_stmt 0 view .LVU59
+ 191 008e CDB1     		cbz	r5, .L11
+ 177:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __ESOS_INIT_TASK(&__astUserTaskPool[u8_IndexFree]);               // reset the task state
+ 192              		.loc 1 177 7 is_stmt 1 view .LVU60
+ 177:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __ESOS_INIT_TASK(&__astUserTaskPool[u8_IndexFree]);               // reset the task state
+ 193              		.loc 1 177 43 is_stmt 0 view .LVU61
+ 194 0090 0E4B     		ldr	r3, .L16+4
+ 195              	.LVL15:
+ 177:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __ESOS_INIT_TASK(&__astUserTaskPool[u8_IndexFree]);               // reset the task state
+ 196              		.loc 1 177 43 view .LVU62
+ 197 0092 06EB4602 		add	r2, r6, r6, lsl #1
+ 198 0096 D400     		lsls	r4, r2, #3
+ 199 0098 03EBC202 		add	r2, r3, r2, lsl #3
+ 200 009c 5060     		str	r0, [r2, #4]
+ 178:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFree].flags = 0;                        // reset the task flags
+ 201              		.loc 1 178 7 is_stmt 1 view .LVU63
+ 202 009e 0021     		movs	r1, #0
+ 203 00a0 1953     		strh	r1, [r3, r4]	@ movhi
+ 178:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFree].flags = 0;                        // reset the task flags
+ 204              		.loc 1 178 7 view .LVU64
+ 178:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFree].flags = 0;                        // reset the task flags
+ 205              		.loc 1 178 57 view .LVU65
+ 179:C:/MinGW/msys/1.0/esos32/src\esos.c ****       ESOS_TASK_FLUSH_TASK_MAILBOX(&__astUserTaskPool[u8_IndexFree]);   // reset the task mailbox
+ 206              		.loc 1 179 7 view .LVU66
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 9
+
+
+ 179:C:/MinGW/msys/1.0/esos32/src\esos.c ****       ESOS_TASK_FLUSH_TASK_MAILBOX(&__astUserTaskPool[u8_IndexFree]);   // reset the task mailbox
+ 207              		.loc 1 179 45 is_stmt 0 view .LVU67
+ 208 00a2 9170     		strb	r1, [r2, #2]
+ 180:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __au8UserTaskStructIndex[__u8UserTasksRegistered] = u8_IndexFree;
+ 209              		.loc 1 180 7 is_stmt 1 view .LVU68
+ 210 00a4 5069     		ldr	r0, [r2, #20]
+ 211              	.LVL16:
+ 180:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __au8UserTaskStructIndex[__u8UserTasksRegistered] = u8_IndexFree;
+ 212              		.loc 1 180 7 is_stmt 0 view .LVU69
+ 213 00a6 0068     		ldr	r0, [r0]
+ 214 00a8 8180     		strh	r1, [r0, #4]	@ movhi
+ 215              	.LVL17:
+ 181:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __u8UserTasksRegistered++;
+ 216              		.loc 1 181 7 is_stmt 1 view .LVU70
+ 181:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __u8UserTasksRegistered++;
+ 217              		.loc 1 181 57 is_stmt 0 view .LVU71
+ 218 00aa 0949     		ldr	r1, .L16+8
+ 219 00ac CE55     		strb	r6, [r1, r7]
+ 182:C:/MinGW/msys/1.0/esos32/src\esos.c ****       // Since this is a "new" task, give it a new task ID number
+ 220              		.loc 1 182 7 is_stmt 1 view .LVU72
+ 182:C:/MinGW/msys/1.0/esos32/src\esos.c ****       // Since this is a "new" task, give it a new task ID number
+ 221              		.loc 1 182 30 is_stmt 0 view .LVU73
+ 222 00ae 0137     		adds	r7, r7, #1
+ 223 00b0 0549     		ldr	r1, .L16
+ 224 00b2 0F70     		strb	r7, [r1]
+ 184:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFree].u16_taskID = __u16NumTasksEverCreated;
+ 225              		.loc 1 184 7 is_stmt 1 view .LVU74
+ 184:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astUserTaskPool[u8_IndexFree].u16_taskID = __u16NumTasksEverCreated;
+ 226              		.loc 1 184 31 is_stmt 0 view .LVU75
+ 227 00b4 0748     		ldr	r0, .L16+12
+ 228 00b6 0188     		ldrh	r1, [r0]
+ 229 00b8 0131     		adds	r1, r1, #1
+ 230 00ba 89B2     		uxth	r1, r1
+ 231 00bc 0180     		strh	r1, [r0]	@ movhi
+ 185:C:/MinGW/msys/1.0/esos32/src\esos.c ****       return &__astUserTaskPool[u8_IndexFree];
+ 232              		.loc 1 185 7 is_stmt 1 view .LVU76
+ 185:C:/MinGW/msys/1.0/esos32/src\esos.c ****       return &__astUserTaskPool[u8_IndexFree];
+ 233              		.loc 1 185 50 is_stmt 0 view .LVU77
+ 234 00be 1182     		strh	r1, [r2, #16]	@ movhi
+ 186:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } // endof if
+ 235              		.loc 1 186 7 is_stmt 1 view .LVU78
+ 186:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } // endof if
+ 236              		.loc 1 186 14 is_stmt 0 view .LVU79
+ 237 00c0 1046     		mov	r0, r2
+ 238 00c2 E2E7     		b	.L1
+ 239              	.LVL18:
+ 240              	.L11:
+ 194:C:/MinGW/msys/1.0/esos32/src\esos.c ****   } else {
+ 241              		.loc 1 194 12 view .LVU80
+ 242 00c4 0020     		movs	r0, #0
+ 243              	.LVL19:
+ 194:C:/MinGW/msys/1.0/esos32/src\esos.c ****   } else {
+ 244              		.loc 1 194 12 view .LVU81
+ 245 00c6 E0E7     		b	.L1
+ 246              	.L17:
+ 247              		.align	2
+ 248              	.L16:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 10
+
+
+ 249 00c8 00000000 		.word	__u8UserTasksRegistered
+ 250 00cc 00000000 		.word	__astUserTaskPool
+ 251 00d0 00000000 		.word	__au8UserTaskStructIndex
+ 252 00d4 00000000 		.word	__u16NumTasksEverCreated
+ 253              		.cfi_endproc
+ 254              	.LFE0:
+ 256              		.section	.text.esos_UnregisterTask,"ax",%progbits
+ 257              		.align	1
+ 258              		.global	esos_UnregisterTask
+ 259              		.syntax unified
+ 260              		.thumb
+ 261              		.thumb_func
+ 262              		.fpu fpv4-sp-d16
+ 264              	esos_UnregisterTask:
+ 265              	.LVL20:
+ 266              	.LFB1:
+ 199:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 200:C:/MinGW/msys/1.0/esos32/src\esos.c **** /**
+ 201:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * Removes the task from the scheduler
+ 202:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \param taskname name of task (argument to \ref ESOS_USER_TASK declaration
+ 203:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval TRUE if task was found in scheduler and removed
+ 204:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval FALSE  otherwise
+ 205:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa ESOS_USER_TASK
+ 206:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_RegisterTask
+ 207:C:/MinGW/msys/1.0/esos32/src\esos.c **** */
+ 208:C:/MinGW/msys/1.0/esos32/src\esos.c **** uint8_t    esos_UnregisterTask( uint8_t (*taskname)(ESOS_TASK_HANDLE pstTask) ) {
+ 267              		.loc 1 208 81 is_stmt 1 view -0
+ 268              		.cfi_startproc
+ 269              		@ args = 0, pretend = 0, frame = 0
+ 270              		@ frame_needed = 0, uses_anonymous_args = 0
+ 271              		@ link register save eliminated.
+ 209:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t                 u8Status=FALSE;
+ 272              		.loc 1 209 3 view .LVU83
+ 210:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t                 u8_i, u8_z;
+ 273              		.loc 1 210 3 view .LVU84
+ 211:C:/MinGW/msys/1.0/esos32/src\esos.c ****   ESOS_TASK_HANDLE      pstNowTask;
+ 274              		.loc 1 211 3 view .LVU85
+ 212:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 213:C:/MinGW/msys/1.0/esos32/src\esos.c ****   /* Search through the pool and find out where the task needing unregistering
+ 214:C:/MinGW/msys/1.0/esos32/src\esos.c ****      is residing in the pool.  Then, we will mark this slot as needing removal
+ 215:C:/MinGW/msys/1.0/esos32/src\esos.c ****      and setting a flag for task pool repacking at the end of the current
+ 216:C:/MinGW/msys/1.0/esos32/src\esos.c ****      rotation through the pool.
+ 217:C:/MinGW/msys/1.0/esos32/src\esos.c ****   */
+ 218:C:/MinGW/msys/1.0/esos32/src\esos.c ****   for (u8_i=0; u8_i<__u8UserTasksRegistered; u8_i++) {
+ 275              		.loc 1 218 3 view .LVU86
+ 276              		.loc 1 218 12 is_stmt 0 view .LVU87
+ 277 0000 0023     		movs	r3, #0
+ 278              	.LVL21:
+ 279              		.loc 1 218 16 is_stmt 1 view .LVU88
+ 280              		.loc 1 218 20 is_stmt 0 view .LVU89
+ 281 0002 144A     		ldr	r2, .L30
+ 282 0004 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 283              		.loc 1 218 3 view .LVU90
+ 284 0006 9A42     		cmp	r2, r3
+ 285 0008 22D9     		bls	.L28
+ 208:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t                 u8Status=FALSE;
+ 286              		.loc 1 208 81 view .LVU91
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 11
+
+
+ 287 000a 10B4     		push	{r4}
+ 288              	.LCFI3:
+ 289              		.cfi_def_cfa_offset 4
+ 290              		.cfi_offset 4, -4
+ 291 000c 05E0     		b	.L22
+ 292              	.LVL22:
+ 293              	.L20:
+ 294              		.loc 1 218 46 is_stmt 1 discriminator 2 view .LVU92
+ 295              		.loc 1 218 50 is_stmt 0 discriminator 2 view .LVU93
+ 296 000e 0133     		adds	r3, r3, #1
+ 297              	.LVL23:
+ 298              		.loc 1 218 50 discriminator 2 view .LVU94
+ 299 0010 DBB2     		uxtb	r3, r3
+ 300              	.LVL24:
+ 301              		.loc 1 218 16 is_stmt 1 discriminator 2 view .LVU95
+ 302              		.loc 1 218 20 is_stmt 0 discriminator 2 view .LVU96
+ 303 0012 104A     		ldr	r2, .L30
+ 304 0014 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 305              		.loc 1 218 3 discriminator 2 view .LVU97
+ 306 0016 9A42     		cmp	r2, r3
+ 307 0018 16D9     		bls	.L29
+ 308              	.LVL25:
+ 309              	.L22:
+ 219:C:/MinGW/msys/1.0/esos32/src\esos.c ****     // get next index from array so we can get the task handle
+ 220:C:/MinGW/msys/1.0/esos32/src\esos.c ****     u8_z = __au8UserTaskStructIndex[u8_i];
+ 310              		.loc 1 220 5 is_stmt 1 view .LVU98
+ 311              		.loc 1 220 36 is_stmt 0 view .LVU99
+ 312 001a 1C46     		mov	r4, r3
+ 313              		.loc 1 220 10 view .LVU100
+ 314 001c 0E4A     		ldr	r2, .L30+4
+ 315 001e D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 316              	.LVL26:
+ 221:C:/MinGW/msys/1.0/esos32/src\esos.c ****     /* check tasks that have been allocated (not a NULLIDX) and
+ 222:C:/MinGW/msys/1.0/esos32/src\esos.c ****        not been garbage collected (not REMOVE_IDX) yet.  If our
+ 223:C:/MinGW/msys/1.0/esos32/src\esos.c ****        task is among them, the mark it to be garbaged collected
+ 224:C:/MinGW/msys/1.0/esos32/src\esos.c ****        (REMOVE_IDX) at the next opportunity
+ 225:C:/MinGW/msys/1.0/esos32/src\esos.c ****     */
+ 226:C:/MinGW/msys/1.0/esos32/src\esos.c ****     if ((u8_z != NULLIDX) & (u8_z != REMOVE_IDX)) {
+ 317              		.loc 1 226 5 is_stmt 1 view .LVU101
+ 318              		.loc 1 226 8 is_stmt 0 view .LVU102
+ 319 0020 FD2A     		cmp	r2, #253
+ 320 0022 F4D8     		bhi	.L20
+ 227:C:/MinGW/msys/1.0/esos32/src\esos.c ****       pstNowTask = &__astUserTaskPool[u8_z];
+ 321              		.loc 1 227 7 is_stmt 1 view .LVU103
+ 322              	.LVL27:
+ 228:C:/MinGW/msys/1.0/esos32/src\esos.c ****       // If we find our task, mark it and signal ESOS to repack task pool
+ 229:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (pstNowTask->pfn == taskname) {
+ 323              		.loc 1 229 7 view .LVU104
+ 324              		.loc 1 229 21 is_stmt 0 view .LVU105
+ 325 0024 02EB4202 		add	r2, r2, r2, lsl #1
+ 326              	.LVL28:
+ 327              		.loc 1 229 21 view .LVU106
+ 328 0028 0C49     		ldr	r1, .L30+8
+ 329 002a 01EBC202 		add	r2, r1, r2, lsl #3
+ 330 002e 5268     		ldr	r2, [r2, #4]
+ 331              		.loc 1 229 10 view .LVU107
+ 332 0030 8242     		cmp	r2, r0
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 12
+
+
+ 333 0032 ECD1     		bne	.L20
+ 230:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __au8UserTaskStructIndex[u8_i] = REMOVE_IDX;
+ 334              		.loc 1 230 9 is_stmt 1 view .LVU108
+ 335              		.loc 1 230 40 is_stmt 0 view .LVU109
+ 336 0034 084B     		ldr	r3, .L30+4
+ 337              	.LVL29:
+ 338              		.loc 1 230 40 view .LVU110
+ 339 0036 FE22     		movs	r2, #254
+ 340 0038 1A55     		strb	r2, [r3, r4]
+ 341              	.LVL30:
+ 231:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __esos_SetSystemFlag( __ESOS_SYS_FLAG_PACK_TASKS );
+ 342              		.loc 1 231 9 is_stmt 1 view .LVU111
+ 343 003a 094A     		ldr	r2, .L30+12
+ 344 003c 1368     		ldr	r3, [r2]
+ 345 003e 43F00103 		orr	r3, r3, #1
+ 346 0042 1360     		str	r3, [r2]
+ 232:C:/MinGW/msys/1.0/esos32/src\esos.c ****         u8Status=TRUE;
+ 347              		.loc 1 232 9 view .LVU112
+ 348              	.LVL31:
+ 233:C:/MinGW/msys/1.0/esos32/src\esos.c ****         break;
+ 349              		.loc 1 233 9 view .LVU113
+ 232:C:/MinGW/msys/1.0/esos32/src\esos.c ****         u8Status=TRUE;
+ 350              		.loc 1 232 17 is_stmt 0 view .LVU114
+ 351 0044 0120     		movs	r0, #1
+ 352              	.LVL32:
+ 353              		.loc 1 233 9 view .LVU115
+ 354 0046 00E0     		b	.L21
+ 355              	.LVL33:
+ 356              	.L29:
+ 209:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t                 u8_i, u8_z;
+ 357              		.loc 1 209 27 view .LVU116
+ 358 0048 0020     		movs	r0, #0
+ 359              	.LVL34:
+ 360              	.L21:
+ 234:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // end if (pfn == taskname)
+ 235:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } // end if (!NULLIDX)
+ 236:C:/MinGW/msys/1.0/esos32/src\esos.c ****   } // end for
+ 237:C:/MinGW/msys/1.0/esos32/src\esos.c ****   return  u8Status;
+ 361              		.loc 1 237 3 is_stmt 1 view .LVU117
+ 238:C:/MinGW/msys/1.0/esos32/src\esos.c **** }// end esos_UnregisterTask()
+ 362              		.loc 1 238 1 is_stmt 0 view .LVU118
+ 363 004a 5DF8044B 		ldr	r4, [sp], #4
+ 364              	.LCFI4:
+ 365              		.cfi_restore 4
+ 366              		.cfi_def_cfa_offset 0
+ 367 004e 7047     		bx	lr
+ 368              	.LVL35:
+ 369              	.L28:
+ 209:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t                 u8_i, u8_z;
+ 370              		.loc 1 209 27 view .LVU119
+ 371 0050 0020     		movs	r0, #0
+ 372              	.LVL36:
+ 237:C:/MinGW/msys/1.0/esos32/src\esos.c **** }// end esos_UnregisterTask()
+ 373              		.loc 1 237 3 is_stmt 1 view .LVU120
+ 374              		.loc 1 238 1 is_stmt 0 view .LVU121
+ 375 0052 7047     		bx	lr
+ 376              	.L31:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 13
+
+
+ 377              		.align	2
+ 378              	.L30:
+ 379 0054 00000000 		.word	__u8UserTasksRegistered
+ 380 0058 00000000 		.word	__au8UserTaskStructIndex
+ 381 005c 00000000 		.word	__astUserTaskPool
+ 382 0060 00000000 		.word	__esos_u32SystemFlags
+ 383              		.cfi_endproc
+ 384              	.LFE1:
+ 386              		.section	.text.esos_GetTaskHandle,"ax",%progbits
+ 387              		.align	1
+ 388              		.global	esos_GetTaskHandle
+ 389              		.syntax unified
+ 390              		.thumb
+ 391              		.thumb_func
+ 392              		.fpu fpv4-sp-d16
+ 394              	esos_GetTaskHandle:
+ 395              	.LVL37:
+ 396              	.LFB2:
+ 239:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 240:C:/MinGW/msys/1.0/esos32/src\esos.c **** /**
+ 241:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * Find the (active) task handle for a given task function
+ 242:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \param taskname name of task (argument to \ref ESOS_USER_TASK declaration
+ 243:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval NULLPTR   if task is not found among the active tasks
+ 244:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval TaskHandle the handle to the task function requested
+ 245:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *  \sa ESOS_USER_TASK
+ 246:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *  \sa esos_RegisterTask
+ 247:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *  \sa esos_UnregisterTask
+ 248:C:/MinGW/msys/1.0/esos32/src\esos.c **** */
+ 249:C:/MinGW/msys/1.0/esos32/src\esos.c **** ESOS_TASK_HANDLE    esos_GetTaskHandle( uint8_t (*taskname)(ESOS_TASK_HANDLE pstTask) ) {
+ 397              		.loc 1 249 89 is_stmt 1 view -0
+ 398              		.cfi_startproc
+ 399              		@ args = 0, pretend = 0, frame = 0
+ 400              		@ frame_needed = 0, uses_anonymous_args = 0
+ 401              		@ link register save eliminated.
+ 402              		.loc 1 249 89 is_stmt 0 view .LVU123
+ 403 0000 30B4     		push	{r4, r5}
+ 404              	.LCFI5:
+ 405              		.cfi_def_cfa_offset 8
+ 406              		.cfi_offset 4, -8
+ 407              		.cfi_offset 5, -4
+ 408 0002 0546     		mov	r5, r0
+ 250:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t                 u8_i, u8_z;
+ 409              		.loc 1 250 3 is_stmt 1 view .LVU124
+ 251:C:/MinGW/msys/1.0/esos32/src\esos.c ****   ESOS_TASK_HANDLE      pst_NowTask;
+ 410              		.loc 1 251 3 view .LVU125
+ 252:C:/MinGW/msys/1.0/esos32/src\esos.c ****   ESOS_TASK_HANDLE      pst_ReturnTask = (ESOS_TASK_HANDLE) NULLPTR;
+ 411              		.loc 1 252 3 view .LVU126
+ 412              	.LVL38:
+ 253:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 254:C:/MinGW/msys/1.0/esos32/src\esos.c ****   /* Scan through the pool of "registered" tasks and see
+ 255:C:/MinGW/msys/1.0/esos32/src\esos.c ****      if we can find the task function name requested
+ 256:C:/MinGW/msys/1.0/esos32/src\esos.c ****   */
+ 257:C:/MinGW/msys/1.0/esos32/src\esos.c ****   for (u8_i=0; u8_i<__u8UserTasksRegistered; u8_i++) {
+ 413              		.loc 1 257 3 view .LVU127
+ 414              		.loc 1 257 12 is_stmt 0 view .LVU128
+ 415 0004 0023     		movs	r3, #0
+ 416              		.loc 1 257 3 view .LVU129
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 14
+
+
+ 417 0006 01E0     		b	.L33
+ 418              	.LVL39:
+ 419              	.L34:
+ 420              		.loc 1 257 46 is_stmt 1 discriminator 2 view .LVU130
+ 421              		.loc 1 257 50 is_stmt 0 discriminator 2 view .LVU131
+ 422 0008 0133     		adds	r3, r3, #1
+ 423              	.LVL40:
+ 424              		.loc 1 257 50 discriminator 2 view .LVU132
+ 425 000a DBB2     		uxtb	r3, r3
+ 426              	.LVL41:
+ 427              	.L33:
+ 428              		.loc 1 257 16 is_stmt 1 discriminator 1 view .LVU133
+ 429              		.loc 1 257 20 is_stmt 0 discriminator 1 view .LVU134
+ 430 000c 094A     		ldr	r2, .L39
+ 431 000e 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 432              		.loc 1 257 3 discriminator 1 view .LVU135
+ 433 0010 9A42     		cmp	r2, r3
+ 434 0012 0CD9     		bls	.L38
+ 258:C:/MinGW/msys/1.0/esos32/src\esos.c ****     // get next index from array so we can get the task handle
+ 259:C:/MinGW/msys/1.0/esos32/src\esos.c ****     u8_z = __au8UserTaskStructIndex[u8_i];
+ 435              		.loc 1 259 5 is_stmt 1 view .LVU136
+ 436              		.loc 1 259 10 is_stmt 0 view .LVU137
+ 437 0014 084A     		ldr	r2, .L39+4
+ 438 0016 D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 439              	.LVL42:
+ 260:C:/MinGW/msys/1.0/esos32/src\esos.c ****     /* check tasks that have been allocated (not a NULLIDX) and
+ 261:C:/MinGW/msys/1.0/esos32/src\esos.c ****        not been garbage collected (not REMOVE_IDX) yet.  If our
+ 262:C:/MinGW/msys/1.0/esos32/src\esos.c ****        task is among them, then return the handle to the caller
+ 263:C:/MinGW/msys/1.0/esos32/src\esos.c ****     */
+ 264:C:/MinGW/msys/1.0/esos32/src\esos.c ****     if ((u8_z != NULLIDX) & (u8_z != REMOVE_IDX)) {
+ 440              		.loc 1 264 5 is_stmt 1 view .LVU138
+ 441              		.loc 1 264 8 is_stmt 0 view .LVU139
+ 442 0018 FD2A     		cmp	r2, #253
+ 443 001a F5D8     		bhi	.L34
+ 265:C:/MinGW/msys/1.0/esos32/src\esos.c ****       pst_NowTask = &__astUserTaskPool[u8_z];
+ 444              		.loc 1 265 7 is_stmt 1 view .LVU140
+ 445              		.loc 1 265 19 is_stmt 0 view .LVU141
+ 446 001c 02EB4204 		add	r4, r2, r2, lsl #1
+ 447 0020 0649     		ldr	r1, .L39+8
+ 448 0022 01EBC400 		add	r0, r1, r4, lsl #3
+ 449              	.LVL43:
+ 266:C:/MinGW/msys/1.0/esos32/src\esos.c ****       // If we find our task, save the pstXXX so we can return it
+ 267:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (pst_NowTask->pfn == taskname) {
+ 450              		.loc 1 267 7 is_stmt 1 view .LVU142
+ 451              		.loc 1 267 22 is_stmt 0 view .LVU143
+ 452 0026 4268     		ldr	r2, [r0, #4]
+ 453              	.LVL44:
+ 454              		.loc 1 267 10 view .LVU144
+ 455 0028 AA42     		cmp	r2, r5
+ 456 002a EDD1     		bne	.L34
+ 457 002c 00E0     		b	.L32
+ 458              	.LVL45:
+ 459              	.L38:
+ 252:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 460              		.loc 1 252 25 view .LVU145
+ 461 002e 0020     		movs	r0, #0
+ 268:C:/MinGW/msys/1.0/esos32/src\esos.c ****         pst_ReturnTask = pst_NowTask;
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 15
+
+
+ 269:C:/MinGW/msys/1.0/esos32/src\esos.c ****         break;
+ 270:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // end if (pfn == taskname)
+ 271:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } // end if (!NULLIDX)
+ 272:C:/MinGW/msys/1.0/esos32/src\esos.c ****   } //end for
+ 273:C:/MinGW/msys/1.0/esos32/src\esos.c ****   return pst_ReturnTask;
+ 462              		.loc 1 273 3 is_stmt 1 view .LVU146
+ 463              	.L32:
+ 274:C:/MinGW/msys/1.0/esos32/src\esos.c **** } //end esos_GetTaskHandle()
+ 464              		.loc 1 274 1 is_stmt 0 view .LVU147
+ 465 0030 30BC     		pop	{r4, r5}
+ 466              	.LCFI6:
+ 467              		.cfi_restore 5
+ 468              		.cfi_restore 4
+ 469              		.cfi_def_cfa_offset 0
+ 470              	.LVL46:
+ 471              		.loc 1 274 1 view .LVU148
+ 472 0032 7047     		bx	lr
+ 473              	.L40:
+ 474              		.align	2
+ 475              	.L39:
+ 476 0034 00000000 		.word	__u8UserTasksRegistered
+ 477 0038 00000000 		.word	__au8UserTaskStructIndex
+ 478 003c 00000000 		.word	__astUserTaskPool
+ 479              		.cfi_endproc
+ 480              	.LFE2:
+ 482              		.section	.text.esos_GetTaskHandleFromID,"ax",%progbits
+ 483              		.align	1
+ 484              		.global	esos_GetTaskHandleFromID
+ 485              		.syntax unified
+ 486              		.thumb
+ 487              		.thumb_func
+ 488              		.fpu fpv4-sp-d16
+ 490              	esos_GetTaskHandleFromID:
+ 491              	.LVL47:
+ 492              	.LFB3:
+ 275:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 276:C:/MinGW/msys/1.0/esos32/src\esos.c **** /**
+ 277:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * Find the (active) task handle for a given task function
+ 278:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \param u16_TaskID name of task (argument to \ref ESOS_USER_TASK declaration)
+ 279:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval NULLPTR   if task is not found among the active tasks
+ 280:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval TaskHandle the handle to the task function requested
+ 281:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *  \sa ESOS_USER_TASK
+ 282:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *  \sa esos_RegisterTask
+ 283:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *  \sa esos_UnregisterTask
+ 284:C:/MinGW/msys/1.0/esos32/src\esos.c **** */
+ 285:C:/MinGW/msys/1.0/esos32/src\esos.c **** ESOS_TASK_HANDLE    esos_GetTaskHandleFromID( uint16_t u16_TaskID ) {
+ 493              		.loc 1 285 69 is_stmt 1 view -0
+ 494              		.cfi_startproc
+ 495              		@ args = 0, pretend = 0, frame = 0
+ 496              		@ frame_needed = 0, uses_anonymous_args = 0
+ 497              		@ link register save eliminated.
+ 498              		.loc 1 285 69 is_stmt 0 view .LVU150
+ 499 0000 30B4     		push	{r4, r5}
+ 500              	.LCFI7:
+ 501              		.cfi_def_cfa_offset 8
+ 502              		.cfi_offset 4, -8
+ 503              		.cfi_offset 5, -4
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 16
+
+
+ 504 0002 0546     		mov	r5, r0
+ 286:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t             u8_i, u8_z;
+ 505              		.loc 1 286 3 is_stmt 1 view .LVU151
+ 287:C:/MinGW/msys/1.0/esos32/src\esos.c ****   ESOS_TASK_HANDLE      pst_NowTask;
+ 506              		.loc 1 287 3 view .LVU152
+ 288:C:/MinGW/msys/1.0/esos32/src\esos.c ****   ESOS_TASK_HANDLE      pst_ReturnTask = (ESOS_TASK_HANDLE) NULLPTR;
+ 507              		.loc 1 288 3 view .LVU153
+ 508              	.LVL48:
+ 289:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 290:C:/MinGW/msys/1.0/esos32/src\esos.c ****   /* Scan through the pool of "registered" tasks and see
+ 291:C:/MinGW/msys/1.0/esos32/src\esos.c ****      if we can find the task function name requested
+ 292:C:/MinGW/msys/1.0/esos32/src\esos.c ****   */
+ 293:C:/MinGW/msys/1.0/esos32/src\esos.c ****   for (u8_i=0; u8_i<__u8UserTasksRegistered; u8_i++) {
+ 509              		.loc 1 293 3 view .LVU154
+ 510              		.loc 1 293 12 is_stmt 0 view .LVU155
+ 511 0004 0023     		movs	r3, #0
+ 512              		.loc 1 293 3 view .LVU156
+ 513 0006 01E0     		b	.L42
+ 514              	.LVL49:
+ 515              	.L43:
+ 516              		.loc 1 293 46 is_stmt 1 discriminator 2 view .LVU157
+ 517              		.loc 1 293 50 is_stmt 0 discriminator 2 view .LVU158
+ 518 0008 0133     		adds	r3, r3, #1
+ 519              	.LVL50:
+ 520              		.loc 1 293 50 discriminator 2 view .LVU159
+ 521 000a DBB2     		uxtb	r3, r3
+ 522              	.LVL51:
+ 523              	.L42:
+ 524              		.loc 1 293 16 is_stmt 1 discriminator 1 view .LVU160
+ 525              		.loc 1 293 20 is_stmt 0 discriminator 1 view .LVU161
+ 526 000c 094A     		ldr	r2, .L48
+ 527 000e 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 528              		.loc 1 293 3 discriminator 1 view .LVU162
+ 529 0010 9A42     		cmp	r2, r3
+ 530 0012 0CD9     		bls	.L47
+ 294:C:/MinGW/msys/1.0/esos32/src\esos.c ****     // get next index from array so we can get the task handle
+ 295:C:/MinGW/msys/1.0/esos32/src\esos.c ****     u8_z = __au8UserTaskStructIndex[u8_i];
+ 531              		.loc 1 295 5 is_stmt 1 view .LVU163
+ 532              		.loc 1 295 10 is_stmt 0 view .LVU164
+ 533 0014 084A     		ldr	r2, .L48+4
+ 534 0016 D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 535              	.LVL52:
+ 296:C:/MinGW/msys/1.0/esos32/src\esos.c ****     /* check tasks that have been allocated (not a NULLIDX) and
+ 297:C:/MinGW/msys/1.0/esos32/src\esos.c ****        not been garbage collected (not REMOVE_IDX) yet.  If our
+ 298:C:/MinGW/msys/1.0/esos32/src\esos.c ****        task is among them, then return the handle to the caller
+ 299:C:/MinGW/msys/1.0/esos32/src\esos.c ****     */
+ 300:C:/MinGW/msys/1.0/esos32/src\esos.c ****     if ((u8_z != NULLIDX) & (u8_z != REMOVE_IDX)) {
+ 536              		.loc 1 300 5 is_stmt 1 view .LVU165
+ 537              		.loc 1 300 8 is_stmt 0 view .LVU166
+ 538 0018 FD2A     		cmp	r2, #253
+ 539 001a F5D8     		bhi	.L43
+ 301:C:/MinGW/msys/1.0/esos32/src\esos.c ****       pst_NowTask = &__astUserTaskPool[u8_z];
+ 540              		.loc 1 301 7 is_stmt 1 view .LVU167
+ 541              		.loc 1 301 19 is_stmt 0 view .LVU168
+ 542 001c 02EB4204 		add	r4, r2, r2, lsl #1
+ 543 0020 0649     		ldr	r1, .L48+8
+ 544 0022 01EBC400 		add	r0, r1, r4, lsl #3
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 17
+
+
+ 545              	.LVL53:
+ 302:C:/MinGW/msys/1.0/esos32/src\esos.c ****       // If we find our task, save the pstXXX so we can return it
+ 303:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (pst_NowTask->u16_taskID == u16_TaskID) {
+ 546              		.loc 1 303 7 is_stmt 1 view .LVU169
+ 547              		.loc 1 303 22 is_stmt 0 view .LVU170
+ 548 0026 028A     		ldrh	r2, [r0, #16]
+ 549              	.LVL54:
+ 550              		.loc 1 303 10 view .LVU171
+ 551 0028 AA42     		cmp	r2, r5
+ 552 002a EDD1     		bne	.L43
+ 553 002c 00E0     		b	.L41
+ 554              	.LVL55:
+ 555              	.L47:
+ 288:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 556              		.loc 1 288 25 view .LVU172
+ 557 002e 0020     		movs	r0, #0
+ 304:C:/MinGW/msys/1.0/esos32/src\esos.c ****         pst_ReturnTask = pst_NowTask;
+ 305:C:/MinGW/msys/1.0/esos32/src\esos.c ****         break;
+ 306:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // end if (pfn == taskname)
+ 307:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } // end if (!NULLIDX)
+ 308:C:/MinGW/msys/1.0/esos32/src\esos.c ****   } //end for
+ 309:C:/MinGW/msys/1.0/esos32/src\esos.c ****   return pst_ReturnTask;
+ 558              		.loc 1 309 3 is_stmt 1 view .LVU173
+ 559              	.L41:
+ 310:C:/MinGW/msys/1.0/esos32/src\esos.c **** } //end esos_GetTaskHandleFromID()
+ 560              		.loc 1 310 1 is_stmt 0 view .LVU174
+ 561 0030 30BC     		pop	{r4, r5}
+ 562              	.LCFI8:
+ 563              		.cfi_restore 5
+ 564              		.cfi_restore 4
+ 565              		.cfi_def_cfa_offset 0
+ 566 0032 7047     		bx	lr
+ 567              	.L49:
+ 568              		.align	2
+ 569              	.L48:
+ 570 0034 00000000 		.word	__u8UserTasksRegistered
+ 571 0038 00000000 		.word	__au8UserTaskStructIndex
+ 572 003c 00000000 		.word	__astUserTaskPool
+ 573              		.cfi_endproc
+ 574              	.LFE3:
+ 576              		.section	.text.esos_GetFreeChildTaskStruct,"ax",%progbits
+ 577              		.align	1
+ 578              		.global	esos_GetFreeChildTaskStruct
+ 579              		.syntax unified
+ 580              		.thumb
+ 581              		.thumb_func
+ 582              		.fpu fpv4-sp-d16
+ 584              	esos_GetFreeChildTaskStruct:
+ 585              	.LFB4:
+ 311:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 312:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 313:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 314:C:/MinGW/msys/1.0/esos32/src\esos.c **** // TODO: I DONT THINK I NEED TO STORE THE ACTUAL PFNs SINCE THE PARENT'S
+ 315:C:/MinGW/msys/1.0/esos32/src\esos.c **** // WAIT FUNCTION WILL DECOMPOSE INTO A CALL TO THE CHILD TASK AUTOMATICALLY.
+ 316:C:/MinGW/msys/1.0/esos32/src\esos.c **** //
+ 317:C:/MinGW/msys/1.0/esos32/src\esos.c **** // INVESTIGATE MORE!
+ 318:C:/MinGW/msys/1.0/esos32/src\esos.c **** //
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 18
+
+
+ 319:C:/MinGW/msys/1.0/esos32/src\esos.c **** // TODO:  make sure childs get restarted if they yield and some other task
+ 320:C:/MinGW/msys/1.0/esos32/src\esos.c **** //        executes in the meantime!
+ 321:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 322:C:/MinGW/msys/1.0/esos32/src\esos.c **** /**
+ 323:C:/MinGW/msys/1.0/esos32/src\esos.c **** * Searches child task pool to find a free child task structure and returns
+ 324:C:/MinGW/msys/1.0/esos32/src\esos.c **** *    a handle (pst) back to the caller
+ 325:C:/MinGW/msys/1.0/esos32/src\esos.c **** * \retval TaskHandle if a child task structure is available
+ 326:C:/MinGW/msys/1.0/esos32/src\esos.c **** * \retval ESOS_BAD_CHILD_TASK_HANDLE  if no structures are available at this time
+ 327:C:/MinGW/msys/1.0/esos32/src\esos.c **** */
+ 328:C:/MinGW/msys/1.0/esos32/src\esos.c **** ESOS_TASK_HANDLE  esos_GetFreeChildTaskStruct() {
+ 586              		.loc 1 328 49 is_stmt 1 view -0
+ 587              		.cfi_startproc
+ 588              		@ args = 0, pretend = 0, frame = 0
+ 589              		@ frame_needed = 0, uses_anonymous_args = 0
+ 590              		@ link register save eliminated.
+ 329:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint16_t    u16_i = 0;
+ 591              		.loc 1 329 3 view .LVU176
+ 592              	.LVL56:
+ 330:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 331:C:/MinGW/msys/1.0/esos32/src\esos.c ****   while (u16_i < MAX_NUM_CHILD_TASKS) {
+ 593              		.loc 1 331 3 view .LVU177
+ 329:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint16_t    u16_i = 0;
+ 594              		.loc 1 329 15 is_stmt 0 view .LVU178
+ 595 0000 0023     		movs	r3, #0
+ 596              	.LVL57:
+ 597              	.L51:
+ 598              		.loc 1 331 9 is_stmt 1 view .LVU179
+ 599 0002 1F2B     		cmp	r3, #31
+ 600 0004 0ED8     		bhi	.L55
+ 332:C:/MinGW/msys/1.0/esos32/src\esos.c ****     if (ESOS_IS_TASK_INITED( &__astChildTaskPool[u16_i]) )
+ 601              		.loc 1 332 5 view .LVU180
+ 602              		.loc 1 332 9 is_stmt 0 view .LVU181
+ 603 0006 03EB4301 		add	r1, r3, r3, lsl #1
+ 604 000a CA00     		lsls	r2, r1, #3
+ 605 000c 0649     		ldr	r1, .L57
+ 606 000e 8A5A     		ldrh	r2, [r1, r2]
+ 607              		.loc 1 332 8 view .LVU182
+ 608 0010 12B1     		cbz	r2, .L56
+ 333:C:/MinGW/msys/1.0/esos32/src\esos.c ****       return &__astChildTaskPool[u16_i];
+ 334:C:/MinGW/msys/1.0/esos32/src\esos.c ****     u16_i++;
+ 609              		.loc 1 334 5 is_stmt 1 view .LVU183
+ 610              		.loc 1 334 10 is_stmt 0 view .LVU184
+ 611 0012 0133     		adds	r3, r3, #1
+ 612              	.LVL58:
+ 613              		.loc 1 334 10 view .LVU185
+ 614 0014 9BB2     		uxth	r3, r3
+ 615              	.LVL59:
+ 616              		.loc 1 334 10 view .LVU186
+ 617 0016 F4E7     		b	.L51
+ 618              	.L56:
+ 333:C:/MinGW/msys/1.0/esos32/src\esos.c ****       return &__astChildTaskPool[u16_i];
+ 619              		.loc 1 333 7 is_stmt 1 view .LVU187
+ 333:C:/MinGW/msys/1.0/esos32/src\esos.c ****       return &__astChildTaskPool[u16_i];
+ 620              		.loc 1 333 14 is_stmt 0 view .LVU188
+ 621 0018 03EB4300 		add	r0, r3, r3, lsl #1
+ 622 001c C300     		lsls	r3, r0, #3
+ 623              	.LVL60:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 19
+
+
+ 333:C:/MinGW/msys/1.0/esos32/src\esos.c ****       return &__astChildTaskPool[u16_i];
+ 624              		.loc 1 333 14 view .LVU189
+ 625 001e 0846     		mov	r0, r1
+ 626 0020 1844     		add	r0, r0, r3
+ 627 0022 7047     		bx	lr
+ 628              	.LVL61:
+ 629              	.L55:
+ 335:C:/MinGW/msys/1.0/esos32/src\esos.c ****   }
+ 336:C:/MinGW/msys/1.0/esos32/src\esos.c ****   return NULLPTR;
+ 630              		.loc 1 336 10 view .LVU190
+ 631 0024 0020     		movs	r0, #0
+ 337:C:/MinGW/msys/1.0/esos32/src\esos.c **** }// end esos_u16GetFreeChildTaskStruct()
+ 632              		.loc 1 337 1 view .LVU191
+ 633 0026 7047     		bx	lr
+ 634              	.L58:
+ 635              		.align	2
+ 636              	.L57:
+ 637 0028 00000000 		.word	__astChildTaskPool
+ 638              		.cfi_endproc
+ 639              	.LFE4:
+ 641              		.section	.text.esos_GetMaxNumberTasks,"ax",%progbits
+ 642              		.align	1
+ 643              		.global	esos_GetMaxNumberTasks
+ 644              		.syntax unified
+ 645              		.thumb
+ 646              		.thumb_func
+ 647              		.fpu fpv4-sp-d16
+ 649              	esos_GetMaxNumberTasks:
+ 650              	.LFB5:
+ 338:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 339:C:/MinGW/msys/1.0/esos32/src\esos.c **** /********************************************************************************/
+ 340:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 341:C:/MinGW/msys/1.0/esos32/src\esos.c **** /**
+ 342:C:/MinGW/msys/1.0/esos32/src\esos.c **** * Returns the number of tasks we can execute
+ 343:C:/MinGW/msys/1.0/esos32/src\esos.c **** * \retval N the number of tasks this version of ESOS can execute
+ 344:C:/MinGW/msys/1.0/esos32/src\esos.c **** */
+ 345:C:/MinGW/msys/1.0/esos32/src\esos.c **** uint8_t   esos_GetMaxNumberTasks(void) {
+ 651              		.loc 1 345 40 is_stmt 1 view -0
+ 652              		.cfi_startproc
+ 653              		@ args = 0, pretend = 0, frame = 0
+ 654              		@ frame_needed = 0, uses_anonymous_args = 0
+ 655              		@ link register save eliminated.
+ 346:C:/MinGW/msys/1.0/esos32/src\esos.c ****   return MAX_NUM_USER_TASKS;
+ 656              		.loc 1 346 3 view .LVU193
+ 347:C:/MinGW/msys/1.0/esos32/src\esos.c **** } // end osGetMaxNumberTasks()
+ 657              		.loc 1 347 1 is_stmt 0 view .LVU194
+ 658 0000 2020     		movs	r0, #32
+ 659 0002 7047     		bx	lr
+ 660              		.cfi_endproc
+ 661              	.LFE5:
+ 663              		.section	.text.__esos_hasTickDurationPassed,"ax",%progbits
+ 664              		.align	1
+ 665              		.global	__esos_hasTickDurationPassed
+ 666              		.syntax unified
+ 667              		.thumb
+ 668              		.thumb_func
+ 669              		.fpu fpv4-sp-d16
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 20
+
+
+ 671              	__esos_hasTickDurationPassed:
+ 672              	.LVL62:
+ 673              	.LFB6:
+ 348:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 349:C:/MinGW/msys/1.0/esos32/src\esos.c **** /*
+ 350:C:/MinGW/msys/1.0/esos32/src\esos.c **** * Determine whether a period of time has elapsed.  Users
+ 351:C:/MinGW/msys/1.0/esos32/src\esos.c **** * have no need to call this function.  It is used by ESOS
+ 352:C:/MinGW/msys/1.0/esos32/src\esos.c **** * internally.
+ 353:C:/MinGW/msys/1.0/esos32/src\esos.c **** * \param u32_startTick system tick count when timer was created
+ 354:C:/MinGW/msys/1.0/esos32/src\esos.c **** * \param u32_period duration of period in system ticks
+ 355:C:/MinGW/msys/1.0/esos32/src\esos.c **** * \retval TRUE if the period of time has elapsed
+ 356:C:/MinGW/msys/1.0/esos32/src\esos.c **** * \retval FALSE if the period of time has not yet elapsed
+ 357:C:/MinGW/msys/1.0/esos32/src\esos.c **** */
+ 358:C:/MinGW/msys/1.0/esos32/src\esos.c **** uint16_t  __esos_hasTickDurationPassed(uint32_t u32_startTick, uint32_t u32_period) {
+ 674              		.loc 1 358 85 is_stmt 1 view -0
+ 675              		.cfi_startproc
+ 676              		@ args = 0, pretend = 0, frame = 0
+ 677              		@ frame_needed = 0, uses_anonymous_args = 0
+ 678              		.loc 1 358 85 is_stmt 0 view .LVU196
+ 679 0000 38B5     		push	{r3, r4, r5, lr}
+ 680              	.LCFI9:
+ 681              		.cfi_def_cfa_offset 16
+ 682              		.cfi_offset 3, -16
+ 683              		.cfi_offset 4, -12
+ 684              		.cfi_offset 5, -8
+ 685              		.cfi_offset 14, -4
+ 686 0002 0446     		mov	r4, r0
+ 687 0004 0D46     		mov	r5, r1
+ 359:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint32_t    u32_delta, u32_current;
+ 688              		.loc 1 359 3 is_stmt 1 view .LVU197
+ 360:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 361:C:/MinGW/msys/1.0/esos32/src\esos.c ****   u32_current = esos_GetSystemTick();
+ 689              		.loc 1 361 3 view .LVU198
+ 690              		.loc 1 361 17 is_stmt 0 view .LVU199
+ 691 0006 FFF7FEFF 		bl	__esos_hw_GetSystemTickCount
+ 692              	.LVL63:
+ 362:C:/MinGW/msys/1.0/esos32/src\esos.c ****   u32_delta = u32_current - u32_startTick;
+ 693              		.loc 1 362 3 is_stmt 1 view .LVU200
+ 694              		.loc 1 362 13 is_stmt 0 view .LVU201
+ 695 000a 031B     		subs	r3, r0, r4
+ 696              	.LVL64:
+ 363:C:/MinGW/msys/1.0/esos32/src\esos.c ****   if (u32_current < u32_startTick)
+ 697              		.loc 1 363 3 is_stmt 1 view .LVU202
+ 698              		.loc 1 363 6 is_stmt 0 view .LVU203
+ 699 000c A042     		cmp	r0, r4
+ 700 000e 00D2     		bcs	.L61
+ 364:C:/MinGW/msys/1.0/esos32/src\esos.c ****     u32_delta += 0xFFFFFFFF;    // account for rollover (DELTA=0xFFFFFFF-start+current)
+ 701              		.loc 1 364 5 is_stmt 1 view .LVU204
+ 702              		.loc 1 364 15 is_stmt 0 view .LVU205
+ 703 0010 013B     		subs	r3, r3, #1
+ 704              	.LVL65:
+ 705              	.L61:
+ 365:C:/MinGW/msys/1.0/esos32/src\esos.c ****   if (u32_delta > u32_period)
+ 706              		.loc 1 365 3 is_stmt 1 view .LVU206
+ 707              		.loc 1 365 6 is_stmt 0 view .LVU207
+ 708 0012 AB42     		cmp	r3, r5
+ 709 0014 01D9     		bls	.L63
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 21
+
+
+ 366:C:/MinGW/msys/1.0/esos32/src\esos.c ****     return TRUE;
+ 710              		.loc 1 366 12 view .LVU208
+ 711 0016 0120     		movs	r0, #1
+ 712              	.LVL66:
+ 713              	.L62:
+ 367:C:/MinGW/msys/1.0/esos32/src\esos.c ****   else
+ 368:C:/MinGW/msys/1.0/esos32/src\esos.c ****     return FALSE;
+ 369:C:/MinGW/msys/1.0/esos32/src\esos.c **** } // end __esos_hasSystemTickDurationPassed()
+ 714              		.loc 1 369 1 view .LVU209
+ 715 0018 38BD     		pop	{r3, r4, r5, pc}
+ 716              	.LVL67:
+ 717              	.L63:
+ 368:C:/MinGW/msys/1.0/esos32/src\esos.c **** } // end __esos_hasSystemTickDurationPassed()
+ 718              		.loc 1 368 12 view .LVU210
+ 719 001a 0020     		movs	r0, #0
+ 720              	.LVL68:
+ 368:C:/MinGW/msys/1.0/esos32/src\esos.c **** } // end __esos_hasSystemTickDurationPassed()
+ 721              		.loc 1 368 12 view .LVU211
+ 722 001c FCE7     		b	.L62
+ 723              		.cfi_endproc
+ 724              	.LFE6:
+ 726              		.section	.text.__esos_tmrSvcsExecute,"ax",%progbits
+ 727              		.align	1
+ 728              		.global	__esos_tmrSvcsExecute
+ 729              		.syntax unified
+ 730              		.thumb
+ 731              		.thumb_func
+ 732              		.fpu fpv4-sp-d16
+ 734              	__esos_tmrSvcsExecute:
+ 735              	.LFB7:
+ 370:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 371:C:/MinGW/msys/1.0/esos32/src\esos.c **** /*
+ 372:C:/MinGW/msys/1.0/esos32/src\esos.c **** * ESOS timer services callback function.  HW-specific code
+ 373:C:/MinGW/msys/1.0/esos32/src\esos.c **** * that creates the system tick must call this function at
+ 374:C:/MinGW/msys/1.0/esos32/src\esos.c **** * every ESOS system tick.
+ 375:C:/MinGW/msys/1.0/esos32/src\esos.c **** */
+ 376:C:/MinGW/msys/1.0/esos32/src\esos.c **** void __esos_tmrSvcsExecute(void) {
+ 736              		.loc 1 376 34 is_stmt 1 view -0
+ 737              		.cfi_startproc
+ 738              		@ args = 0, pretend = 0, frame = 0
+ 739              		@ frame_needed = 0, uses_anonymous_args = 0
+ 740 0000 38B5     		push	{r3, r4, r5, lr}
+ 741              	.LCFI10:
+ 742              		.cfi_def_cfa_offset 16
+ 743              		.cfi_offset 3, -16
+ 744              		.cfi_offset 4, -12
+ 745              		.cfi_offset 5, -8
+ 746              		.cfi_offset 14, -4
+ 377:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t     u8_cnt, u8_index;
+ 747              		.loc 1 377 3 view .LVU213
+ 378:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 379:C:/MinGW/msys/1.0/esos32/src\esos.c ****   u8_cnt = __esos_u8TmrSvcsRegistered;
+ 748              		.loc 1 379 3 view .LVU214
+ 749              		.loc 1 379 10 is_stmt 0 view .LVU215
+ 750 0002 134B     		ldr	r3, .L72
+ 751 0004 1D78     		ldrb	r5, [r3]	@ zero_extendqisi2
+ 752              	.LVL69:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 22
+
+
+ 380:C:/MinGW/msys/1.0/esos32/src\esos.c ****   u8_index = 0;
+ 753              		.loc 1 380 3 is_stmt 1 view .LVU216
+ 381:C:/MinGW/msys/1.0/esos32/src\esos.c ****   while (u8_cnt) {
+ 754              		.loc 1 381 3 view .LVU217
+ 380:C:/MinGW/msys/1.0/esos32/src\esos.c ****   u8_index = 0;
+ 755              		.loc 1 380 12 is_stmt 0 view .LVU218
+ 756 0006 0024     		movs	r4, #0
+ 757              		.loc 1 381 9 view .LVU219
+ 758 0008 03E0     		b	.L66
+ 759              	.LVL70:
+ 760              	.L68:
+ 382:C:/MinGW/msys/1.0/esos32/src\esos.c ****     // if timer is running, update its structure and call it if necessary
+ 383:C:/MinGW/msys/1.0/esos32/src\esos.c ****     if (esos_IsTimerRunning(u8_index)) {
+ 384:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astTmrSvcs[u8_index].u32_cntDown--;
+ 385:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (__astTmrSvcs[u8_index].u32_cntDown == 0 ) {
+ 386:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astTmrSvcs[u8_index].u32_cntDown = __astTmrSvcs[u8_index].u32_period;
+ 387:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astTmrSvcs[u8_index].pfn();
+ 388:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } //endif timer has expired
+ 389:C:/MinGW/msys/1.0/esos32/src\esos.c ****       u8_cnt--;                         // denote we've serviced one of the active timers
+ 761              		.loc 1 389 7 is_stmt 1 view .LVU220
+ 762              		.loc 1 389 13 is_stmt 0 view .LVU221
+ 763 000a 013D     		subs	r5, r5, #1
+ 764              	.LVL71:
+ 765              		.loc 1 389 13 view .LVU222
+ 766 000c EDB2     		uxtb	r5, r5
+ 767              	.LVL72:
+ 768              	.L67:
+ 390:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } // endif IsTimerRunning
+ 391:C:/MinGW/msys/1.0/esos32/src\esos.c ****     u8_index++;       // move index to next timer in array
+ 769              		.loc 1 391 5 is_stmt 1 view .LVU223
+ 770              		.loc 1 391 13 is_stmt 0 view .LVU224
+ 771 000e 0134     		adds	r4, r4, #1
+ 772              	.LVL73:
+ 773              		.loc 1 391 13 view .LVU225
+ 774 0010 E4B2     		uxtb	r4, r4
+ 775              	.LVL74:
+ 776              	.L66:
+ 381:C:/MinGW/msys/1.0/esos32/src\esos.c ****     // if timer is running, update its structure and call it if necessary
+ 777              		.loc 1 381 9 is_stmt 1 view .LVU226
+ 778 0012 E5B1     		cbz	r5, .L71
+ 383:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astTmrSvcs[u8_index].u32_cntDown--;
+ 779              		.loc 1 383 5 view .LVU227
+ 383:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astTmrSvcs[u8_index].u32_cntDown--;
+ 780              		.loc 1 383 9 is_stmt 0 view .LVU228
+ 781 0014 0123     		movs	r3, #1
+ 782 0016 A340     		lsls	r3, r3, r4
+ 783 0018 0E49     		ldr	r1, .L72+4
+ 784 001a 0968     		ldr	r1, [r1]
+ 383:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __astTmrSvcs[u8_index].u32_cntDown--;
+ 785              		.loc 1 383 8 view .LVU229
+ 786 001c 0B42     		tst	r3, r1
+ 787 001e F6D0     		beq	.L67
+ 384:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (__astTmrSvcs[u8_index].u32_cntDown == 0 ) {
+ 788              		.loc 1 384 7 is_stmt 1 view .LVU230
+ 384:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (__astTmrSvcs[u8_index].u32_cntDown == 0 ) {
+ 789              		.loc 1 384 29 is_stmt 0 view .LVU231
+ 790 0020 04EB4401 		add	r1, r4, r4, lsl #1
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 23
+
+
+ 791 0024 8B00     		lsls	r3, r1, #2
+ 792 0026 0C49     		ldr	r1, .L72+8
+ 793 0028 1944     		add	r1, r1, r3
+ 794 002a 8B68     		ldr	r3, [r1, #8]
+ 384:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (__astTmrSvcs[u8_index].u32_cntDown == 0 ) {
+ 795              		.loc 1 384 41 view .LVU232
+ 796 002c 013B     		subs	r3, r3, #1
+ 797 002e 8B60     		str	r3, [r1, #8]
+ 385:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astTmrSvcs[u8_index].u32_cntDown = __astTmrSvcs[u8_index].u32_period;
+ 798              		.loc 1 385 7 is_stmt 1 view .LVU233
+ 385:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astTmrSvcs[u8_index].u32_cntDown = __astTmrSvcs[u8_index].u32_period;
+ 799              		.loc 1 385 10 is_stmt 0 view .LVU234
+ 800 0030 002B     		cmp	r3, #0
+ 801 0032 EAD1     		bne	.L68
+ 386:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astTmrSvcs[u8_index].pfn();
+ 802              		.loc 1 386 9 is_stmt 1 view .LVU235
+ 386:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astTmrSvcs[u8_index].pfn();
+ 803              		.loc 1 386 68 is_stmt 0 view .LVU236
+ 804 0034 0849     		ldr	r1, .L72+8
+ 805 0036 04EB4400 		add	r0, r4, r4, lsl #1
+ 806 003a 8300     		lsls	r3, r0, #2
+ 807 003c 0B44     		add	r3, r3, r1
+ 808 003e 5868     		ldr	r0, [r3, #4]
+ 386:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astTmrSvcs[u8_index].pfn();
+ 809              		.loc 1 386 44 view .LVU237
+ 810 0040 9860     		str	r0, [r3, #8]
+ 387:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } //endif timer has expired
+ 811              		.loc 1 387 9 is_stmt 1 view .LVU238
+ 387:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } //endif timer has expired
+ 812              		.loc 1 387 31 is_stmt 0 view .LVU239
+ 813 0042 04EB4402 		add	r2, r4, r4, lsl #1
+ 814 0046 9300     		lsls	r3, r2, #2
+ 815 0048 CB58     		ldr	r3, [r1, r3]
+ 387:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } //endif timer has expired
+ 816              		.loc 1 387 9 view .LVU240
+ 817 004a 9847     		blx	r3
+ 818              	.LVL75:
+ 819 004c DDE7     		b	.L68
+ 820              	.L71:
+ 392:C:/MinGW/msys/1.0/esos32/src\esos.c ****   } // end while(u8_cnt)
+ 393:C:/MinGW/msys/1.0/esos32/src\esos.c **** } //end __esos_tmrSvcsExecute()
+ 821              		.loc 1 393 1 view .LVU241
+ 822 004e 38BD     		pop	{r3, r4, r5, pc}
+ 823              	.LVL76:
+ 824              	.L73:
+ 825              		.loc 1 393 1 view .LVU242
+ 826              		.align	2
+ 827              	.L72:
+ 828 0050 00000000 		.word	__esos_u8TmrSvcsRegistered
+ 829 0054 00000000 		.word	__esos_u32TmrActiveFlags
+ 830 0058 00000000 		.word	__astTmrSvcs
+ 831              		.cfi_endproc
+ 832              	.LFE7:
+ 834              		.section	.text.esos_RegisterTimer,"ax",%progbits
+ 835              		.align	1
+ 836              		.global	esos_RegisterTimer
+ 837              		.syntax unified
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 24
+
+
+ 838              		.thumb
+ 839              		.thumb_func
+ 840              		.fpu fpv4-sp-d16
+ 842              	esos_RegisterTimer:
+ 843              	.LVL77:
+ 844              	.LFB8:
+ 394:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 395:C:/MinGW/msys/1.0/esos32/src\esos.c **** /**
+ 396:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * Adds a timer to the ESOS timer service.  Timer function will execute at its
+ 397:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * next opportunity.  Timer functions must have \em void arguments and \em void
+ 398:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * returns.
+ 399:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \param timername name under which timer was declared in \ref ESOS_USER_TIMER.
+ 400:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * and contains the code to run when software timer expires
+ 401:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \param u32_period period of timer in system ticks (currently, milliseconds)
+ 402:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval ESOS_TMR_FAILURE   if no more timers can added at this time
+ 403:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval timerhandle   if timer service was registered
+ 404:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa ESOS_USER_TIMER
+ 405:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_UnregisterTimer
+ 406:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_GetTimerHandle
+ 407:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_ChangeTimerPeriod
+ 408:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_IsTimerRunning
+ 409:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa
+ 410:C:/MinGW/msys/1.0/esos32/src\esos.c ****  *
+ 411:C:/MinGW/msys/1.0/esos32/src\esos.c ****  */
+ 412:C:/MinGW/msys/1.0/esos32/src\esos.c **** ESOS_TMR_HANDLE    esos_RegisterTimer( void (*timername)(void), uint32_t u32_period ) {
+ 845              		.loc 1 412 87 is_stmt 1 view -0
+ 846              		.cfi_startproc
+ 847              		@ args = 0, pretend = 0, frame = 0
+ 848              		@ frame_needed = 0, uses_anonymous_args = 0
+ 849              		.loc 1 412 87 is_stmt 0 view .LVU244
+ 850 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 851              	.LCFI11:
+ 852              		.cfi_def_cfa_offset 20
+ 853              		.cfi_offset 4, -20
+ 854              		.cfi_offset 5, -16
+ 855              		.cfi_offset 6, -12
+ 856              		.cfi_offset 7, -8
+ 857              		.cfi_offset 14, -4
+ 413:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t   u8_i;
+ 858              		.loc 1 413 3 is_stmt 1 view .LVU245
+ 414:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 415:C:/MinGW/msys/1.0/esos32/src\esos.c ****   if ( esos_GetNumberRunningTimers() < MAX_NUM_TMRS) {
+ 859              		.loc 1 415 3 view .LVU246
+ 860              		.loc 1 415 38 is_stmt 0 view .LVU247
+ 861 0002 134B     		ldr	r3, .L84
+ 862 0004 1D78     		ldrb	r5, [r3]	@ zero_extendqisi2
+ 863              		.loc 1 415 6 view .LVU248
+ 864 0006 0F2D     		cmp	r5, #15
+ 865 0008 0CD8     		bhi	.L81
+ 866 000a 0746     		mov	r7, r0
+ 416:C:/MinGW/msys/1.0/esos32/src\esos.c ****     for (u8_i=0; u8_i<MAX_NUM_TMRS; u8_i++ ) {
+ 867              		.loc 1 416 14 view .LVU249
+ 868 000c 0020     		movs	r0, #0
+ 869              	.LVL78:
+ 870              	.L75:
+ 871              		.loc 1 416 18 is_stmt 1 discriminator 1 view .LVU250
+ 872              		.loc 1 416 5 is_stmt 0 discriminator 1 view .LVU251
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 25
+
+
+ 873 000e 0F28     		cmp	r0, #15
+ 874 0010 1CD8     		bhi	.L82
+ 417:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (!esos_IsTimerRunning(u8_i)) {
+ 875              		.loc 1 417 7 is_stmt 1 view .LVU252
+ 876              		.loc 1 417 12 is_stmt 0 view .LVU253
+ 877 0012 0123     		movs	r3, #1
+ 878 0014 8340     		lsls	r3, r3, r0
+ 879 0016 0F4A     		ldr	r2, .L84+4
+ 880 0018 1268     		ldr	r2, [r2]
+ 881              		.loc 1 417 10 view .LVU254
+ 882 001a 1342     		tst	r3, r2
+ 883 001c 04D0     		beq	.L83
+ 416:C:/MinGW/msys/1.0/esos32/src\esos.c ****     for (u8_i=0; u8_i<MAX_NUM_TMRS; u8_i++ ) {
+ 884              		.loc 1 416 37 is_stmt 1 discriminator 2 view .LVU255
+ 416:C:/MinGW/msys/1.0/esos32/src\esos.c ****     for (u8_i=0; u8_i<MAX_NUM_TMRS; u8_i++ ) {
+ 885              		.loc 1 416 41 is_stmt 0 discriminator 2 view .LVU256
+ 886 001e 0130     		adds	r0, r0, #1
+ 887              	.LVL79:
+ 416:C:/MinGW/msys/1.0/esos32/src\esos.c ****     for (u8_i=0; u8_i<MAX_NUM_TMRS; u8_i++ ) {
+ 888              		.loc 1 416 41 discriminator 2 view .LVU257
+ 889 0020 C0B2     		uxtb	r0, r0
+ 890              	.LVL80:
+ 416:C:/MinGW/msys/1.0/esos32/src\esos.c ****     for (u8_i=0; u8_i<MAX_NUM_TMRS; u8_i++ ) {
+ 891              		.loc 1 416 41 discriminator 2 view .LVU258
+ 892 0022 F4E7     		b	.L75
+ 893              	.LVL81:
+ 894              	.L81:
+ 418:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astTmrSvcs[u8_i].pfn = timername;
+ 419:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astTmrSvcs[u8_i].u32_period = u32_period;
+ 420:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astTmrSvcs[u8_i].u32_cntDown = u32_period;
+ 421:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __esos_u8TmrSvcsRegistered++;
+ 422:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __esos_MarkTimerRunning( u8_i );
+ 423:C:/MinGW/msys/1.0/esos32/src\esos.c ****         return u8_i;
+ 424:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // endif IsTimerRunning
+ 425:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } // endfor
+ 426:C:/MinGW/msys/1.0/esos32/src\esos.c ****     return ESOS_TMR_FAILURE;
+ 427:C:/MinGW/msys/1.0/esos32/src\esos.c ****   } // endif
+ 428:C:/MinGW/msys/1.0/esos32/src\esos.c ****   else
+ 429:C:/MinGW/msys/1.0/esos32/src\esos.c ****     return ESOS_TMR_FAILURE;
+ 895              		.loc 1 429 12 view .LVU259
+ 896 0024 FF20     		movs	r0, #255
+ 897              	.LVL82:
+ 898              		.loc 1 429 12 view .LVU260
+ 899 0026 12E0     		b	.L76
+ 900              	.LVL83:
+ 901              	.L83:
+ 418:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astTmrSvcs[u8_i].pfn = timername;
+ 902              		.loc 1 418 9 is_stmt 1 view .LVU261
+ 418:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astTmrSvcs[u8_i].pfn = timername;
+ 903              		.loc 1 418 32 is_stmt 0 view .LVU262
+ 904 0028 0B4E     		ldr	r6, .L84+8
+ 905 002a 00EB400C 		add	ip, r0, r0, lsl #1
+ 906 002e 06EB8C0E 		add	lr, r6, ip, lsl #2
+ 907 0032 46F82C70 		str	r7, [r6, ip, lsl #2]
+ 419:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astTmrSvcs[u8_i].u32_cntDown = u32_period;
+ 908              		.loc 1 419 9 is_stmt 1 view .LVU263
+ 419:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __astTmrSvcs[u8_i].u32_cntDown = u32_period;
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 26
+
+
+ 909              		.loc 1 419 39 is_stmt 0 view .LVU264
+ 910 0036 CEF80410 		str	r1, [lr, #4]
+ 420:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __esos_u8TmrSvcsRegistered++;
+ 911              		.loc 1 420 9 is_stmt 1 view .LVU265
+ 420:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __esos_u8TmrSvcsRegistered++;
+ 912              		.loc 1 420 40 is_stmt 0 view .LVU266
+ 913 003a CEF80810 		str	r1, [lr, #8]
+ 421:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __esos_MarkTimerRunning( u8_i );
+ 914              		.loc 1 421 9 is_stmt 1 view .LVU267
+ 421:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __esos_MarkTimerRunning( u8_i );
+ 915              		.loc 1 421 35 is_stmt 0 view .LVU268
+ 916 003e 0135     		adds	r5, r5, #1
+ 917 0040 0349     		ldr	r1, .L84
+ 918              	.LVL84:
+ 421:C:/MinGW/msys/1.0/esos32/src\esos.c ****         __esos_MarkTimerRunning( u8_i );
+ 919              		.loc 1 421 35 view .LVU269
+ 920 0042 0D70     		strb	r5, [r1]
+ 422:C:/MinGW/msys/1.0/esos32/src\esos.c ****         return u8_i;
+ 921              		.loc 1 422 9 is_stmt 1 view .LVU270
+ 922 0044 1343     		orrs	r3, r3, r2
+ 923 0046 034A     		ldr	r2, .L84+4
+ 924 0048 1360     		str	r3, [r2]
+ 423:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // endif IsTimerRunning
+ 925              		.loc 1 423 9 view .LVU271
+ 423:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // endif IsTimerRunning
+ 926              		.loc 1 423 16 is_stmt 0 view .LVU272
+ 927 004a 00E0     		b	.L76
+ 928              	.LVL85:
+ 929              	.L82:
+ 426:C:/MinGW/msys/1.0/esos32/src\esos.c ****   } // endif
+ 930              		.loc 1 426 12 view .LVU273
+ 931 004c FF20     		movs	r0, #255
+ 932              	.LVL86:
+ 933              	.L76:
+ 430:C:/MinGW/msys/1.0/esos32/src\esos.c **** } // end esos_RegisterTimer
+ 934              		.loc 1 430 1 view .LVU274
+ 935 004e F0BD     		pop	{r4, r5, r6, r7, pc}
+ 936              	.L85:
+ 937              		.align	2
+ 938              	.L84:
+ 939 0050 00000000 		.word	__esos_u8TmrSvcsRegistered
+ 940 0054 00000000 		.word	__esos_u32TmrActiveFlags
+ 941 0058 00000000 		.word	__astTmrSvcs
+ 942              		.cfi_endproc
+ 943              	.LFE8:
+ 945              		.section	.text.esos_UnregisterTimer,"ax",%progbits
+ 946              		.align	1
+ 947              		.global	esos_UnregisterTimer
+ 948              		.syntax unified
+ 949              		.thumb
+ 950              		.thumb_func
+ 951              		.fpu fpv4-sp-d16
+ 953              	esos_UnregisterTimer:
+ 954              	.LVL87:
+ 955              	.LFB9:
+ 431:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 432:C:/MinGW/msys/1.0/esos32/src\esos.c **** /**
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 27
+
+
+ 433:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * Removes a timer from the ESOS timer service.
+ 434:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \param hnd_timer handle to timer to remove
+ 435:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval FALSE  if timer wasn't active in the first place
+ 436:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval TRUE   if timer was stopped and removed
+ 437:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_RegisterTimer
+ 438:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_GetTimerHandle
+ 439:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_ChangeTimerPeriod
+ 440:C:/MinGW/msys/1.0/esos32/src\esos.c ****  */
+ 441:C:/MinGW/msys/1.0/esos32/src\esos.c **** uint8_t    esos_UnregisterTimer( ESOS_TMR_HANDLE hnd_timer ) {
+ 956              		.loc 1 441 62 is_stmt 1 view -0
+ 957              		.cfi_startproc
+ 958              		@ args = 0, pretend = 0, frame = 0
+ 959              		@ frame_needed = 0, uses_anonymous_args = 0
+ 960              		@ link register save eliminated.
+ 442:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 443:C:/MinGW/msys/1.0/esos32/src\esos.c ****   if ( esos_IsTimerRunning(hnd_timer) ) {
+ 961              		.loc 1 443 3 view .LVU276
+ 962              		.loc 1 443 8 is_stmt 0 view .LVU277
+ 963 0000 0123     		movs	r3, #1
+ 964 0002 8340     		lsls	r3, r3, r0
+ 965 0004 0C4A     		ldr	r2, .L93
+ 966 0006 1268     		ldr	r2, [r2]
+ 967              		.loc 1 443 6 view .LVU278
+ 968 0008 1342     		tst	r3, r2
+ 969 000a 12D0     		beq	.L88
+ 441:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 970              		.loc 1 441 62 view .LVU279
+ 971 000c 10B4     		push	{r4}
+ 972              	.LCFI12:
+ 973              		.cfi_def_cfa_offset 4
+ 974              		.cfi_offset 4, -4
+ 444:C:/MinGW/msys/1.0/esos32/src\esos.c ****     __astTmrSvcs[hnd_timer].pfn = NULLPTR;
+ 975              		.loc 1 444 5 is_stmt 1 view .LVU280
+ 976              		.loc 1 444 33 is_stmt 0 view .LVU281
+ 977 000e 00EB4000 		add	r0, r0, r0, lsl #1
+ 978              	.LVL88:
+ 979              		.loc 1 444 33 view .LVU282
+ 980 0012 8000     		lsls	r0, r0, #2
+ 981 0014 0949     		ldr	r1, .L93+4
+ 982 0016 0024     		movs	r4, #0
+ 983 0018 0C50     		str	r4, [r1, r0]
+ 445:C:/MinGW/msys/1.0/esos32/src\esos.c ****     __esos_u8TmrSvcsRegistered--;
+ 984              		.loc 1 445 5 is_stmt 1 view .LVU283
+ 985              		.loc 1 445 31 is_stmt 0 view .LVU284
+ 986 001a 0948     		ldr	r0, .L93+8
+ 987 001c 0178     		ldrb	r1, [r0]	@ zero_extendqisi2
+ 988 001e 0139     		subs	r1, r1, #1
+ 989 0020 0170     		strb	r1, [r0]
+ 446:C:/MinGW/msys/1.0/esos32/src\esos.c ****     __esos_MarkTimerStopped(hnd_timer);
+ 990              		.loc 1 446 5 is_stmt 1 view .LVU285
+ 991 0022 22EA0303 		bic	r3, r2, r3
+ 992 0026 044A     		ldr	r2, .L93
+ 993 0028 1360     		str	r3, [r2]
+ 447:C:/MinGW/msys/1.0/esos32/src\esos.c ****     return TRUE;
+ 994              		.loc 1 447 5 view .LVU286
+ 995              		.loc 1 447 12 is_stmt 0 view .LVU287
+ 996 002a 0120     		movs	r0, #1
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 28
+
+
+ 448:C:/MinGW/msys/1.0/esos32/src\esos.c ****   } else
+ 449:C:/MinGW/msys/1.0/esos32/src\esos.c ****     return FALSE;
+ 450:C:/MinGW/msys/1.0/esos32/src\esos.c **** } //end esos_UnregisterTimer()
+ 997              		.loc 1 450 1 view .LVU288
+ 998 002c 5DF8044B 		ldr	r4, [sp], #4
+ 999              	.LCFI13:
+ 1000              		.cfi_restore 4
+ 1001              		.cfi_def_cfa_offset 0
+ 1002 0030 7047     		bx	lr
+ 1003              	.LVL89:
+ 1004              	.L88:
+ 449:C:/MinGW/msys/1.0/esos32/src\esos.c **** } //end esos_UnregisterTimer()
+ 1005              		.loc 1 449 12 view .LVU289
+ 1006 0032 0020     		movs	r0, #0
+ 1007              	.LVL90:
+ 1008              		.loc 1 450 1 view .LVU290
+ 1009 0034 7047     		bx	lr
+ 1010              	.L94:
+ 1011 0036 00BF     		.align	2
+ 1012              	.L93:
+ 1013 0038 00000000 		.word	__esos_u32TmrActiveFlags
+ 1014 003c 00000000 		.word	__astTmrSvcs
+ 1015 0040 00000000 		.word	__esos_u8TmrSvcsRegistered
+ 1016              		.cfi_endproc
+ 1017              	.LFE9:
+ 1019              		.section	.text.esos_GetTimerHandle,"ax",%progbits
+ 1020              		.align	1
+ 1021              		.global	esos_GetTimerHandle
+ 1022              		.syntax unified
+ 1023              		.thumb
+ 1024              		.thumb_func
+ 1025              		.fpu fpv4-sp-d16
+ 1027              	esos_GetTimerHandle:
+ 1028              	.LVL91:
+ 1029              	.LFB10:
+ 451:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 452:C:/MinGW/msys/1.0/esos32/src\esos.c **** /**
+ 453:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * Finds the timer handle to the provided and ACTIVE timer function
+ 454:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \param pfnTmrFcn pointer to timer function (will execute each time timer expires)
+ 455:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval ESOS_TMR_FAILURE    could not find the function in the active timer list
+ 456:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval timerHandle       handle to timer
+ 457:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_RegisterTimer
+ 458:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_UnregisterTimer
+ 459:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_ChangeTimerPeriod
+ 460:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_IsTimerRunning
+ 461:C:/MinGW/msys/1.0/esos32/src\esos.c ****  */
+ 462:C:/MinGW/msys/1.0/esos32/src\esos.c **** ESOS_TMR_HANDLE    esos_GetTimerHandle( void (*pfnTmrFcn)(void) ) {
+ 1030              		.loc 1 462 67 is_stmt 1 view -0
+ 1031              		.cfi_startproc
+ 1032              		@ args = 0, pretend = 0, frame = 0
+ 1033              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1034              		@ link register save eliminated.
+ 1035              		.loc 1 462 67 is_stmt 0 view .LVU292
+ 1036 0000 10B4     		push	{r4}
+ 1037              	.LCFI14:
+ 1038              		.cfi_def_cfa_offset 4
+ 1039              		.cfi_offset 4, -4
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 29
+
+
+ 1040 0002 0446     		mov	r4, r0
+ 463:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t   u8_i=0;
+ 1041              		.loc 1 463 3 is_stmt 1 view .LVU293
+ 1042              	.LVL92:
+ 464:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t   u8_cnt;
+ 1043              		.loc 1 464 3 view .LVU294
+ 465:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 466:C:/MinGW/msys/1.0/esos32/src\esos.c ****   u8_cnt = esos_GetNumberRunningTimers();
+ 1044              		.loc 1 466 3 view .LVU295
+ 1045              		.loc 1 466 10 is_stmt 0 view .LVU296
+ 1046 0004 0D4B     		ldr	r3, .L102
+ 1047 0006 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 1048              	.LVL93:
+ 467:C:/MinGW/msys/1.0/esos32/src\esos.c ****   while (u8_cnt) {
+ 1049              		.loc 1 467 3 is_stmt 1 view .LVU297
+ 463:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t   u8_cnt;
+ 1050              		.loc 1 463 13 is_stmt 0 view .LVU298
+ 1051 0008 0020     		movs	r0, #0
+ 1052              	.LVL94:
+ 1053              		.loc 1 467 9 view .LVU299
+ 1054 000a 01E0     		b	.L96
+ 1055              	.LVL95:
+ 1056              	.L97:
+ 468:C:/MinGW/msys/1.0/esos32/src\esos.c ****     if (esos_IsTimerRunning(u8_i) ) {
+ 469:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if ( __astTmrSvcs[u8_i].pfn == pfnTmrFcn ) return u8_i;
+ 470:C:/MinGW/msys/1.0/esos32/src\esos.c ****       u8_cnt--;
+ 471:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } //endif
+ 472:C:/MinGW/msys/1.0/esos32/src\esos.c ****     u8_i++;
+ 1057              		.loc 1 472 5 is_stmt 1 view .LVU300
+ 1058              		.loc 1 472 9 is_stmt 0 view .LVU301
+ 1059 000c 0130     		adds	r0, r0, #1
+ 1060              	.LVL96:
+ 1061              		.loc 1 472 9 view .LVU302
+ 1062 000e C0B2     		uxtb	r0, r0
+ 1063              	.LVL97:
+ 1064              	.L96:
+ 467:C:/MinGW/msys/1.0/esos32/src\esos.c ****     if (esos_IsTimerRunning(u8_i) ) {
+ 1065              		.loc 1 467 9 is_stmt 1 view .LVU303
+ 1066 0010 7AB1     		cbz	r2, .L101
+ 468:C:/MinGW/msys/1.0/esos32/src\esos.c ****     if (esos_IsTimerRunning(u8_i) ) {
+ 1067              		.loc 1 468 5 view .LVU304
+ 468:C:/MinGW/msys/1.0/esos32/src\esos.c ****     if (esos_IsTimerRunning(u8_i) ) {
+ 1068              		.loc 1 468 9 is_stmt 0 view .LVU305
+ 1069 0012 0123     		movs	r3, #1
+ 1070 0014 8340     		lsls	r3, r3, r0
+ 1071 0016 0A49     		ldr	r1, .L102+4
+ 1072 0018 0968     		ldr	r1, [r1]
+ 468:C:/MinGW/msys/1.0/esos32/src\esos.c ****     if (esos_IsTimerRunning(u8_i) ) {
+ 1073              		.loc 1 468 8 view .LVU306
+ 1074 001a 0B42     		tst	r3, r1
+ 1075 001c F6D0     		beq	.L97
+ 469:C:/MinGW/msys/1.0/esos32/src\esos.c ****       u8_cnt--;
+ 1076              		.loc 1 469 7 is_stmt 1 view .LVU307
+ 469:C:/MinGW/msys/1.0/esos32/src\esos.c ****       u8_cnt--;
+ 1077              		.loc 1 469 30 is_stmt 0 view .LVU308
+ 1078 001e 00EB4003 		add	r3, r0, r0, lsl #1
+ 1079 0022 0849     		ldr	r1, .L102+8
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 30
+
+
+ 1080 0024 51F82330 		ldr	r3, [r1, r3, lsl #2]
+ 469:C:/MinGW/msys/1.0/esos32/src\esos.c ****       u8_cnt--;
+ 1081              		.loc 1 469 10 view .LVU309
+ 1082 0028 A342     		cmp	r3, r4
+ 1083 002a 03D0     		beq	.L98
+ 470:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } //endif
+ 1084              		.loc 1 470 7 is_stmt 1 view .LVU310
+ 470:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } //endif
+ 1085              		.loc 1 470 13 is_stmt 0 view .LVU311
+ 1086 002c 013A     		subs	r2, r2, #1
+ 1087              	.LVL98:
+ 470:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } //endif
+ 1088              		.loc 1 470 13 view .LVU312
+ 1089 002e D2B2     		uxtb	r2, r2
+ 1090              	.LVL99:
+ 470:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } //endif
+ 1091              		.loc 1 470 13 view .LVU313
+ 1092 0030 ECE7     		b	.L97
+ 1093              	.L101:
+ 473:C:/MinGW/msys/1.0/esos32/src\esos.c ****   } // endwhile
+ 474:C:/MinGW/msys/1.0/esos32/src\esos.c ****   return ESOS_TMR_FAILURE;
+ 1094              		.loc 1 474 10 view .LVU314
+ 1095 0032 FF20     		movs	r0, #255
+ 1096              	.LVL100:
+ 1097              	.L98:
+ 475:C:/MinGW/msys/1.0/esos32/src\esos.c **** } //end esos_GetTimerHandle()
+ 1098              		.loc 1 475 1 view .LVU315
+ 1099 0034 5DF8044B 		ldr	r4, [sp], #4
+ 1100              	.LCFI15:
+ 1101              		.cfi_restore 4
+ 1102              		.cfi_def_cfa_offset 0
+ 1103              	.LVL101:
+ 1104              		.loc 1 475 1 view .LVU316
+ 1105 0038 7047     		bx	lr
+ 1106              	.L103:
+ 1107 003a 00BF     		.align	2
+ 1108              	.L102:
+ 1109 003c 00000000 		.word	__esos_u8TmrSvcsRegistered
+ 1110 0040 00000000 		.word	__esos_u32TmrActiveFlags
+ 1111 0044 00000000 		.word	__astTmrSvcs
+ 1112              		.cfi_endproc
+ 1113              	.LFE10:
+ 1115              		.section	.text.esos_ChangeTimerPeriod,"ax",%progbits
+ 1116              		.align	1
+ 1117              		.global	esos_ChangeTimerPeriod
+ 1118              		.syntax unified
+ 1119              		.thumb
+ 1120              		.thumb_func
+ 1121              		.fpu fpv4-sp-d16
+ 1123              	esos_ChangeTimerPeriod:
+ 1124              	.LVL102:
+ 1125              	.LFB11:
+ 476:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 477:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 478:C:/MinGW/msys/1.0/esos32/src\esos.c **** /**
+ 479:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * Change a timer period.
+ 480:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \param hnd_timer handle to timer whose period is to be changed
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 31
+
+
+ 481:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \param u32_period new period for timer selected by mask
+ 482:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval FALSE if timer is not currently running
+ 483:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \retval TRUE if timer period was changed
+ 484:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_RegisterTimer
+ 485:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_UnregisterTimer
+ 486:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_GetTimerHandle
+ 487:C:/MinGW/msys/1.0/esos32/src\esos.c ****  * \sa esos_IsTimerRunning
+ 488:C:/MinGW/msys/1.0/esos32/src\esos.c ****  */
+ 489:C:/MinGW/msys/1.0/esos32/src\esos.c **** uint8_t    esos_ChangeTimerPeriod( ESOS_TMR_HANDLE hnd_timer, uint32_t u32_period ) {
+ 1126              		.loc 1 489 85 is_stmt 1 view -0
+ 1127              		.cfi_startproc
+ 1128              		@ args = 0, pretend = 0, frame = 0
+ 1129              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1130              		@ link register save eliminated.
+ 490:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 491:C:/MinGW/msys/1.0/esos32/src\esos.c ****   if (esos_IsTimerRunning(hnd_timer) ) {
+ 1131              		.loc 1 491 3 view .LVU318
+ 1132              		.loc 1 491 7 is_stmt 0 view .LVU319
+ 1133 0000 0123     		movs	r3, #1
+ 1134 0002 8340     		lsls	r3, r3, r0
+ 1135 0004 064A     		ldr	r2, .L107
+ 1136 0006 1268     		ldr	r2, [r2]
+ 1137              		.loc 1 491 6 view .LVU320
+ 1138 0008 1342     		tst	r3, r2
+ 1139 000a 07D0     		beq	.L106
+ 492:C:/MinGW/msys/1.0/esos32/src\esos.c ****     __astTmrSvcs[hnd_timer].u32_period = u32_period;
+ 1140              		.loc 1 492 5 is_stmt 1 view .LVU321
+ 1141              		.loc 1 492 40 is_stmt 0 view .LVU322
+ 1142 000c 00EB4000 		add	r0, r0, r0, lsl #1
+ 1143              	.LVL103:
+ 1144              		.loc 1 492 40 view .LVU323
+ 1145 0010 044B     		ldr	r3, .L107+4
+ 1146 0012 03EB8000 		add	r0, r3, r0, lsl #2
+ 1147 0016 4160     		str	r1, [r0, #4]
+ 493:C:/MinGW/msys/1.0/esos32/src\esos.c ****     return TRUE;
+ 1148              		.loc 1 493 5 is_stmt 1 view .LVU324
+ 1149              		.loc 1 493 12 is_stmt 0 view .LVU325
+ 1150 0018 0120     		movs	r0, #1
+ 1151 001a 7047     		bx	lr
+ 1152              	.LVL104:
+ 1153              	.L106:
+ 494:C:/MinGW/msys/1.0/esos32/src\esos.c ****   } else return FALSE;
+ 1154              		.loc 1 494 17 view .LVU326
+ 1155 001c 0020     		movs	r0, #0
+ 1156              	.LVL105:
+ 495:C:/MinGW/msys/1.0/esos32/src\esos.c **** } //end esos_geTimerHandle()
+ 1157              		.loc 1 495 1 view .LVU327
+ 1158 001e 7047     		bx	lr
+ 1159              	.L108:
+ 1160              		.align	2
+ 1161              	.L107:
+ 1162 0020 00000000 		.word	__esos_u32TmrActiveFlags
+ 1163 0024 00000000 		.word	__astTmrSvcs
+ 1164              		.cfi_endproc
+ 1165              	.LFE11:
+ 1167              		.section	.text.__esosInit,"ax",%progbits
+ 1168              		.align	1
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 32
+
+
+ 1169              		.global	__esosInit
+ 1170              		.syntax unified
+ 1171              		.thumb
+ 1172              		.thumb_func
+ 1173              		.fpu fpv4-sp-d16
+ 1175              	__esosInit:
+ 1176              	.LFB12:
+ 496:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 497:C:/MinGW/msys/1.0/esos32/src\esos.c **** void __esosInit(void) {
+ 1177              		.loc 1 497 23 is_stmt 1 view -0
+ 1178              		.cfi_startproc
+ 1179              		@ args = 0, pretend = 0, frame = 0
+ 1180              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1181 0000 10B5     		push	{r4, lr}
+ 1182              	.LCFI16:
+ 1183              		.cfi_def_cfa_offset 8
+ 1184              		.cfi_offset 4, -8
+ 1185              		.cfi_offset 14, -4
+ 498:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t     u8_i;
+ 1186              		.loc 1 498 3 view .LVU329
+ 499:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 500:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // initialize the pool of available user tasks
+ 501:C:/MinGW/msys/1.0/esos32/src\esos.c ****   for (u8_i=0; u8_i<MAX_NUM_USER_TASKS; u8_i++) {
+ 1187              		.loc 1 501 3 view .LVU330
+ 1188              	.LVL106:
+ 1189              		.loc 1 501 12 is_stmt 0 view .LVU331
+ 1190 0002 0024     		movs	r4, #0
+ 1191              	.LVL107:
+ 1192              	.L110:
+ 1193              		.loc 1 501 16 is_stmt 1 discriminator 1 view .LVU332
+ 1194              		.loc 1 501 3 is_stmt 0 discriminator 1 view .LVU333
+ 1195 0004 1F2C     		cmp	r4, #31
+ 1196 0006 24D8     		bhi	.L115
+ 502:C:/MinGW/msys/1.0/esos32/src\esos.c ****     __astUserTaskPool[u8_i].pfn = NULLPTR;
+ 1197              		.loc 1 502 5 is_stmt 1 discriminator 3 view .LVU334
+ 1198              		.loc 1 502 33 is_stmt 0 discriminator 3 view .LVU335
+ 1199 0008 04EB4403 		add	r3, r4, r4, lsl #1
+ 1200 000c DA00     		lsls	r2, r3, #3
+ 1201 000e 214B     		ldr	r3, .L117
+ 1202 0010 1344     		add	r3, r3, r2
+ 1203 0012 0021     		movs	r1, #0
+ 1204 0014 5960     		str	r1, [r3, #4]
+ 503:C:/MinGW/msys/1.0/esos32/src\esos.c ****     __au8UserTaskStructIndex[u8_i] = NULLIDX;
+ 1205              		.loc 1 503 5 is_stmt 1 discriminator 3 view .LVU336
+ 1206              		.loc 1 503 36 is_stmt 0 discriminator 3 view .LVU337
+ 1207 0016 204A     		ldr	r2, .L117+4
+ 1208 0018 FF20     		movs	r0, #255
+ 1209 001a 1055     		strb	r0, [r2, r4]
+ 504:C:/MinGW/msys/1.0/esos32/src\esos.c ****     __astChildTaskPool[u8_i].pfn = NULLPTR;
+ 1210              		.loc 1 504 5 is_stmt 1 discriminator 3 view .LVU338
+ 1211              		.loc 1 504 34 is_stmt 0 discriminator 3 view .LVU339
+ 1212 001c 04EB4402 		add	r2, r4, r4, lsl #1
+ 1213 0020 D000     		lsls	r0, r2, #3
+ 1214 0022 1E4A     		ldr	r2, .L117+8
+ 1215 0024 0244     		add	r2, r2, r0
+ 1216 0026 5160     		str	r1, [r2, #4]
+ 505:C:/MinGW/msys/1.0/esos32/src\esos.c ****     // assign each possible user task a mailbox and initialize it
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 33
+
+
+ 506:C:/MinGW/msys/1.0/esos32/src\esos.c ****     __astUserTaskPool[u8_i].pst_Mailbox = &__astMailbox[u8_i];
+ 1217              		.loc 1 506 5 is_stmt 1 discriminator 3 view .LVU340
+ 1218              		.loc 1 506 43 is_stmt 0 discriminator 3 view .LVU341
+ 1219 0028 1D4A     		ldr	r2, .L117+12
+ 1220 002a 02EBC400 		add	r0, r2, r4, lsl #3
+ 1221              		.loc 1 506 41 discriminator 3 view .LVU342
+ 1222 002e 5861     		str	r0, [r3, #20]
+ 507:C:/MinGW/msys/1.0/esos32/src\esos.c ****     (__astUserTaskPool[u8_i].pst_Mailbox)->pst_CBuffer = &__astCircularBuffers[u8_i];
+ 1223              		.loc 1 507 5 is_stmt 1 discriminator 3 view .LVU343
+ 1224              		.loc 1 507 58 is_stmt 0 discriminator 3 view .LVU344
+ 1225 0030 04EB4401 		add	r1, r4, r4, lsl #1
+ 1226 0034 8B00     		lsls	r3, r1, #2
+ 1227 0036 1B49     		ldr	r1, .L117+16
+ 1228 0038 0B44     		add	r3, r3, r1
+ 1229              		.loc 1 507 56 discriminator 3 view .LVU345
+ 1230 003a 42F83430 		str	r3, [r2, r4, lsl #3]
+ 508:C:/MinGW/msys/1.0/esos32/src\esos.c ****     __esos_InitMailbox(__astUserTaskPool[u8_i].pst_Mailbox, &__au8_MBData[u8_i][0]);
+ 1231              		.loc 1 508 5 is_stmt 1 discriminator 3 view .LVU346
+ 1232 003e C4EB0412 		rsb	r2, r4, r4, lsl #4
+ 1233 0042 D300     		lsls	r3, r2, #3
+ 1234 0044 1849     		ldr	r1, .L117+20
+ 1235 0046 1944     		add	r1, r1, r3
+ 1236 0048 FFF7FEFF 		bl	__esos_InitMailbox
+ 1237              	.LVL108:
+ 501:C:/MinGW/msys/1.0/esos32/src\esos.c ****     __astUserTaskPool[u8_i].pfn = NULLPTR;
+ 1238              		.loc 1 501 41 discriminator 3 view .LVU347
+ 501:C:/MinGW/msys/1.0/esos32/src\esos.c ****     __astUserTaskPool[u8_i].pfn = NULLPTR;
+ 1239              		.loc 1 501 45 is_stmt 0 discriminator 3 view .LVU348
+ 1240 004c 0134     		adds	r4, r4, #1
+ 1241              	.LVL109:
+ 501:C:/MinGW/msys/1.0/esos32/src\esos.c ****     __astUserTaskPool[u8_i].pfn = NULLPTR;
+ 1242              		.loc 1 501 45 discriminator 3 view .LVU349
+ 1243 004e E4B2     		uxtb	r4, r4
+ 1244              	.LVL110:
+ 501:C:/MinGW/msys/1.0/esos32/src\esos.c ****     __astUserTaskPool[u8_i].pfn = NULLPTR;
+ 1245              		.loc 1 501 45 discriminator 3 view .LVU350
+ 1246 0050 D8E7     		b	.L110
+ 1247              	.L115:
+ 509:C:/MinGW/msys/1.0/esos32/src\esos.c ****   }
+ 510:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __esos_u32TmrActiveFlags = 0;
+ 1248              		.loc 1 510 3 is_stmt 1 view .LVU351
+ 1249              		.loc 1 510 28 is_stmt 0 view .LVU352
+ 1250 0052 0023     		movs	r3, #0
+ 1251 0054 154A     		ldr	r2, .L117+24
+ 1252 0056 1360     		str	r3, [r2]
+ 511:C:/MinGW/msys/1.0/esos32/src\esos.c ****   for (u8_i=0; u8_i<MAX_NUM_TMRS; u8_i++) {
+ 1253              		.loc 1 511 3 is_stmt 1 view .LVU353
+ 1254              	.LVL111:
+ 1255              	.L112:
+ 1256              		.loc 1 511 16 discriminator 1 view .LVU354
+ 1257              		.loc 1 511 3 is_stmt 0 discriminator 1 view .LVU355
+ 1258 0058 0F2B     		cmp	r3, #15
+ 1259 005a 08D8     		bhi	.L116
+ 512:C:/MinGW/msys/1.0/esos32/src\esos.c ****     __astTmrSvcs[u8_i].pfn = NULLPTR;
+ 1260              		.loc 1 512 5 is_stmt 1 discriminator 3 view .LVU356
+ 1261              		.loc 1 512 28 is_stmt 0 discriminator 3 view .LVU357
+ 1262 005c 03EB4301 		add	r1, r3, r3, lsl #1
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 34
+
+
+ 1263 0060 8A00     		lsls	r2, r1, #2
+ 1264 0062 1349     		ldr	r1, .L117+28
+ 1265 0064 0020     		movs	r0, #0
+ 1266 0066 8850     		str	r0, [r1, r2]
+ 511:C:/MinGW/msys/1.0/esos32/src\esos.c ****   for (u8_i=0; u8_i<MAX_NUM_TMRS; u8_i++) {
+ 1267              		.loc 1 511 35 is_stmt 1 discriminator 3 view .LVU358
+ 511:C:/MinGW/msys/1.0/esos32/src\esos.c ****   for (u8_i=0; u8_i<MAX_NUM_TMRS; u8_i++) {
+ 1268              		.loc 1 511 39 is_stmt 0 discriminator 3 view .LVU359
+ 1269 0068 0133     		adds	r3, r3, #1
+ 1270              	.LVL112:
+ 511:C:/MinGW/msys/1.0/esos32/src\esos.c ****   for (u8_i=0; u8_i<MAX_NUM_TMRS; u8_i++) {
+ 1271              		.loc 1 511 39 discriminator 3 view .LVU360
+ 1272 006a DBB2     		uxtb	r3, r3
+ 1273              	.LVL113:
+ 511:C:/MinGW/msys/1.0/esos32/src\esos.c ****   for (u8_i=0; u8_i<MAX_NUM_TMRS; u8_i++) {
+ 1274              		.loc 1 511 39 discriminator 3 view .LVU361
+ 1275 006c F4E7     		b	.L112
+ 1276              	.L116:
+ 513:C:/MinGW/msys/1.0/esos32/src\esos.c ****   }
+ 514:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 515:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // no user tasks are currently registered
+ 516:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __u8UserTasksRegistered = 0;
+ 1277              		.loc 1 516 3 is_stmt 1 view .LVU362
+ 1278              		.loc 1 516 27 is_stmt 0 view .LVU363
+ 1279 006e 0023     		movs	r3, #0
+ 1280              	.LVL114:
+ 1281              		.loc 1 516 27 view .LVU364
+ 1282 0070 104A     		ldr	r2, .L117+32
+ 1283 0072 1370     		strb	r3, [r2]
+ 517:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // no child tasks are active
+ 518:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __u8ChildTasksRegistered = 0;
+ 1284              		.loc 1 518 3 is_stmt 1 view .LVU365
+ 1285              		.loc 1 518 28 is_stmt 0 view .LVU366
+ 1286 0074 104A     		ldr	r2, .L117+36
+ 1287 0076 1370     		strb	r3, [r2]
+ 519:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // no timer services are active
+ 520:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __esos_u8TmrSvcsRegistered = 0;
+ 1288              		.loc 1 520 3 is_stmt 1 view .LVU367
+ 1289              		.loc 1 520 30 is_stmt 0 view .LVU368
+ 1290 0078 104A     		ldr	r2, .L117+40
+ 1291 007a 1370     		strb	r3, [r2]
+ 521:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 522:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // initialize the ESOS pseudo-random number generator
+ 523:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // see value, in case the hardware-functions don't..
+ 524:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // Also, some internal ESOS functions may use the SW PRNG
+ 525:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // in ESOS via the hidden function, so let's make sure it 
+ 526:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // is seed.  We will use MAX_NUM_USER_TASKS for now.
+ 527:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __esos_set_PRNG_U32Seed( MAX_NUM_USER_TASKS );
+ 1292              		.loc 1 527 3 is_stmt 1 view .LVU369
+ 1293 007c 2020     		movs	r0, #32
+ 1294 007e FFF7FEFF 		bl	__esos_set_PRNG_U32Seed
+ 1295              	.LVL115:
+ 528:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // call the config routine for the hardware PRNG.
+ 529:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __esos_hw_config_PRNG();
+ 1296              		.loc 1 529 3 view .LVU370
+ 1297 0082 FFF7FEFF 		bl	__esos_hw_config_PRNG
+ 1298              	.LVL116:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 35
+
+
+ 530:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 531:C:/MinGW/msys/1.0/esos32/src\esos.c ****   /* Call the user provided function to initialize the
+ 532:C:/MinGW/msys/1.0/esos32/src\esos.c ****    *    and start the ESOS system tick..
+ 533:C:/MinGW/msys/1.0/esos32/src\esos.c ****    */
+ 534:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __esos_hw_InitSystemTick();
+ 1299              		.loc 1 534 3 view .LVU371
+ 1300 0086 FFF7FEFF 		bl	__esos_hw_InitSystemTick
+ 1301              	.LVL117:
+ 535:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 536:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // initialize the HW interrupts
+ 537:C:/MinGW/msys/1.0/esos32/src\esos.c ****   //   (This routine is considered HW specific, because
+ 538:C:/MinGW/msys/1.0/esos32/src\esos.c ****   //      we don't know the number of HW interrupts on the
+ 539:C:/MinGW/msys/1.0/esos32/src\esos.c ****   //      CPU at this point....)
+ 540:C:/MinGW/msys/1.0/esos32/src\esos.c **** #ifdef  ESOS_USE_IRQS
+ 541:C:/MinGW/msys/1.0/esos32/src\esos.c ****   _esos_hw_InitUserInterrupts();
+ 542:C:/MinGW/msys/1.0/esos32/src\esos.c **** #endif
+ 543:C:/MinGW/msys/1.0/esos32/src\esos.c ****   /*
+ 544:C:/MinGW/msys/1.0/esos32/src\esos.c ****    * Now, initialize one of the communication systems if
+ 545:C:/MinGW/msys/1.0/esos32/src\esos.c ****    * the user has requested it in user_config.h
+ 546:C:/MinGW/msys/1.0/esos32/src\esos.c ****    *
+ 547:C:/MinGW/msys/1.0/esos32/src\esos.c ****    * TODO: At some point, I want to be able to run both comm
+ 548:C:/MinGW/msys/1.0/esos32/src\esos.c ****    * systems independently so we can use USB and debug via
+ 549:C:/MinGW/msys/1.0/esos32/src\esos.c ****    * RS232 or vice-versa.  I'll worry about that later.
+ 550:C:/MinGW/msys/1.0/esos32/src\esos.c ****    */
+ 551:C:/MinGW/msys/1.0/esos32/src\esos.c **** #ifdef  ESOS_USE_BULK_CDC_USB
+ 552:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __esos_InitCommSystem();
+ 553:C:/MinGW/msys/1.0/esos32/src\esos.c **** #endif
+ 554:C:/MinGW/msys/1.0/esos32/src\esos.c **** #ifdef ESOS_USE_SERIAL_PORT
+ 555:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __esos_InitCommSystem();
+ 1302              		.loc 1 555 3 view .LVU372
+ 1303 008a FFF7FEFF 		bl	__esos_InitCommSystem
+ 1304              	.LVL118:
+ 556:C:/MinGW/msys/1.0/esos32/src\esos.c **** #endif
+ 557:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 558:C:/MinGW/msys/1.0/esos32/src\esos.c **** #ifdef ESOS_USE_LCD
+ 559:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // Initialize LCD services
+ 560:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __esos_lcd44780_init();
+ 561:C:/MinGW/msys/1.0/esos32/src\esos.c **** #endif
+ 562:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 563:C:/MinGW/msys/1.0/esos32/src\esos.c ****   
+ 564:C:/MinGW/msys/1.0/esos32/src\esos.c ****   user_init();
+ 1305              		.loc 1 564 3 view .LVU373
+ 1306 008e FFF7FEFF 		bl	user_init
+ 1307              	.LVL119:
+ 565:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 566:C:/MinGW/msys/1.0/esos32/src\esos.c **** #ifdef ESOS_USE_SUI
+ 567:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // must be called **AFTER** user_init() because we expect the user
+ 568:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // to "register" their SUI elements before we try to initialize the
+ 569:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // devices
+ 570:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __esos_InitSUI();
+ 571:C:/MinGW/msys/1.0/esos32/src\esos.c **** #endif
+ 572:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 573:C:/MinGW/msys/1.0/esos32/src\esos.c **** #if defined (ESOS_USE_I2C_100KBPS) || defined (ESOS_USE_I2C) || defined (ESOS_USE_I2C_400KBPS)
+ 574:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // Cal **AFTER** user_init() because the user might have set
+ 575:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // pin directions and peripheral functions in their user_init()
+ 576:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // ESOS will call the specific __esos_i2c_hw_config( u32_i2cbps)
+ 577:C:/MinGW/msys/1.0/esos32/src\esos.c ****   //  as well.
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 36
+
+
+ 578:C:/MinGW/msys/1.0/esos32/src\esos.c **** #ifdef ESOS_USE_I2C_400KBPS
+ 579:C:/MinGW/msys/1.0/esos32/src\esos.c ****   #warning Using 400kbps I2C service.... Can your I2C slaves handle it?
+ 580:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __esos_i2c_config(400000UL);
+ 581:C:/MinGW/msys/1.0/esos32/src\esos.c **** #else
+ 582:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __esos_i2c_config(100000UL);
+ 583:C:/MinGW/msys/1.0/esos32/src\esos.c **** #endif
+ 584:C:/MinGW/msys/1.0/esos32/src\esos.c **** #endif
+ 585:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 586:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 587:C:/MinGW/msys/1.0/esos32/src\esos.c **** #ifdef ESOS_USE_WATCHDOG
+ 588:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // must be called at the very end so that watchdog doesnt reset
+ 589:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // us before the user gets around to feeding the watchdog
+ 590:C:/MinGW/msys/1.0/esos32/src\esos.c ****   // We will use a 1000 ms = 1 second watchdog period for now....
+ 591:C:/MinGW/msys/1.0/esos32/src\esos.c ****   _esos_wdog_initWatchdog( 1000 );
+ 592:C:/MinGW/msys/1.0/esos32/src\esos.c **** #endif
+ 593:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 594:C:/MinGW/msys/1.0/esos32/src\esos.c **** } // end osInit()
+ 1308              		.loc 1 594 1 is_stmt 0 view .LVU374
+ 1309 0092 10BD     		pop	{r4, pc}
+ 1310              	.L118:
+ 1311              		.align	2
+ 1312              	.L117:
+ 1313 0094 00000000 		.word	__astUserTaskPool
+ 1314 0098 00000000 		.word	__au8UserTaskStructIndex
+ 1315 009c 00000000 		.word	__astChildTaskPool
+ 1316 00a0 00000000 		.word	__astMailbox
+ 1317 00a4 00000000 		.word	__astCircularBuffers
+ 1318 00a8 00000000 		.word	__au8_MBData
+ 1319 00ac 00000000 		.word	__esos_u32TmrActiveFlags
+ 1320 00b0 00000000 		.word	__astTmrSvcs
+ 1321 00b4 00000000 		.word	__u8UserTasksRegistered
+ 1322 00b8 00000000 		.word	__u8ChildTasksRegistered
+ 1323 00bc 00000000 		.word	__esos_u8TmrSvcsRegistered
+ 1324              		.cfi_endproc
+ 1325              	.LFE12:
+ 1327              		.section	.text.main,"ax",%progbits
+ 1328              		.align	1
+ 1329              		.global	main
+ 1330              		.syntax unified
+ 1331              		.thumb
+ 1332              		.thumb_func
+ 1333              		.fpu fpv4-sp-d16
+ 1335              	main:
+ 1336              	.LFB13:
+ 595:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 596:C:/MinGW/msys/1.0/esos32/src\esos.c **** main_t main(void) {
+ 1337              		.loc 1 596 19 is_stmt 1 view -0
+ 1338              		.cfi_startproc
+ 1339              		@ args = 0, pretend = 0, frame = 0
+ 1340              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1341 0000 70B5     		push	{r4, r5, r6, lr}
+ 1342              	.LCFI17:
+ 1343              		.cfi_def_cfa_offset 16
+ 1344              		.cfi_offset 4, -16
+ 1345              		.cfi_offset 5, -12
+ 1346              		.cfi_offset 6, -8
+ 1347              		.cfi_offset 14, -4
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 37
+
+
+ 597:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t             u8TaskReturnedVal=0;
+ 1348              		.loc 1 597 3 view .LVU376
+ 1349              	.LVL120:
+ 598:C:/MinGW/msys/1.0/esos32/src\esos.c ****   uint8_t             u8i,u8j, u8NumRegdTasksTemp;
+ 1350              		.loc 1 598 3 view .LVU377
+ 599:C:/MinGW/msys/1.0/esos32/src\esos.c ****   ESOS_TASK_HANDLE  pstNowTask;
+ 1351              		.loc 1 599 3 view .LVU378
+ 600:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 601:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __esosInit();
+ 1352              		.loc 1 601 3 view .LVU379
+ 1353 0002 FFF7FEFF 		bl	__esosInit
+ 1354              	.LVL121:
+ 602:C:/MinGW/msys/1.0/esos32/src\esos.c ****   /* Keep a running counter of number of tasks we've created
+ 603:C:/MinGW/msys/1.0/esos32/src\esos.c ****   ** to serve as stupid/simple task identifier
+ 604:C:/MinGW/msys/1.0/esos32/src\esos.c ****   */
+ 605:C:/MinGW/msys/1.0/esos32/src\esos.c ****   __u16NumTasksEverCreated = 0;
+ 1355              		.loc 1 605 3 view .LVU380
+ 1356              		.loc 1 605 28 is_stmt 0 view .LVU381
+ 1357 0006 234B     		ldr	r3, .L136
+ 1358 0008 0022     		movs	r2, #0
+ 1359 000a 1A80     		strh	r2, [r3]	@ movhi
+ 1360 000c 1CE0     		b	.L123
+ 1361              	.LVL122:
+ 1362              	.L132:
+ 606:C:/MinGW/msys/1.0/esos32/src\esos.c ****   while (TRUE) {
+ 607:C:/MinGW/msys/1.0/esos32/src\esos.c ****     /* First, let ESOS get something done.....
+ 608:C:/MinGW/msys/1.0/esos32/src\esos.c ****      *      service communications, garbage collection, etc.
+ 609:C:/MinGW/msys/1.0/esos32/src\esos.c ****      *      Whatever a nice little OS needs to do.
+ 610:C:/MinGW/msys/1.0/esos32/src\esos.c ****      */
+ 611:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 612:C:/MinGW/msys/1.0/esos32/src\esos.c ****     u8i = 0;
+ 613:C:/MinGW/msys/1.0/esos32/src\esos.c ****     /* get the number of currently registered tasks.... we must make
+ 614:C:/MinGW/msys/1.0/esos32/src\esos.c ****      * a local copy, because the tasks themselves may unregister and
+ 615:C:/MinGW/msys/1.0/esos32/src\esos.c ****      * change the variable __u8UserTasksRegistered as they go!
+ 616:C:/MinGW/msys/1.0/esos32/src\esos.c ****      */
+ 617:C:/MinGW/msys/1.0/esos32/src\esos.c ****     u8NumRegdTasksTemp = __u8UserTasksRegistered;
+ 618:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 619:C:/MinGW/msys/1.0/esos32/src\esos.c ****     // if there are registered tasks, let them run (call them)
+ 620:C:/MinGW/msys/1.0/esos32/src\esos.c ****     while ( u8i < u8NumRegdTasksTemp  ) {
+ 621:C:/MinGW/msys/1.0/esos32/src\esos.c ****       /* Get the next task up for execution.  Call it and catch
+ 622:C:/MinGW/msys/1.0/esos32/src\esos.c ****          its state (returned value) when it gives focus back.
+ 623:C:/MinGW/msys/1.0/esos32/src\esos.c ****          We may need to do something depending on its new state,
+ 624:C:/MinGW/msys/1.0/esos32/src\esos.c ****          e.g. if it has ended, we need to remove it from the rotation
+ 625:C:/MinGW/msys/1.0/esos32/src\esos.c ****       */
+ 626:C:/MinGW/msys/1.0/esos32/src\esos.c ****       pstNowTask = &__astUserTaskPool[__au8UserTaskStructIndex[u8i]];
+ 627:C:/MinGW/msys/1.0/esos32/src\esos.c ****       u8TaskReturnedVal = pstNowTask->pfn( pstNowTask );
+ 628:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (u8TaskReturnedVal == ESOS_TASK_ENDED) {
+ 629:C:/MinGW/msys/1.0/esos32/src\esos.c ****         //printf ("Unregistering an ENDED protothread\n");
+ 630:C:/MinGW/msys/1.0/esos32/src\esos.c ****         esos_UnregisterTask( pstNowTask->pfn );
+ 1363              		.loc 1 630 9 is_stmt 1 view .LVU382
+ 1364 000e 05EB4505 		add	r5, r5, r5, lsl #1
+ 1365              	.LVL123:
+ 1366              		.loc 1 630 9 is_stmt 0 view .LVU383
+ 1367 0012 214B     		ldr	r3, .L136+4
+ 1368 0014 03EBC505 		add	r5, r3, r5, lsl #3
+ 1369 0018 6868     		ldr	r0, [r5, #4]
+ 1370              	.LVL124:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 38
+
+
+ 1371              		.loc 1 630 9 view .LVU384
+ 1372 001a FFF7FEFF 		bl	esos_UnregisterTask
+ 1373              	.LVL125:
+ 1374              	.L121:
+ 631:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // endif
+ 632:C:/MinGW/msys/1.0/esos32/src\esos.c ****       u8i++;
+ 1375              		.loc 1 632 7 is_stmt 1 view .LVU385
+ 1376              		.loc 1 632 10 is_stmt 0 view .LVU386
+ 1377 001e 0134     		adds	r4, r4, #1
+ 1378              	.LVL126:
+ 1379              		.loc 1 632 10 view .LVU387
+ 1380 0020 E4B2     		uxtb	r4, r4
+ 1381              	.LVL127:
+ 1382              	.L120:
+ 633:C:/MinGW/msys/1.0/esos32/src\esos.c ****       OS_ITERATE;
+ 1383              		.loc 1 633 17 is_stmt 1 view .LVU388
+ 620:C:/MinGW/msys/1.0/esos32/src\esos.c ****       /* Get the next task up for execution.  Call it and catch
+ 1384              		.loc 1 620 11 view .LVU389
+ 1385 0022 B442     		cmp	r4, r6
+ 1386 0024 0BD2     		bcs	.L131
+ 626:C:/MinGW/msys/1.0/esos32/src\esos.c ****       u8TaskReturnedVal = pstNowTask->pfn( pstNowTask );
+ 1387              		.loc 1 626 7 view .LVU390
+ 626:C:/MinGW/msys/1.0/esos32/src\esos.c ****       u8TaskReturnedVal = pstNowTask->pfn( pstNowTask );
+ 1388              		.loc 1 626 63 is_stmt 0 view .LVU391
+ 1389 0026 1D4B     		ldr	r3, .L136+8
+ 1390 0028 1D5D     		ldrb	r5, [r3, r4]	@ zero_extendqisi2
+ 626:C:/MinGW/msys/1.0/esos32/src\esos.c ****       u8TaskReturnedVal = pstNowTask->pfn( pstNowTask );
+ 1391              		.loc 1 626 18 view .LVU392
+ 1392 002a 05EB4503 		add	r3, r5, r5, lsl #1
+ 1393 002e 1A48     		ldr	r0, .L136+4
+ 1394 0030 00EBC300 		add	r0, r0, r3, lsl #3
+ 1395              	.LVL128:
+ 627:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (u8TaskReturnedVal == ESOS_TASK_ENDED) {
+ 1396              		.loc 1 627 7 is_stmt 1 view .LVU393
+ 627:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (u8TaskReturnedVal == ESOS_TASK_ENDED) {
+ 1397              		.loc 1 627 37 is_stmt 0 view .LVU394
+ 1398 0034 4368     		ldr	r3, [r0, #4]
+ 627:C:/MinGW/msys/1.0/esos32/src\esos.c ****       if (u8TaskReturnedVal == ESOS_TASK_ENDED) {
+ 1399              		.loc 1 627 27 view .LVU395
+ 1400 0036 9847     		blx	r3
+ 1401              	.LVL129:
+ 628:C:/MinGW/msys/1.0/esos32/src\esos.c ****         //printf ("Unregistering an ENDED protothread\n");
+ 1402              		.loc 1 628 7 is_stmt 1 view .LVU396
+ 628:C:/MinGW/msys/1.0/esos32/src\esos.c ****         //printf ("Unregistering an ENDED protothread\n");
+ 1403              		.loc 1 628 10 is_stmt 0 view .LVU397
+ 1404 0038 0328     		cmp	r0, #3
+ 1405 003a F0D1     		bne	.L121
+ 1406 003c E7E7     		b	.L132
+ 1407              	.LVL130:
+ 1408              	.L131:
+ 634:C:/MinGW/msys/1.0/esos32/src\esos.c ****     } //end while()
+ 635:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 636:C:/MinGW/msys/1.0/esos32/src\esos.c ****     /* we have completed a rotation through the set of active tasks
+ 637:C:/MinGW/msys/1.0/esos32/src\esos.c ****        Now repack the pool (if necessary) to keep everything nice and
+ 638:C:/MinGW/msys/1.0/esos32/src\esos.c ****        tight.
+ 639:C:/MinGW/msys/1.0/esos32/src\esos.c ****     */
+ 640:C:/MinGW/msys/1.0/esos32/src\esos.c ****     if (__esos_IsSystemFlagSet( __ESOS_SYS_FLAG_PACK_TASKS) ) {
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 39
+
+
+ 1409              		.loc 1 640 5 is_stmt 1 view .LVU398
+ 1410              		.loc 1 640 9 is_stmt 0 view .LVU399
+ 1411 003e 184B     		ldr	r3, .L136+12
+ 1412 0040 1B68     		ldr	r3, [r3]
+ 1413              		.loc 1 640 8 view .LVU400
+ 1414 0042 13F0010F 		tst	r3, #1
+ 1415 0046 03D1     		bne	.L133
+ 1416              	.LVL131:
+ 1417              	.L123:
+ 606:C:/MinGW/msys/1.0/esos32/src\esos.c ****     /* First, let ESOS get something done.....
+ 1418              		.loc 1 606 3 is_stmt 1 view .LVU401
+ 612:C:/MinGW/msys/1.0/esos32/src\esos.c ****     /* get the number of currently registered tasks.... we must make
+ 1419              		.loc 1 612 5 view .LVU402
+ 617:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 1420              		.loc 1 617 5 view .LVU403
+ 617:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 1421              		.loc 1 617 24 is_stmt 0 view .LVU404
+ 1422 0048 164B     		ldr	r3, .L136+16
+ 1423 004a 1E78     		ldrb	r6, [r3]	@ zero_extendqisi2
+ 1424              	.LVL132:
+ 620:C:/MinGW/msys/1.0/esos32/src\esos.c ****       /* Get the next task up for execution.  Call it and catch
+ 1425              		.loc 1 620 5 is_stmt 1 view .LVU405
+ 612:C:/MinGW/msys/1.0/esos32/src\esos.c ****     /* get the number of currently registered tasks.... we must make
+ 1426              		.loc 1 612 9 is_stmt 0 view .LVU406
+ 1427 004c 0024     		movs	r4, #0
+ 620:C:/MinGW/msys/1.0/esos32/src\esos.c ****       /* Get the next task up for execution.  Call it and catch
+ 1428              		.loc 1 620 11 view .LVU407
+ 1429 004e E8E7     		b	.L120
+ 1430              	.LVL133:
+ 1431              	.L133:
+ 641:C:/MinGW/msys/1.0/esos32/src\esos.c ****       /* Now, loop over the UserTasks and pack them into
+ 642:C:/MinGW/msys/1.0/esos32/src\esos.c ****          the beginning of our arrays.  We loop through the list
+ 643:C:/MinGW/msys/1.0/esos32/src\esos.c ****          backwards.....
+ 644:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 645:C:/MinGW/msys/1.0/esos32/src\esos.c ****           Loop over the original number of registered tasks and
+ 646:C:/MinGW/msys/1.0/esos32/src\esos.c ****           look for NULLPTRs.  If you find one, scoot all the following
+ 647:C:/MinGW/msys/1.0/esos32/src\esos.c ****           tasks down by one and make the last one a NULLPTR.  Reduce
+ 648:C:/MinGW/msys/1.0/esos32/src\esos.c ****           our count of tasks by one to make the next search shorter.
+ 649:C:/MinGW/msys/1.0/esos32/src\esos.c **** 
+ 650:C:/MinGW/msys/1.0/esos32/src\esos.c ****           NOTE: we can't "break" the for-loop search because there
+ 651:C:/MinGW/msys/1.0/esos32/src\esos.c ****                 may be more than one unregistered tasks in the pool
+ 652:C:/MinGW/msys/1.0/esos32/src\esos.c ****       */
+ 653:C:/MinGW/msys/1.0/esos32/src\esos.c ****       u8i = __u8UserTasksRegistered;
+ 1432              		.loc 1 653 7 is_stmt 1 view .LVU408
+ 1433              		.loc 1 653 11 is_stmt 0 view .LVU409
+ 1434 0050 144A     		ldr	r2, .L136+16
+ 1435 0052 1178     		ldrb	r1, [r2]	@ zero_extendqisi2
+ 1436              	.LVL134:
+ 1437              	.L128:
+ 654:C:/MinGW/msys/1.0/esos32/src\esos.c ****       // TODO:  CHANGE THIS TO A   do{}while(u8i)
+ 655:C:/MinGW/msys/1.0/esos32/src\esos.c ****       while(TRUE) {
+ 1438              		.loc 1 655 7 is_stmt 1 view .LVU410
+ 656:C:/MinGW/msys/1.0/esos32/src\esos.c ****         pstNowTask = &__astUserTaskPool[u8i];
+ 1439              		.loc 1 656 9 view .LVU411
+ 657:C:/MinGW/msys/1.0/esos32/src\esos.c ****         if (__au8UserTaskStructIndex[u8i] == REMOVE_IDX) {
+ 1440              		.loc 1 657 9 view .LVU412
+ 1441              		.loc 1 657 37 is_stmt 0 view .LVU413
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 40
+
+
+ 1442 0054 114A     		ldr	r2, .L136+8
+ 1443 0056 525C     		ldrb	r2, [r2, r1]	@ zero_extendqisi2
+ 1444              		.loc 1 657 12 view .LVU414
+ 1445 0058 FE2A     		cmp	r2, #254
+ 1446 005a 03D0     		beq	.L134
+ 1447              	.L124:
+ 658:C:/MinGW/msys/1.0/esos32/src\esos.c ****           for ( u8j=u8i+1; u8j<u8NumRegdTasksTemp; u8j++) {
+ 659:C:/MinGW/msys/1.0/esos32/src\esos.c ****             __au8UserTaskStructIndex[u8j-1] = __au8UserTaskStructIndex[u8j];
+ 660:C:/MinGW/msys/1.0/esos32/src\esos.c ****           } // end for
+ 661:C:/MinGW/msys/1.0/esos32/src\esos.c ****           __au8UserTaskStructIndex[u8NumRegdTasksTemp-1] = NULLIDX;
+ 662:C:/MinGW/msys/1.0/esos32/src\esos.c ****           u8NumRegdTasksTemp--;
+ 663:C:/MinGW/msys/1.0/esos32/src\esos.c ****         } // end if
+ 664:C:/MinGW/msys/1.0/esos32/src\esos.c ****         /* Have we hit the beginning of the task pool yet?
+ 665:C:/MinGW/msys/1.0/esos32/src\esos.c ****            If not, decrement (do another).
+ 666:C:/MinGW/msys/1.0/esos32/src\esos.c ****            If so, we are done (break)
+ 667:C:/MinGW/msys/1.0/esos32/src\esos.c ****         */
+ 668:C:/MinGW/msys/1.0/esos32/src\esos.c ****         if (u8i)
+ 1448              		.loc 1 668 9 is_stmt 1 view .LVU415
+ 1449              		.loc 1 668 12 is_stmt 0 view .LVU416
+ 1450 005c 99B1     		cbz	r1, .L127
+ 669:C:/MinGW/msys/1.0/esos32/src\esos.c ****           u8i--;
+ 1451              		.loc 1 669 11 is_stmt 1 view .LVU417
+ 1452              		.loc 1 669 14 is_stmt 0 view .LVU418
+ 1453 005e 0139     		subs	r1, r1, #1
+ 1454              	.LVL135:
+ 1455              		.loc 1 669 14 view .LVU419
+ 1456 0060 C9B2     		uxtb	r1, r1
+ 1457              	.LVL136:
+ 655:C:/MinGW/msys/1.0/esos32/src\esos.c ****         pstNowTask = &__astUserTaskPool[u8i];
+ 1458              		.loc 1 655 12 is_stmt 1 view .LVU420
+ 656:C:/MinGW/msys/1.0/esos32/src\esos.c ****         if (__au8UserTaskStructIndex[u8i] == REMOVE_IDX) {
+ 1459              		.loc 1 656 20 is_stmt 0 view .LVU421
+ 1460 0062 F7E7     		b	.L128
+ 1461              	.LVL137:
+ 1462              	.L134:
+ 658:C:/MinGW/msys/1.0/esos32/src\esos.c ****             __au8UserTaskStructIndex[u8j-1] = __au8UserTaskStructIndex[u8j];
+ 1463              		.loc 1 658 11 is_stmt 1 view .LVU422
+ 658:C:/MinGW/msys/1.0/esos32/src\esos.c ****             __au8UserTaskStructIndex[u8j-1] = __au8UserTaskStructIndex[u8j];
+ 1464              		.loc 1 658 20 is_stmt 0 view .LVU423
+ 1465 0064 4A1C     		adds	r2, r1, #1
+ 1466 0066 D2B2     		uxtb	r2, r2
+ 1467              	.LVL138:
+ 1468              	.L125:
+ 658:C:/MinGW/msys/1.0/esos32/src\esos.c ****             __au8UserTaskStructIndex[u8j-1] = __au8UserTaskStructIndex[u8j];
+ 1469              		.loc 1 658 28 is_stmt 1 discriminator 1 view .LVU424
+ 658:C:/MinGW/msys/1.0/esos32/src\esos.c ****             __au8UserTaskStructIndex[u8j-1] = __au8UserTaskStructIndex[u8j];
+ 1470              		.loc 1 658 11 is_stmt 0 discriminator 1 view .LVU425
+ 1471 0068 B242     		cmp	r2, r6
+ 1472 006a 06D2     		bcs	.L135
+ 659:C:/MinGW/msys/1.0/esos32/src\esos.c ****           } // end for
+ 1473              		.loc 1 659 13 is_stmt 1 discriminator 3 view .LVU426
+ 659:C:/MinGW/msys/1.0/esos32/src\esos.c ****           } // end for
+ 1474              		.loc 1 659 41 is_stmt 0 discriminator 3 view .LVU427
+ 1475 006c 541E     		subs	r4, r2, #1
+ 659:C:/MinGW/msys/1.0/esos32/src\esos.c ****           } // end for
+ 1476              		.loc 1 659 71 discriminator 3 view .LVU428
+ 1477 006e 0B48     		ldr	r0, .L136+8
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 41
+
+
+ 1478 0070 855C     		ldrb	r5, [r0, r2]	@ zero_extendqisi2
+ 659:C:/MinGW/msys/1.0/esos32/src\esos.c ****           } // end for
+ 1479              		.loc 1 659 45 discriminator 3 view .LVU429
+ 1480 0072 0555     		strb	r5, [r0, r4]
+ 658:C:/MinGW/msys/1.0/esos32/src\esos.c ****             __au8UserTaskStructIndex[u8j-1] = __au8UserTaskStructIndex[u8j];
+ 1481              		.loc 1 658 52 is_stmt 1 discriminator 3 view .LVU430
+ 658:C:/MinGW/msys/1.0/esos32/src\esos.c ****             __au8UserTaskStructIndex[u8j-1] = __au8UserTaskStructIndex[u8j];
+ 1482              		.loc 1 658 55 is_stmt 0 discriminator 3 view .LVU431
+ 1483 0074 0132     		adds	r2, r2, #1
+ 1484              	.LVL139:
+ 658:C:/MinGW/msys/1.0/esos32/src\esos.c ****             __au8UserTaskStructIndex[u8j-1] = __au8UserTaskStructIndex[u8j];
+ 1485              		.loc 1 658 55 discriminator 3 view .LVU432
+ 1486 0076 D2B2     		uxtb	r2, r2
+ 1487              	.LVL140:
+ 658:C:/MinGW/msys/1.0/esos32/src\esos.c ****             __au8UserTaskStructIndex[u8j-1] = __au8UserTaskStructIndex[u8j];
+ 1488              		.loc 1 658 55 discriminator 3 view .LVU433
+ 1489 0078 F6E7     		b	.L125
+ 1490              	.L135:
+ 661:C:/MinGW/msys/1.0/esos32/src\esos.c ****           u8NumRegdTasksTemp--;
+ 1491              		.loc 1 661 11 is_stmt 1 view .LVU434
+ 661:C:/MinGW/msys/1.0/esos32/src\esos.c ****           u8NumRegdTasksTemp--;
+ 1492              		.loc 1 661 54 is_stmt 0 view .LVU435
+ 1493 007a 013E     		subs	r6, r6, #1
+ 1494              	.LVL141:
+ 661:C:/MinGW/msys/1.0/esos32/src\esos.c ****           u8NumRegdTasksTemp--;
+ 1495              		.loc 1 661 58 view .LVU436
+ 1496 007c 074A     		ldr	r2, .L136+8
+ 1497              	.LVL142:
+ 661:C:/MinGW/msys/1.0/esos32/src\esos.c ****           u8NumRegdTasksTemp--;
+ 1498              		.loc 1 661 58 view .LVU437
+ 1499 007e FF20     		movs	r0, #255
+ 1500 0080 9055     		strb	r0, [r2, r6]
+ 662:C:/MinGW/msys/1.0/esos32/src\esos.c ****         } // end if
+ 1501              		.loc 1 662 11 is_stmt 1 view .LVU438
+ 662:C:/MinGW/msys/1.0/esos32/src\esos.c ****         } // end if
+ 1502              		.loc 1 662 29 is_stmt 0 view .LVU439
+ 1503 0082 F6B2     		uxtb	r6, r6
+ 1504              	.LVL143:
+ 662:C:/MinGW/msys/1.0/esos32/src\esos.c ****         } // end if
+ 1505              		.loc 1 662 29 view .LVU440
+ 1506 0084 EAE7     		b	.L124
+ 1507              	.L127:
+ 670:C:/MinGW/msys/1.0/esos32/src\esos.c ****         else
+ 671:C:/MinGW/msys/1.0/esos32/src\esos.c ****           break;
+ 672:C:/MinGW/msys/1.0/esos32/src\esos.c ****       } // end while
+ 673:C:/MinGW/msys/1.0/esos32/src\esos.c ****       /* We have repacked the task pool (possibly multiple times), so update
+ 674:C:/MinGW/msys/1.0/esos32/src\esos.c ****          the new number of registered tasks and clear the task PACK flag
+ 675:C:/MinGW/msys/1.0/esos32/src\esos.c ****       */
+ 676:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __u8UserTasksRegistered=u8NumRegdTasksTemp;   // set record the new number of registered task
+ 1508              		.loc 1 676 7 is_stmt 1 view .LVU441
+ 1509              		.loc 1 676 30 is_stmt 0 view .LVU442
+ 1510 0086 074A     		ldr	r2, .L136+16
+ 1511 0088 1670     		strb	r6, [r2]
+ 677:C:/MinGW/msys/1.0/esos32/src\esos.c ****       __esos_ClearSystemFlag( __ESOS_SYS_FLAG_PACK_TASKS );
+ 1512              		.loc 1 677 7 is_stmt 1 view .LVU443
+ 1513 008a 23F00103 		bic	r3, r3, #1
+ 1514 008e 044A     		ldr	r2, .L136+12
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 42
+
+
+ 1515 0090 1360     		str	r3, [r2]
+ 1516 0092 D9E7     		b	.L123
+ 1517              	.L137:
+ 1518              		.align	2
+ 1519              	.L136:
+ 1520 0094 00000000 		.word	__u16NumTasksEverCreated
+ 1521 0098 00000000 		.word	__astUserTaskPool
+ 1522 009c 00000000 		.word	__au8UserTaskStructIndex
+ 1523 00a0 00000000 		.word	__esos_u32SystemFlags
+ 1524 00a4 00000000 		.word	__u8UserTasksRegistered
+ 1525              		.cfi_endproc
+ 1526              	.LFE13:
+ 1528              		.comm	__esos_u32SystemFlags,4,4
+ 1529              		.comm	__esos_u32UserFlags,4,4
+ 1530              		.comm	__astCircularBuffers,384,4
+ 1531              		.comm	__au8_MBData,3840,4
+ 1532              		.comm	__astMailbox,256,4
+ 1533              		.comm	__esos_u32TmrActiveFlags,4,4
+ 1534              		.comm	__esos_u8TmrSvcsRegistered,1,1
+ 1535              		.comm	__astTmrSvcs,192,4
+ 1536              		.comm	__u16NumTasksEverCreated,2,2
+ 1537              		.comm	__u8ChildTasksRegistered,1,1
+ 1538              		.comm	__u8UserTasksRegistered,1,1
+ 1539              		.comm	__astChildTaskPool,768,4
+ 1540              		.comm	__au8UserTaskStructIndex,32,4
+ 1541              		.comm	__astUserTaskPool,768,4
+ 1542              		.text
+ 1543              	.Letext0:
+ 1544              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 1545              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 1546              		.file 4 "C:/MinGW/msys/1.0/esos32/include/lc-switch.h"
+ 1547              		.file 5 "C:/MinGW/msys/1.0/esos32/include/esos_cb.h"
+ 1548              		.file 6 "C:/MinGW/msys/1.0/esos32/include/esos_mail.h"
+ 1549              		.file 7 "C:/MinGW/msys/1.0/esos32/include/esos_task.h"
+ 1550              		.file 8 "C:/MinGW/msys/1.0/esos32/include/esos_utils.h"
+ 1551              		.file 9 "C:/MinGW/msys/1.0/esos32/include/esos_comm.h"
+ 1552              		.file 10 "C:/MinGW/msys/1.0/esos32/include/esos.h"
+ 1553              		.file 11 "C:/MinGW/msys/1.0/esos32/include/all_generic.h"
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 43
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 esos.c
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:18     .text.esos_RegisterTask:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:26     .text.esos_RegisterTask:00000000 esos_RegisterTask
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:249    .text.esos_RegisterTask:000000c8 $d
+                            *COM*:00000001 __u8UserTasksRegistered
+                            *COM*:00000300 __astUserTaskPool
+                            *COM*:00000020 __au8UserTaskStructIndex
+                            *COM*:00000002 __u16NumTasksEverCreated
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:257    .text.esos_UnregisterTask:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:264    .text.esos_UnregisterTask:00000000 esos_UnregisterTask
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:379    .text.esos_UnregisterTask:00000054 $d
+                            *COM*:00000004 __esos_u32SystemFlags
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:387    .text.esos_GetTaskHandle:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:394    .text.esos_GetTaskHandle:00000000 esos_GetTaskHandle
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:476    .text.esos_GetTaskHandle:00000034 $d
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:483    .text.esos_GetTaskHandleFromID:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:490    .text.esos_GetTaskHandleFromID:00000000 esos_GetTaskHandleFromID
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:570    .text.esos_GetTaskHandleFromID:00000034 $d
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:577    .text.esos_GetFreeChildTaskStruct:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:584    .text.esos_GetFreeChildTaskStruct:00000000 esos_GetFreeChildTaskStruct
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:637    .text.esos_GetFreeChildTaskStruct:00000028 $d
+                            *COM*:00000300 __astChildTaskPool
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:642    .text.esos_GetMaxNumberTasks:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:649    .text.esos_GetMaxNumberTasks:00000000 esos_GetMaxNumberTasks
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:664    .text.__esos_hasTickDurationPassed:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:671    .text.__esos_hasTickDurationPassed:00000000 __esos_hasTickDurationPassed
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:727    .text.__esos_tmrSvcsExecute:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:734    .text.__esos_tmrSvcsExecute:00000000 __esos_tmrSvcsExecute
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:828    .text.__esos_tmrSvcsExecute:00000050 $d
+                            *COM*:00000001 __esos_u8TmrSvcsRegistered
+                            *COM*:00000004 __esos_u32TmrActiveFlags
+                            *COM*:000000c0 __astTmrSvcs
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:835    .text.esos_RegisterTimer:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:842    .text.esos_RegisterTimer:00000000 esos_RegisterTimer
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:939    .text.esos_RegisterTimer:00000050 $d
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:946    .text.esos_UnregisterTimer:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:953    .text.esos_UnregisterTimer:00000000 esos_UnregisterTimer
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:1013   .text.esos_UnregisterTimer:00000038 $d
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:1020   .text.esos_GetTimerHandle:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:1027   .text.esos_GetTimerHandle:00000000 esos_GetTimerHandle
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:1109   .text.esos_GetTimerHandle:0000003c $d
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:1116   .text.esos_ChangeTimerPeriod:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:1123   .text.esos_ChangeTimerPeriod:00000000 esos_ChangeTimerPeriod
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:1162   .text.esos_ChangeTimerPeriod:00000020 $d
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:1168   .text.__esosInit:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:1175   .text.__esosInit:00000000 __esosInit
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:1313   .text.__esosInit:00000094 $d
+                            *COM*:00000100 __astMailbox
+                            *COM*:00000180 __astCircularBuffers
+                            *COM*:00000f00 __au8_MBData
+                            *COM*:00000001 __u8ChildTasksRegistered
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:1328   .text.main:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:1335   .text.main:00000000 main
+C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s:1520   .text.main:00000094 $d
+                            *COM*:00000004 __esos_u32UserFlags
+
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccv69Nzd.s 			page 44
+
+
+UNDEFINED SYMBOLS
+__esos_hw_GetSystemTickCount
+__esos_InitMailbox
+__esos_set_PRNG_U32Seed
+__esos_hw_config_PRNG
+__esos_hw_InitSystemTick
+__esos_InitCommSystem
+user_init

@@ -1,0 +1,673 @@
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"esos_utils.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.__esos_set_PRNG_U32Seed,"ax",%progbits
+  18              		.align	1
+  19              		.global	__esos_set_PRNG_U32Seed
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	__esos_set_PRNG_U32Seed:
+  27              	.LVL0:
+  28              	.LFB0:
+  29              		.file 1 "C:/MinGW/msys/1.0/esos32/src/esos_utils.c"
+   1:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** /*
+   2:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * "Copyright (c) 2019 J. W. Bruce ("AUTHOR(S)")"
+   3:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * All rights reserved.
+   4:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * (J. W. Bruce, jwbruce_AT_tntech.edu, Tennessee Tech University)
+   5:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  *
+   6:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * Permission to use, copy, modify, and distribute this software and its
+   7:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * documentation for any purpose, without fee, and without written agreement is
+   8:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * hereby granted, provided that the above copyright notice, the following
+   9:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * two paragraphs and the authors appear in all copies of this software.
+  10:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  *
+  11:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * IN NO EVENT SHALL THE "AUTHORS" BE LIABLE TO ANY PARTY FOR
+  12:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT
+  13:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE "AUTHORS"
+  14:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  15:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  *
+  16:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * THE "AUTHORS" SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+  17:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+  18:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS
+  19:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * ON AN "AS IS" BASIS, AND THE "AUTHORS" HAS NO OBLIGATION TO
+  20:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
+  21:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  *
+  22:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * Please maintain this header in its entirety when copying/modifying
+  23:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * these files.
+  24:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  *
+  25:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  *
+  26:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  */
+  27:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+  28:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** /** \file
+  29:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * \brief Various hardware independent utilties for ESOS32 and its user applications
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s 			page 2
+
+
+  30:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  *
+  31:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  */
+  32:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+  33:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+  34:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** #include    "esos.h"
+  35:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** #include    "esos_utils.h"
+  36:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+  37:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** // ******** G L O B A L S ***************
+  38:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** uint32_t            __u32_esos_PRNG_Seed;
+  39:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** uint32_t            __esos_u32FNVHash = 2166136261uL;
+  40:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+  41:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** /****************************************************************
+  42:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** ** F U N C T I O N S
+  43:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** ****************************************************************/
+  44:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+  45:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** /**
+  46:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * Writes message data to a task's mailbox.
+  47:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** *
+  48:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * \param pst_RcvrTask  pointer to task structure (ESOS_TASK_HANDLE) whose mailbox will be written
+  49:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * \param pst_Msg        pointer to mailbox message structure that contains data to write to the tas
+  50:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * \note This function <em>ASSUMES</em> that there is ample free space available in specified
+  51:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * mailbox.
+  52:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** *
+  53:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * \sa ESOS_TASK_WAIT_ON_TASKS_MAILBOX_HAS_SPACE
+  54:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * \hideinitializer
+  55:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** */
+  56:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+  57:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+  58:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** /**
+  59:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * Sets the seed value in the ESOS pseudo-random number generator (PRNG).
+  60:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * \note ESOS init code sets a seed value for the PRNG.  If the application
+  61:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * desires a sequence that is not predictable at each execution run,
+  62:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * then the seed should be set <em>ONCE</em> with some value that is
+  63:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * different with each execution.  An idea is to have the user press
+  64:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * a key during startup.  The value of the ESOS tick when the user presses
+  65:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * the key will be different each time.  This number would make an
+  66:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * ideal PRNG seed.
+  67:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * \sa __esos_GetSWRNGRandomUint32
+  68:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * See http://www.firstpr.com.au/dsp/rand31/  for more information
+  69:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  */
+  70:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** void __esos_set_PRNG_U32Seed(uint32_t u32_seed) {
+  30              		.loc 1 70 49 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  71:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****    __u32_esos_PRNG_Seed = u32_seed;
+  35              		.loc 1 71 4 view .LVU1
+  36              		.loc 1 71 25 is_stmt 0 view .LVU2
+  37 0000 014B     		ldr	r3, .L2
+  38 0002 1860     		str	r0, [r3]
+  72:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** } // end __esos_set_PRNG_U32Seed()
+  39              		.loc 1 72 1 view .LVU3
+  40 0004 7047     		bx	lr
+  41              	.L3:
+  42 0006 00BF     		.align	2
+  43              	.L2:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s 			page 3
+
+
+  44 0008 00000000 		.word	__u32_esos_PRNG_Seed
+  45              		.cfi_endproc
+  46              	.LFE0:
+  48              		.section	.text.__esos_get_PRNG_RandomUint32,"ax",%progbits
+  49              		.align	1
+  50              		.global	__esos_get_PRNG_RandomUint32
+  51              		.syntax unified
+  52              		.thumb
+  53              		.thumb_func
+  54              		.fpu fpv4-sp-d16
+  56              	__esos_get_PRNG_RandomUint32:
+  57              	.LFB1:
+  73:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+  74:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** /**
+  75:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * Returns a 31-bit pseudo-random number generated by the Park-Miller
+  76:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * algorithm.
+  77:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * \sa __esos_setSWRNGU32Seed
+  78:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * \note Visit http://www.firstpr.com.au/dsp/rand31/ for more information
+  79:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** */
+  80:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** uint32_t   __esos_get_PRNG_RandomUint32(void) {
+  58              		.loc 1 80 47 is_stmt 1 view -0
+  59              		.cfi_startproc
+  60              		@ args = 0, pretend = 0, frame = 0
+  61              		@ frame_needed = 0, uses_anonymous_args = 0
+  62              		@ link register save eliminated.
+  81:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   uint32_t  hi, lo;
+  63              		.loc 1 81 3 view .LVU5
+  82:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+  83:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   lo = 16807 * ( __u32_esos_PRNG_Seed * 0xFFFF );
+  64              		.loc 1 83 3 view .LVU6
+  65              		.loc 1 83 14 is_stmt 0 view .LVU7
+  66 0000 0F4B     		ldr	r3, .L7
+  67 0002 1B68     		ldr	r3, [r3]
+  68              		.loc 1 83 6 view .LVU8
+  69 0004 03EB8300 		add	r0, r3, r3, lsl #2
+  70 0008 C0EB0010 		rsb	r0, r0, r0, lsl #4
+  71 000c 03EB4010 		add	r0, r3, r0, lsl #5
+  72 0010 C0EBC000 		rsb	r0, r0, r0, lsl #3
+  73 0014 C0EB0040 		rsb	r0, r0, r0, lsl #16
+  74              	.LVL1:
+  84:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   hi = 16807 * ( __u32_esos_PRNG_Seed >> 16 );
+  75              		.loc 1 84 3 is_stmt 1 view .LVU9
+  76              		.loc 1 84 39 is_stmt 0 view .LVU10
+  77 0018 1B0C     		lsrs	r3, r3, #16
+  78              		.loc 1 84 6 view .LVU11
+  79 001a 44F2A712 		movw	r2, #16807
+  80 001e 02FB03F2 		mul	r2, r2, r3
+  81              	.LVL2:
+  85:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   lo += (hi & 0x7FFF) << 16;
+  82              		.loc 1 85 3 is_stmt 1 view .LVU12
+  83              		.loc 1 85 23 is_stmt 0 view .LVU13
+  84 0022 084B     		ldr	r3, .L7+4
+  85 0024 03EA0243 		and	r3, r3, r2, lsl #16
+  86              		.loc 1 85 6 view .LVU14
+  87 0028 1844     		add	r0, r0, r3
+  88              	.LVL3:
+  86:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   lo += (hi >> 15);
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s 			page 4
+
+
+  89              		.loc 1 86 3 is_stmt 1 view .LVU15
+  87:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   if (lo > 0x7FFFFFFF) lo -= 0x7FFFFFFF;
+  90              		.loc 1 87 3 view .LVU16
+  91              		.loc 1 87 6 is_stmt 0 view .LVU17
+  92 002a 10EBD230 		adds	r0, r0, r2, lsr #15
+  93              	.LVL4:
+  94              		.loc 1 87 6 view .LVU18
+  95 002e 02D4     		bmi	.L6
+  96              	.LVL5:
+  97              	.L5:
+  88:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   return (__u32_esos_PRNG_Seed = (uint32_t) lo );
+  98              		.loc 1 88 3 is_stmt 1 view .LVU19
+  99              		.loc 1 88 32 is_stmt 0 view .LVU20
+ 100 0030 034B     		ldr	r3, .L7
+ 101 0032 1860     		str	r0, [r3]
+  89:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** } // end __esos_get_PRNG_RandomUint32()
+ 102              		.loc 1 89 1 view .LVU21
+ 103 0034 7047     		bx	lr
+ 104              	.L6:
+  87:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   if (lo > 0x7FFFFFFF) lo -= 0x7FFFFFFF;
+ 105              		.loc 1 87 24 is_stmt 1 discriminator 1 view .LVU22
+  87:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   if (lo > 0x7FFFFFFF) lo -= 0x7FFFFFFF;
+ 106              		.loc 1 87 27 is_stmt 0 discriminator 1 view .LVU23
+ 107 0036 00F10040 		add	r0, r0, #-2147483648
+ 108              	.LVL6:
+  87:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   if (lo > 0x7FFFFFFF) lo -= 0x7FFFFFFF;
+ 109              		.loc 1 87 27 discriminator 1 view .LVU24
+ 110 003a 0130     		adds	r0, r0, #1
+ 111              	.LVL7:
+  87:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   if (lo > 0x7FFFFFFF) lo -= 0x7FFFFFFF;
+ 112              		.loc 1 87 27 discriminator 1 view .LVU25
+ 113 003c F8E7     		b	.L5
+ 114              	.L8:
+ 115 003e 00BF     		.align	2
+ 116              	.L7:
+ 117 0040 00000000 		.word	__u32_esos_PRNG_Seed
+ 118 0044 0000FF7F 		.word	2147418112
+ 119              		.cfi_endproc
+ 120              	.LFE1:
+ 122              		.section	.text.esos_GetRandomUint32,"ax",%progbits
+ 123              		.align	1
+ 124              		.global	esos_GetRandomUint32
+ 125              		.syntax unified
+ 126              		.thumb
+ 127              		.thumb_func
+ 128              		.fpu fpv4-sp-d16
+ 130              	esos_GetRandomUint32:
+ 131              	.LFB2:
+  90:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+  91:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** /**
+  92:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * Returns a 32-bit pseudo-random number.  Will call a "hw" RNG
+  93:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * function to allow for HW PRNG if available.  If HW is not present,
+  94:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * the hardware specific (hwxxx or others) can simply call back to
+  95:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * the hidden ESOS function above: __esos_GetSWRNGRandomUint32 
+  96:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * \sa __esos_setSWRNGU32Seed
+  97:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * \sa __esos_GetSWRNGRandomUint32
+  98:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** * \note Visit http://www.firstpr.com.au/dsp/rand31/ for more information
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s 			page 5
+
+
+  99:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** */
+ 100:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** inline uint32_t    esos_GetRandomUint32(void) {
+ 132              		.loc 1 100 47 is_stmt 1 view -0
+ 133              		.cfi_startproc
+ 134              		@ args = 0, pretend = 0, frame = 0
+ 135              		@ frame_needed = 0, uses_anonymous_args = 0
+ 136 0000 08B5     		push	{r3, lr}
+ 137              	.LCFI0:
+ 138              		.cfi_def_cfa_offset 8
+ 139              		.cfi_offset 3, -8
+ 140              		.cfi_offset 14, -4
+ 101:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   return ( __esos_hw_PRNG_u32() );
+ 141              		.loc 1 101 3 view .LVU27
+ 142              		.loc 1 101 12 is_stmt 0 view .LVU28
+ 143 0002 FFF7FEFF 		bl	__esos_hw_PRNG_u32
+ 144              	.LVL8:
+ 102:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** } // end esos_getRandomUint32()
+ 145              		.loc 1 102 1 view .LVU29
+ 146 0006 08BD     		pop	{r3, pc}
+ 147              		.cfi_endproc
+ 148              	.LFE2:
+ 150              		.section	.text.esos_taskname_hash_u16,"ax",%progbits
+ 151              		.align	1
+ 152              		.global	esos_taskname_hash_u16
+ 153              		.syntax unified
+ 154              		.thumb
+ 155              		.thumb_func
+ 156              		.fpu fpv4-sp-d16
+ 158              	esos_taskname_hash_u16:
+ 159              	.LVL9:
+ 160              	.LFB3:
+ 103:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 104:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 105:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** /** ********************************************************************
+ 106:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** *
+ 107:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** *
+ 108:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** ***********************************************************************/
+ 109:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** uint16_t    esos_taskname_hash_u16( void* buf, uint16_t len ) {
+ 161              		.loc 1 109 63 is_stmt 1 view -0
+ 162              		.cfi_startproc
+ 163              		@ args = 0, pretend = 0, frame = 0
+ 164              		@ frame_needed = 0, uses_anonymous_args = 0
+ 165              		@ link register save eliminated.
+ 110:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   unsigned char *bp = (unsigned char *)buf; /* start of buffer */
+ 166              		.loc 1 110 3 view .LVU31
+ 111:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   unsigned char *be = bp + len;   /* beyond end of buffer */
+ 167              		.loc 1 111 3 view .LVU32
+ 168              		.loc 1 111 18 is_stmt 0 view .LVU33
+ 169 0000 0144     		add	r1, r1, r0
+ 170              	.LVL10:
+ 112:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   uint32_t        u32_temp = 2166136261uL;
+ 171              		.loc 1 112 3 is_stmt 1 view .LVU34
+ 113:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 114:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   /*
+ 115:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****    * FNV-1 hash each octet in the buffer
+ 116:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****    */
+ 117:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   while (bp < be) {
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s 			page 6
+
+
+ 172              		.loc 1 117 3 view .LVU35
+ 112:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   uint32_t        u32_temp = 2166136261uL;
+ 173              		.loc 1 112 19 is_stmt 0 view .LVU36
+ 174 0002 0A4A     		ldr	r2, .L15
+ 175              	.LVL11:
+ 176              	.L12:
+ 177              		.loc 1 117 9 is_stmt 1 view .LVU37
+ 178 0004 8842     		cmp	r0, r1
+ 179 0006 0DD2     		bcs	.L14
+ 118:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****     /* multiply by the 32 bit FNV magic prime mod 2^32 */
+ 119:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****     u32_temp += (u32_temp<<1) + (u32_temp<<4) + (u32_temp<<7) + (u32_temp<<8) + (u32_temp<<24);
+ 180              		.loc 1 119 5 view .LVU38
+ 181              		.loc 1 119 42 is_stmt 0 view .LVU39
+ 182 0008 1301     		lsls	r3, r2, #4
+ 183              		.loc 1 119 31 view .LVU40
+ 184 000a 03EB4203 		add	r3, r3, r2, lsl #1
+ 185              		.loc 1 119 47 view .LVU41
+ 186 000e 03EBC213 		add	r3, r3, r2, lsl #7
+ 187              		.loc 1 119 63 view .LVU42
+ 188 0012 03EB0223 		add	r3, r3, r2, lsl #8
+ 189              		.loc 1 119 79 view .LVU43
+ 190 0016 03EB0263 		add	r3, r3, r2, lsl #24
+ 191              		.loc 1 119 14 view .LVU44
+ 192 001a 1A44     		add	r2, r2, r3
+ 193              	.LVL12:
+ 120:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 121:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****     /* xor the bottom with the current octet */
+ 122:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****     u32_temp ^= (uint32_t)*bp++;
+ 194              		.loc 1 122 5 is_stmt 1 view .LVU45
+ 195              		.loc 1 122 27 is_stmt 0 view .LVU46
+ 196 001c 10F8013B 		ldrb	r3, [r0], #1	@ zero_extendqisi2
+ 197              	.LVL13:
+ 198              		.loc 1 122 14 view .LVU47
+ 199 0020 5A40     		eors	r2, r2, r3
+ 200              	.LVL14:
+ 201              		.loc 1 122 14 view .LVU48
+ 202 0022 EFE7     		b	.L12
+ 203              	.L14:
+ 123:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   } // end while
+ 124:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   return (uint16_t) ((u32_temp >> 16) ^ (u32_temp & 0xFFFF));
+ 204              		.loc 1 124 3 is_stmt 1 view .LVU49
+ 205              		.loc 1 124 10 is_stmt 0 view .LVU50
+ 206 0024 82EA1242 		eor	r2, r2, r2, lsr #16
+ 207              	.LVL15:
+ 125:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** } // end esos_taskname_hash_u16
+ 208              		.loc 1 125 1 view .LVU51
+ 209 0028 90B2     		uxth	r0, r2
+ 210              	.LVL16:
+ 211              		.loc 1 125 1 view .LVU52
+ 212 002a 7047     		bx	lr
+ 213              	.L16:
+ 214              		.align	2
+ 215              	.L15:
+ 216 002c C59D1C81 		.word	-2128831035
+ 217              		.cfi_endproc
+ 218              	.LFE3:
+ 220              		.section	.text.esos_buffer_hash_u32,"ax",%progbits
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s 			page 7
+
+
+ 221              		.align	1
+ 222              		.global	esos_buffer_hash_u32
+ 223              		.syntax unified
+ 224              		.thumb
+ 225              		.thumb_func
+ 226              		.fpu fpv4-sp-d16
+ 228              	esos_buffer_hash_u32:
+ 229              	.LVL17:
+ 230              	.LFB4:
+ 126:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 127:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 128:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** /**
+ 129:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * Create a 32-bit (uint32_t) hash value for a buffer of voids
+ 130:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * Routine maintains "state" in the form of variable __esos_u32FNVHash
+ 131:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * This "state" is used in all of the ESOS FNV hash functions.
+ 132:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * Based on the Fowler/Noll/Vo (FNV1a) hash algorithm and code provided
+ 133:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * at http://www.isthe.com/chongo/tech/comp/fnv/
+ 134:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * \param buf pointer to a buffer of voids
+ 135:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * \param len length of the buffer of voids
+ 136:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * \retval uint32_t value of the resulting hash
+ 137:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  *  \sa esos_string_hash_u32
+ 138:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  *  \sa esos_hash_u32_to_u16
+ 139:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** */
+ 140:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** uint32_t esos_buffer_hash_u32(void *buf, uint16_t len) {
+ 231              		.loc 1 140 56 is_stmt 1 view -0
+ 232              		.cfi_startproc
+ 233              		@ args = 0, pretend = 0, frame = 0
+ 234              		@ frame_needed = 0, uses_anonymous_args = 0
+ 235              		@ link register save eliminated.
+ 141:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   unsigned char *bp = (unsigned char *)buf; /* start of buffer */
+ 236              		.loc 1 141 3 view .LVU54
+ 142:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   unsigned char *be = bp + len;           /* beyond end of buffer */
+ 237              		.loc 1 142 3 view .LVU55
+ 238              		.loc 1 142 18 is_stmt 0 view .LVU56
+ 239 0000 0144     		add	r1, r1, r0
+ 240              	.LVL18:
+ 143:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 144:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   /*
+ 145:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****    * FNV-1 hash each octet in the buffer
+ 146:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****    */
+ 147:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   while (bp < be) {
+ 241              		.loc 1 147 3 is_stmt 1 view .LVU57
+ 242              		.loc 1 147 9 view .LVU58
+ 243 0002 8842     		cmp	r0, r1
+ 244 0004 18D2     		bcs	.L24
+ 140:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   unsigned char *bp = (unsigned char *)buf; /* start of buffer */
+ 245              		.loc 1 140 56 is_stmt 0 view .LVU59
+ 246 0006 10B4     		push	{r4}
+ 247              	.LCFI1:
+ 248              		.cfi_def_cfa_offset 4
+ 249              		.cfi_offset 4, -4
+ 250              	.LVL19:
+ 251              	.L19:
+ 148:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 149:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****     /* multiply by the 32 bit FNV magic prime mod 2^32 */
+ 150:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** #if defined(NO_FNV_GCC_OPTIMIZATION)
+ 151:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****     __esos_u32FNVHash *= FNV_32_PRIME;
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s 			page 8
+
+
+ 152:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** #else
+ 153:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****     __esos_u32FNVHash += (__esos_u32FNVHash<<1) + (__esos_u32FNVHash<<4) + (__esos_u32FNVHash<<7) +
+ 252              		.loc 1 153 5 is_stmt 1 view .LVU60
+ 253              		.loc 1 153 44 is_stmt 0 view .LVU61
+ 254 0008 0D4C     		ldr	r4, .L25
+ 255 000a 2368     		ldr	r3, [r4]
+ 256              		.loc 1 153 69 view .LVU62
+ 257 000c 1A01     		lsls	r2, r3, #4
+ 258              		.loc 1 153 49 view .LVU63
+ 259 000e 02EB4302 		add	r2, r2, r3, lsl #1
+ 260              		.loc 1 153 74 view .LVU64
+ 261 0012 02EBC312 		add	r2, r2, r3, lsl #7
+ 262              		.loc 1 153 99 view .LVU65
+ 263 0016 02EB0322 		add	r2, r2, r3, lsl #8
+ 264              		.loc 1 153 124 view .LVU66
+ 265 001a 02EB0362 		add	r2, r2, r3, lsl #24
+ 266              		.loc 1 153 23 view .LVU67
+ 267 001e 1344     		add	r3, r3, r2
+ 268 0020 2360     		str	r3, [r4]
+ 154:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** #endif
+ 155:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 156:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****     /* xor the bottom with the current octet */
+ 157:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****     __esos_u32FNVHash ^= (uint32_t)*bp++;
+ 269              		.loc 1 157 5 is_stmt 1 view .LVU68
+ 270              	.LVL20:
+ 271              		.loc 1 157 36 is_stmt 0 view .LVU69
+ 272 0022 10F8012B 		ldrb	r2, [r0], #1	@ zero_extendqisi2
+ 273              	.LVL21:
+ 274              		.loc 1 157 23 view .LVU70
+ 275 0026 5340     		eors	r3, r3, r2
+ 276 0028 2360     		str	r3, [r4]
+ 147:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 277              		.loc 1 147 9 is_stmt 1 view .LVU71
+ 278 002a 8842     		cmp	r0, r1
+ 279 002c ECD3     		bcc	.L19
+ 158:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   }
+ 159:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 160:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   /* return our new hash value */
+ 161:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   return __esos_u32FNVHash;
+ 280              		.loc 1 161 3 view .LVU72
+ 162:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** }
+ 281              		.loc 1 162 1 is_stmt 0 view .LVU73
+ 282 002e 044B     		ldr	r3, .L25
+ 283 0030 1868     		ldr	r0, [r3]
+ 284              	.LVL22:
+ 285              		.loc 1 162 1 view .LVU74
+ 286 0032 5DF8044B 		ldr	r4, [sp], #4
+ 287              	.LCFI2:
+ 288              		.cfi_restore 4
+ 289              		.cfi_def_cfa_offset 0
+ 290 0036 7047     		bx	lr
+ 291              	.LVL23:
+ 292              	.L24:
+ 161:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** }
+ 293              		.loc 1 161 3 is_stmt 1 view .LVU75
+ 294              		.loc 1 162 1 is_stmt 0 view .LVU76
+ 295 0038 014B     		ldr	r3, .L25
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s 			page 9
+
+
+ 296 003a 1868     		ldr	r0, [r3]
+ 297              	.LVL24:
+ 298              		.loc 1 162 1 view .LVU77
+ 299 003c 7047     		bx	lr
+ 300              	.L26:
+ 301 003e 00BF     		.align	2
+ 302              	.L25:
+ 303 0040 00000000 		.word	.LANCHOR0
+ 304              		.cfi_endproc
+ 305              	.LFE4:
+ 307              		.section	.text.esos_string_hash_u32,"ax",%progbits
+ 308              		.align	1
+ 309              		.global	esos_string_hash_u32
+ 310              		.syntax unified
+ 311              		.thumb
+ 312              		.thumb_func
+ 313              		.fpu fpv4-sp-d16
+ 315              	esos_string_hash_u32:
+ 316              	.LVL25:
+ 317              	.LFB5:
+ 163:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 164:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 165:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** /**
+ 166:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * Create a 32-bit (uint32_t) hash value for a provided string
+ 167:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * Routine maintains "state" in the form of variable __esos_u32FNVHash
+ 168:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * This "state" is used in all of the ESOS FNV hash functions.
+ 169:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * Based on the Fowler/Noll/Vo (FNV1a) hash algorithm and code provided
+ 170:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * at http://www.isthe.com/chongo/tech/comp/fnv/
+ 171:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * \param psz_str pointer to zero-terminated string
+ 172:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  * \retval uint32_t value of the resulting hash
+ 173:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  *  \sa esos_string_hash_u32
+ 174:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****  *  \sa esos_hash_u32_to_u16
+ 175:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** */
+ 176:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** uint32_t esos_string_hash_u32(char *psz_str) {
+ 318              		.loc 1 176 46 is_stmt 1 view -0
+ 319              		.cfi_startproc
+ 320              		@ args = 0, pretend = 0, frame = 0
+ 321              		@ frame_needed = 0, uses_anonymous_args = 0
+ 322              		@ link register save eliminated.
+ 177:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   unsigned char *ch_s = (unsigned char *)psz_str; /* unsigned string */
+ 323              		.loc 1 177 3 view .LVU79
+ 178:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 179:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   /*
+ 180:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****    * FNV-1 hash each octet in the buffer
+ 181:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****    */
+ 182:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   while (*ch_s) {
+ 324              		.loc 1 182 3 view .LVU80
+ 325              	.L28:
+ 326              		.loc 1 182 9 view .LVU81
+ 327              		.loc 1 182 10 is_stmt 0 view .LVU82
+ 328 0000 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
+ 329              		.loc 1 182 9 view .LVU83
+ 330 0002 8BB1     		cbz	r3, .L30
+ 183:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 184:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****     /* multiply by the 32 bit FNV magic prime mod 2^32 */
+ 185:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** #if defined(NO_FNV_GCC_OPTIMIZATION)
+ 186:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****     __esos_u32FNVHash *= FNV_32_PRIME;
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s 			page 10
+
+
+ 187:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** #else
+ 188:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****     __esos_u32FNVHash += (__esos_u32FNVHash<<1) + (__esos_u32FNVHash<<4) + (__esos_u32FNVHash<<7) +
+ 331              		.loc 1 188 5 is_stmt 1 view .LVU84
+ 332              		.loc 1 188 44 is_stmt 0 view .LVU85
+ 333 0004 0A49     		ldr	r1, .L31
+ 334 0006 0B68     		ldr	r3, [r1]
+ 335              		.loc 1 188 69 view .LVU86
+ 336 0008 1A01     		lsls	r2, r3, #4
+ 337              		.loc 1 188 49 view .LVU87
+ 338 000a 02EB4302 		add	r2, r2, r3, lsl #1
+ 339              		.loc 1 188 74 view .LVU88
+ 340 000e 02EBC312 		add	r2, r2, r3, lsl #7
+ 341              		.loc 1 188 99 view .LVU89
+ 342 0012 02EB0322 		add	r2, r2, r3, lsl #8
+ 343              		.loc 1 188 124 view .LVU90
+ 344 0016 02EB0362 		add	r2, r2, r3, lsl #24
+ 345              		.loc 1 188 23 view .LVU91
+ 346 001a 1344     		add	r3, r3, r2
+ 347 001c 0B60     		str	r3, [r1]
+ 189:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** #endif
+ 190:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 191:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****     /* xor the bottom with the current octet */
+ 192:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****     __esos_u32FNVHash ^= (uint32_t)*ch_s++;
+ 348              		.loc 1 192 5 is_stmt 1 view .LVU92
+ 349              	.LVL26:
+ 350              		.loc 1 192 36 is_stmt 0 view .LVU93
+ 351 001e 10F8012B 		ldrb	r2, [r0], #1	@ zero_extendqisi2
+ 352              	.LVL27:
+ 353              		.loc 1 192 23 view .LVU94
+ 354 0022 5340     		eors	r3, r3, r2
+ 355 0024 0B60     		str	r3, [r1]
+ 356 0026 EBE7     		b	.L28
+ 357              	.L30:
+ 193:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   }
+ 194:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 195:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   /* return our new hash value */
+ 196:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   return __esos_u32FNVHash;
+ 358              		.loc 1 196 3 is_stmt 1 view .LVU95
+ 197:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** }
+ 359              		.loc 1 197 1 is_stmt 0 view .LVU96
+ 360 0028 014B     		ldr	r3, .L31
+ 361 002a 1868     		ldr	r0, [r3]
+ 362              	.LVL28:
+ 363              		.loc 1 197 1 view .LVU97
+ 364 002c 7047     		bx	lr
+ 365              	.L32:
+ 366 002e 00BF     		.align	2
+ 367              	.L31:
+ 368 0030 00000000 		.word	.LANCHOR0
+ 369              		.cfi_endproc
+ 370              	.LFE5:
+ 372              		.section	.text.esos_hash_u32_to_u16,"ax",%progbits
+ 373              		.align	1
+ 374              		.global	esos_hash_u32_to_u16
+ 375              		.syntax unified
+ 376              		.thumb
+ 377              		.thumb_func
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s 			page 11
+
+
+ 378              		.fpu fpv4-sp-d16
+ 380              	esos_hash_u32_to_u16:
+ 381              	.LVL29:
+ 382              	.LFB6:
+ 198:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** 
+ 199:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** inline uint16_t esos_hash_u32_to_u16(uint32_t u32_hash) {
+ 383              		.loc 1 199 57 is_stmt 1 view -0
+ 384              		.cfi_startproc
+ 385              		@ args = 0, pretend = 0, frame = 0
+ 386              		@ frame_needed = 0, uses_anonymous_args = 0
+ 387              		@ link register save eliminated.
+ 200:C:/MinGW/msys/1.0/esos32/src\esos_utils.c ****   return  (uint16_t) ((u32_hash>>16) ^ (u32_hash&0xFFFF));
+ 388              		.loc 1 200 3 view .LVU99
+ 389              		.loc 1 200 11 is_stmt 0 view .LVU100
+ 390 0000 80EA1040 		eor	r0, r0, r0, lsr #16
+ 391              	.LVL30:
+ 201:C:/MinGW/msys/1.0/esos32/src\esos_utils.c **** }
+ 392              		.loc 1 201 1 view .LVU101
+ 393 0004 80B2     		uxth	r0, r0
+ 394 0006 7047     		bx	lr
+ 395              		.cfi_endproc
+ 396              	.LFE6:
+ 398              		.global	__esos_u32FNVHash
+ 399              		.comm	__u32_esos_PRNG_Seed,4,4
+ 400              		.section	.data.__esos_u32FNVHash,"aw"
+ 401              		.align	2
+ 402              		.set	.LANCHOR0,. + 0
+ 405              	__esos_u32FNVHash:
+ 406 0000 C59D1C81 		.word	-2128831035
+ 407              		.text
+ 408              	.Letext0:
+ 409              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 410              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 411              		.file 4 "C:/MinGW/msys/1.0/esos32/include/lc-switch.h"
+ 412              		.file 5 "C:/MinGW/msys/1.0/esos32/include/esos_cb.h"
+ 413              		.file 6 "C:/MinGW/msys/1.0/esos32/include/esos_mail.h"
+ 414              		.file 7 "C:/MinGW/msys/1.0/esos32/include/esos_task.h"
+ 415              		.file 8 "C:/MinGW/msys/1.0/esos32/include/esos_utils.h"
+ 416              		.file 9 "C:/MinGW/msys/1.0/esos32/include/esos_comm.h"
+ 417              		.file 10 "C:/MinGW/msys/1.0/esos32/include/esos.h"
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 esos_utils.c
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:18     .text.__esos_set_PRNG_U32Seed:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:26     .text.__esos_set_PRNG_U32Seed:00000000 __esos_set_PRNG_U32Seed
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:44     .text.__esos_set_PRNG_U32Seed:00000008 $d
+                            *COM*:00000004 __u32_esos_PRNG_Seed
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:49     .text.__esos_get_PRNG_RandomUint32:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:56     .text.__esos_get_PRNG_RandomUint32:00000000 __esos_get_PRNG_RandomUint32
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:117    .text.__esos_get_PRNG_RandomUint32:00000040 $d
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:123    .text.esos_GetRandomUint32:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:130    .text.esos_GetRandomUint32:00000000 esos_GetRandomUint32
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:151    .text.esos_taskname_hash_u16:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:158    .text.esos_taskname_hash_u16:00000000 esos_taskname_hash_u16
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:216    .text.esos_taskname_hash_u16:0000002c $d
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:221    .text.esos_buffer_hash_u32:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:228    .text.esos_buffer_hash_u32:00000000 esos_buffer_hash_u32
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:303    .text.esos_buffer_hash_u32:00000040 $d
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:308    .text.esos_string_hash_u32:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:315    .text.esos_string_hash_u32:00000000 esos_string_hash_u32
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:368    .text.esos_string_hash_u32:00000030 $d
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:373    .text.esos_hash_u32_to_u16:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:380    .text.esos_hash_u32_to_u16:00000000 esos_hash_u32_to_u16
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:405    .data.__esos_u32FNVHash:00000000 __esos_u32FNVHash
+C:\Users\Travis\AppData\Local\Temp\ccLNKPe4.s:401    .data.__esos_u32FNVHash:00000000 $d
+
+UNDEFINED SYMBOLS
+__esos_hw_PRNG_u32

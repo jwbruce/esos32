@@ -1,0 +1,2174 @@
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"semaphore2_app.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.task_flash_LED,"ax",%progbits
+  18              		.align	1
+  19              		.global	task_flash_LED
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	task_flash_LED:
+  27              	.LVL0:
+  28              	.LFB0:
+  29              		.file 1 "src/semaphore2_app.c"
+   1:src/semaphore2_app.c **** /*
+   2:src/semaphore2_app.c ****  * "Copyright (c) 2019 J. W. Bruce ("AUTHOR(S)")"
+   3:src/semaphore2_app.c ****  * All rights reserved.
+   4:src/semaphore2_app.c ****  * (J. W. Bruce, jwbruce_AT_tntech.edu, Tennessee Tech University)
+   5:src/semaphore2_app.c ****  *
+   6:src/semaphore2_app.c ****  * Permission to use, copy, modify, and distribute this software and its
+   7:src/semaphore2_app.c ****  * documentation for any purpose, without fee, and without written agreement is
+   8:src/semaphore2_app.c ****  * hereby granted, provided that the above copyright notice, the following
+   9:src/semaphore2_app.c ****  * two paragraphs and the authors appear in all copies of this software.
+  10:src/semaphore2_app.c ****  *
+  11:src/semaphore2_app.c ****  * IN NO EVENT SHALL THE "AUTHORS" BE LIABLE TO ANY PARTY FOR
+  12:src/semaphore2_app.c ****  * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT
+  13:src/semaphore2_app.c ****  * OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE "AUTHORS"
+  14:src/semaphore2_app.c ****  * HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  15:src/semaphore2_app.c ****  *
+  16:src/semaphore2_app.c ****  * THE "AUTHORS" SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+  17:src/semaphore2_app.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+  18:src/semaphore2_app.c ****  * AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS
+  19:src/semaphore2_app.c ****  * ON AN "AS IS" BASIS, AND THE "AUTHORS" HAS NO OBLIGATION TO
+  20:src/semaphore2_app.c ****  * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
+  21:src/semaphore2_app.c ****  *
+  22:src/semaphore2_app.c ****  * Please maintain this header in its entirety when copying/modifying
+  23:src/semaphore2_app.c ****  * these files.
+  24:src/semaphore2_app.c ****  *
+  25:src/semaphore2_app.c ****  *
+  26:src/semaphore2_app.c ****  */
+  27:src/semaphore2_app.c **** 
+  28:src/semaphore2_app.c **** // #define ESOS_USE_IRQS
+  29:src/semaphore2_app.c **** 
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 2
+
+
+  30:src/semaphore2_app.c **** // INCLUDEs go here  (First include the main esos.h file)
+  31:src/semaphore2_app.c **** //      After that, the user can include what they need
+  32:src/semaphore2_app.c **** #include    "esos.h"
+  33:src/semaphore2_app.c **** #include  "user_app.h"
+  34:src/semaphore2_app.c **** #ifdef __linux
+  35:src/semaphore2_app.c **** #include    "esos_pc.h"
+  36:src/semaphore2_app.c **** #include    "esos_pc_stdio.h"
+  37:src/semaphore2_app.c **** // INCLUDE these so our printf and other PC hacks work
+  38:src/semaphore2_app.c **** #include <stdio.h>
+  39:src/semaphore2_app.c **** #include <sys/select.h>
+  40:src/semaphore2_app.c **** #include <termios.h>
+  41:src/semaphore2_app.c **** #include <unistd.h>
+  42:src/semaphore2_app.c **** #else
+  43:src/semaphore2_app.c **** #include    "esos_stm32l4.h"
+  44:src/semaphore2_app.c **** #include    "esos_stm32l4_rs232.h"
+  45:src/semaphore2_app.c **** #endif
+  46:src/semaphore2_app.c **** 
+  47:src/semaphore2_app.c **** 
+  48:src/semaphore2_app.c **** // DEFINEs go here
+  49:src/semaphore2_app.c **** 
+  50:src/semaphore2_app.c **** /*
+  51:src/semaphore2_app.c ****  * PROTOTYPEs go here
+  52:src/semaphore2_app.c ****  *
+  53:src/semaphore2_app.c ****  */
+  54:src/semaphore2_app.c **** void __user_init_hw( void );
+  55:src/semaphore2_app.c **** uint32_t getRandomDelay(void);
+  56:src/semaphore2_app.c **** 
+  57:src/semaphore2_app.c **** // GLOBALs go here
+  58:src/semaphore2_app.c **** //  Generally, the user-created semaphores will be defined/allocated here
+  59:src/semaphore2_app.c **** char psz_CRNL[3]= {0x0D, 0x0A, 0};
+  60:src/semaphore2_app.c **** char psz_T1[] = "Task 1: ";
+  61:src/semaphore2_app.c **** char psz_T2[] = "Task 2: ";
+  62:src/semaphore2_app.c **** char psz_rv[] = "rendez-vous!";
+  63:src/semaphore2_app.c **** 
+  64:src/semaphore2_app.c **** ESOS_SEMAPHORE( sem_T1CanRun );
+  65:src/semaphore2_app.c **** ESOS_SEMAPHORE( sem_T2CanRun );
+  66:src/semaphore2_app.c **** 
+  67:src/semaphore2_app.c **** // timer globals
+  68:src/semaphore2_app.c **** 
+  69:src/semaphore2_app.c **** #ifdef _linux
+  70:src/semaphore2_app.c **** /*
+  71:src/semaphore2_app.c ****  * Simulate the timer ISR found on a MCU
+  72:src/semaphore2_app.c ****  *   The PC doesn't have a timer ISR, so this task will periodically
+  73:src/semaphore2_app.c ****  *   call the timer services callback instead.
+  74:src/semaphore2_app.c ****  *   USED ONLY FOR DEVELOPMENT AND TESTING ON PC.
+  75:src/semaphore2_app.c ****  *   Real MCU hardware doesn't need this task
+  76:src/semaphore2_app.c ****  */
+  77:src/semaphore2_app.c **** ESOS_USER_TASK( __simulated_isr ) {
+  78:src/semaphore2_app.c ****   ESOS_TASK_BEGIN();
+  79:src/semaphore2_app.c ****   while (TRUE) {
+  80:src/semaphore2_app.c ****     // call the ESOS timer services callback just like a real H/W ISR would
+  81:src/semaphore2_app.c ****     __esos_tmrSvcsExecute();
+  82:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS(  1 );
+  83:src/semaphore2_app.c **** 
+  84:src/semaphore2_app.c ****   } // endof while(TRUE)
+  85:src/semaphore2_app.c ****   ESOS_TASK_END();
+  86:src/semaphore2_app.c **** } // end child_task
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 3
+
+
+  87:src/semaphore2_app.c **** #endif
+  88:src/semaphore2_app.c **** 
+  89:src/semaphore2_app.c **** ESOS_USER_TASK( task_flash_LED ) {
+  30              		.loc 1 89 34 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		.loc 1 89 34 is_stmt 0 view .LVU1
+  35 0000 38B5     		push	{r3, r4, r5, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 16
+  38              		.cfi_offset 3, -16
+  39              		.cfi_offset 4, -12
+  40              		.cfi_offset 5, -8
+  41              		.cfi_offset 14, -4
+  42 0002 0446     		mov	r4, r0
+  90:src/semaphore2_app.c ****   ESOS_TASK_BEGIN();
+  43              		.loc 1 90 3 is_stmt 1 view .LVU2
+  44 0004 8378     		ldrb	r3, [r0, #2]	@ zero_extendqisi2
+  45 0006 63F07F03 		orn	r3, r3, #127
+  46 000a 8370     		strb	r3, [r0, #2]
+  47              		.loc 1 90 3 view .LVU3
+  48 000c 0388     		ldrh	r3, [r0]
+  49 000e 5F2B     		cmp	r3, #95
+  50 0010 27D0     		beq	.L2
+  51 0012 612B     		cmp	r3, #97
+  52 0014 3CD0     		beq	.L3
+  53 0016 93B1     		cbz	r3, .L10
+  91:src/semaphore2_app.c ****   while (TRUE) {
+  92:src/semaphore2_app.c ****     gpio_toggle(LED2_GPIO_Port,LED2_Pin);
+  93:src/semaphore2_app.c ****     if(gpio_get(SW1_GPIO_Port,SW1_Pin) == 0)
+  94:src/semaphore2_app.c ****     {
+  95:src/semaphore2_app.c ****       ESOS_TASK_WAIT_TICKS( 125 );
+  96:src/semaphore2_app.c ****     } else {
+  97:src/semaphore2_app.c ****       ESOS_TASK_WAIT_TICKS( 600 );
+  98:src/semaphore2_app.c ****     }
+  99:src/semaphore2_app.c ****   } // endof while(TRUE)
+ 100:src/semaphore2_app.c ****   ESOS_TASK_END();
+  54              		.loc 1 100 3 view .LVU4
+  55              		.loc 1 100 3 view .LVU5
+  56 0018 0823     		movs	r3, #8
+  57 001a 8370     		strb	r3, [r0, #2]
+  58              		.loc 1 100 3 view .LVU6
+  59 001c 0023     		movs	r3, #0
+  60 001e 0380     		strh	r3, [r0]	@ movhi
+  61              		.loc 1 100 3 view .LVU7
+  62              		.loc 1 100 3 view .LVU8
+  63              		.loc 1 100 3 view .LVU9
+  64 0020 0325     		movs	r5, #3
+  65              	.LVL1:
+  66              	.L7:
+  67              		.loc 1 100 18 discriminator 1 view .LVU10
+ 101:src/semaphore2_app.c **** } // end task_flash_LED()
+  68              		.loc 1 101 1 is_stmt 0 discriminator 1 view .LVU11
+  69 0022 2846     		mov	r0, r5
+  70 0024 38BD     		pop	{r3, r4, r5, pc}
+  71              	.LVL2:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 4
+
+
+  72              	.L15:
+  95:src/semaphore2_app.c ****     } else {
+  73              		.loc 1 95 7 is_stmt 1 discriminator 2 view .LVU12
+  74 0026 0423     		movs	r3, #4
+  75 0028 A370     		strb	r3, [r4, #2]
+  95:src/semaphore2_app.c ****     } else {
+  76              		.loc 1 95 7 discriminator 2 view .LVU13
+  77 002a 0325     		movs	r5, #3
+  78 002c F9E7     		b	.L7
+  79              	.L8:
+  95:src/semaphore2_app.c ****     } else {
+  80              		.loc 1 95 7 discriminator 5 view .LVU14
+  81 002e A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+  82 0030 43F00103 		orr	r3, r3, #1
+  83 0034 A370     		strb	r3, [r4, #2]
+  84              	.L9:
+  95:src/semaphore2_app.c ****     } else {
+  85              		.loc 1 95 7 discriminator 7 view .LVU15
+  86 0036 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+  87 0038 13F0010F 		tst	r3, #1
+  88 003c F1D1     		bne	.L7
+  89              	.L10:
+  90:src/semaphore2_app.c ****   while (TRUE) {
+  90              		.loc 1 90 20 discriminator 1 view .LVU16
+  91:src/semaphore2_app.c ****     gpio_toggle(LED2_GPIO_Port,LED2_Pin);
+  91              		.loc 1 91 3 discriminator 1 view .LVU17
+  92:src/semaphore2_app.c ****     if(gpio_get(SW1_GPIO_Port,SW1_Pin) == 0)
+  92              		.loc 1 92 5 discriminator 1 view .LVU18
+  93 003e 2021     		movs	r1, #32
+  94 0040 4FF09040 		mov	r0, #1207959552
+  95 0044 FFF7FEFF 		bl	gpio_toggle
+  96              	.LVL3:
+  93:src/semaphore2_app.c ****     {
+  97              		.loc 1 93 5 discriminator 1 view .LVU19
+  93:src/semaphore2_app.c ****     {
+  98              		.loc 1 93 8 is_stmt 0 discriminator 1 view .LVU20
+  99 0048 4FF40051 		mov	r1, #8192
+ 100 004c 1E48     		ldr	r0, .L17
+ 101 004e FFF7FEFF 		bl	gpio_get
+ 102              	.LVL4:
+  93:src/semaphore2_app.c ****     {
+ 103              		.loc 1 93 7 discriminator 1 view .LVU21
+ 104 0052 A8B9     		cbnz	r0, .L5
+  95:src/semaphore2_app.c ****     } else {
+ 105              		.loc 1 95 7 is_stmt 1 view .LVU22
+  95:src/semaphore2_app.c ****     } else {
+ 106              		.loc 1 95 7 view .LVU23
+ 107 0054 FFF7FEFF 		bl	__esos_hw_GetSystemTickCount
+ 108              	.LVL5:
+ 109 0058 A060     		str	r0, [r4, #8]
+  95:src/semaphore2_app.c ****     } else {
+ 110              		.loc 1 95 7 view .LVU24
+ 111 005a 7D23     		movs	r3, #125
+ 112 005c E360     		str	r3, [r4, #12]
+  95:src/semaphore2_app.c ****     } else {
+ 113              		.loc 1 95 7 view .LVU25
+  95:src/semaphore2_app.c ****     } else {
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 5
+
+
+ 114              		.loc 1 95 7 view .LVU26
+ 115 005e 5F23     		movs	r3, #95
+ 116 0060 2380     		strh	r3, [r4]	@ movhi
+ 117              	.L2:
+  95:src/semaphore2_app.c ****     } else {
+ 118              		.loc 1 95 7 discriminator 1 view .LVU27
+  95:src/semaphore2_app.c ****     } else {
+ 119              		.loc 1 95 7 discriminator 1 view .LVU28
+ 120 0062 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 121 0064 15F00405 		ands	r5, r5, #4
+ 122 0068 DDD1     		bne	.L15
+  95:src/semaphore2_app.c ****     } else {
+ 123              		.loc 1 95 7 discriminator 3 view .LVU29
+ 124 006a E168     		ldr	r1, [r4, #12]
+ 125 006c A068     		ldr	r0, [r4, #8]
+ 126 006e FFF7FEFF 		bl	__esos_hasTickDurationPassed
+ 127              	.LVL6:
+ 128 0072 0028     		cmp	r0, #0
+ 129 0074 DBD0     		beq	.L8
+  95:src/semaphore2_app.c ****     } else {
+ 130              		.loc 1 95 7 discriminator 4 view .LVU30
+ 131 0076 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 132 0078 23F00103 		bic	r3, r3, #1
+ 133 007c A370     		strb	r3, [r4, #2]
+ 134 007e DAE7     		b	.L9
+ 135              	.L5:
+  97:src/semaphore2_app.c ****     }
+ 136              		.loc 1 97 7 view .LVU31
+  97:src/semaphore2_app.c ****     }
+ 137              		.loc 1 97 7 view .LVU32
+ 138 0080 FFF7FEFF 		bl	__esos_hw_GetSystemTickCount
+ 139              	.LVL7:
+ 140 0084 A060     		str	r0, [r4, #8]
+  97:src/semaphore2_app.c ****     }
+ 141              		.loc 1 97 7 view .LVU33
+ 142 0086 4FF41673 		mov	r3, #600
+ 143 008a E360     		str	r3, [r4, #12]
+  97:src/semaphore2_app.c ****     }
+ 144              		.loc 1 97 7 view .LVU34
+  97:src/semaphore2_app.c ****     }
+ 145              		.loc 1 97 7 view .LVU35
+ 146 008c 6123     		movs	r3, #97
+ 147 008e 2380     		strh	r3, [r4]	@ movhi
+ 148              	.L3:
+  97:src/semaphore2_app.c ****     }
+ 149              		.loc 1 97 7 discriminator 1 view .LVU36
+  97:src/semaphore2_app.c ****     }
+ 150              		.loc 1 97 7 discriminator 1 view .LVU37
+ 151 0090 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 152 0092 15F00405 		ands	r5, r5, #4
+ 153 0096 0DD1     		bne	.L16
+  97:src/semaphore2_app.c ****     }
+ 154              		.loc 1 97 7 discriminator 3 view .LVU38
+ 155 0098 E168     		ldr	r1, [r4, #12]
+ 156 009a A068     		ldr	r0, [r4, #8]
+ 157 009c FFF7FEFF 		bl	__esos_hasTickDurationPassed
+ 158              	.LVL8:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 6
+
+
+ 159 00a0 60B1     		cbz	r0, .L12
+  97:src/semaphore2_app.c ****     }
+ 160              		.loc 1 97 7 discriminator 4 view .LVU39
+ 161 00a2 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 162 00a4 23F00103 		bic	r3, r3, #1
+ 163 00a8 A370     		strb	r3, [r4, #2]
+ 164              	.L13:
+  97:src/semaphore2_app.c ****     }
+ 165              		.loc 1 97 7 discriminator 7 view .LVU40
+ 166 00aa A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 167 00ac 13F0010F 		tst	r3, #1
+ 168 00b0 C5D0     		beq	.L10
+ 169 00b2 B6E7     		b	.L7
+ 170              	.L16:
+  97:src/semaphore2_app.c ****     }
+ 171              		.loc 1 97 7 discriminator 2 view .LVU41
+ 172 00b4 0423     		movs	r3, #4
+ 173 00b6 A370     		strb	r3, [r4, #2]
+  97:src/semaphore2_app.c ****     }
+ 174              		.loc 1 97 7 discriminator 2 view .LVU42
+ 175 00b8 0325     		movs	r5, #3
+ 176 00ba B2E7     		b	.L7
+ 177              	.L12:
+  97:src/semaphore2_app.c ****     }
+ 178              		.loc 1 97 7 discriminator 5 view .LVU43
+ 179 00bc A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 180 00be 43F00103 		orr	r3, r3, #1
+ 181 00c2 A370     		strb	r3, [r4, #2]
+ 182 00c4 F1E7     		b	.L13
+ 183              	.L18:
+ 184 00c6 00BF     		.align	2
+ 185              	.L17:
+ 186 00c8 00080048 		.word	1207961600
+ 187              		.cfi_endproc
+ 188              	.LFE0:
+ 190              		.section	.text.task1,"ax",%progbits
+ 191              		.align	1
+ 192              		.global	task1
+ 193              		.syntax unified
+ 194              		.thumb
+ 195              		.thumb_func
+ 196              		.fpu fpv4-sp-d16
+ 198              	task1:
+ 199              	.LVL9:
+ 200              	.LFB1:
+ 102:src/semaphore2_app.c **** 
+ 103:src/semaphore2_app.c **** 
+ 104:src/semaphore2_app.c **** /* == task1 ==
+ 105:src/semaphore2_app.c ****  * Print out a counter value local to this task, then delay
+ 106:src/semaphore2_app.c ****  * for a random period of time.  (Delays range from approx.
+ 107:src/semaphore2_app.c ****  * 0.25 - 4.1 seconds)
+ 108:src/semaphore2_app.c ****  */
+ 109:src/semaphore2_app.c **** ESOS_USER_TASK(task1) {
+ 201              		.loc 1 109 23 view -0
+ 202              		.cfi_startproc
+ 203              		@ args = 0, pretend = 0, frame = 0
+ 204              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 7
+
+
+ 205              		.loc 1 109 23 is_stmt 0 view .LVU45
+ 206 0000 38B5     		push	{r3, r4, r5, lr}
+ 207              	.LCFI1:
+ 208              		.cfi_def_cfa_offset 16
+ 209              		.cfi_offset 3, -16
+ 210              		.cfi_offset 4, -12
+ 211              		.cfi_offset 5, -8
+ 212              		.cfi_offset 14, -4
+ 213 0002 0446     		mov	r4, r0
+ 110:src/semaphore2_app.c ****   static  uint8_t           u8_cnt=0;
+ 214              		.loc 1 110 3 is_stmt 1 view .LVU46
+ 111:src/semaphore2_app.c **** 
+ 112:src/semaphore2_app.c ****   ESOS_TASK_BEGIN();
+ 215              		.loc 1 112 3 view .LVU47
+ 216 0004 8378     		ldrb	r3, [r0, #2]	@ zero_extendqisi2
+ 217 0006 63F07F03 		orn	r3, r3, #127
+ 218 000a 8370     		strb	r3, [r0, #2]
+ 219              		.loc 1 112 3 view .LVU48
+ 220 000c 0388     		ldrh	r3, [r0]
+ 221 000e 002B     		cmp	r3, #0
+ 222 0010 00F0AC80 		beq	.L20
+ 223 0014 7E2B     		cmp	r3, #126
+ 224 0016 00F20E81 		bhi	.L21
+ 225 001a 722B     		cmp	r3, #114
+ 226 001c C0F00B81 		bcc	.L21
+ 227 0020 723B     		subs	r3, r3, #114
+ 228 0022 0C2B     		cmp	r3, #12
+ 229 0024 00F20781 		bhi	.L21
+ 230 0028 DFE813F0 		tbh	[pc, r3, lsl #1]
+ 231              	.L23:
+ 232 002c 0F00     		.2byte	(.L31-.L23)/2
+ 233 002e 2C00     		.2byte	(.L30-.L23)/2
+ 234 0030 4600     		.2byte	(.L29-.L23)/2
+ 235 0032 6100     		.2byte	(.L28-.L23)/2
+ 236 0034 0501     		.2byte	(.L21-.L23)/2
+ 237 0036 0501     		.2byte	(.L21-.L23)/2
+ 238 0038 8C00     		.2byte	(.L27-.L23)/2
+ 239 003a 0501     		.2byte	(.L21-.L23)/2
+ 240 003c 0501     		.2byte	(.L21-.L23)/2
+ 241 003e AB00     		.2byte	(.L26-.L23)/2
+ 242 0040 C500     		.2byte	(.L25-.L23)/2
+ 243 0042 DC00     		.2byte	(.L24-.L23)/2
+ 244 0044 F300     		.2byte	(.L22-.L23)/2
+ 245              	.LVL10:
+ 246              		.p2align 1
+ 247              	.L48:
+ 113:src/semaphore2_app.c ****   while (u8_cnt < 6) {
+ 114:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
+ 248              		.loc 1 114 5 view .LVU49
+ 249              		.loc 1 114 5 view .LVU50
+ 250 0046 7223     		movs	r3, #114
+ 251 0048 2380     		strh	r3, [r4]	@ movhi
+ 252              	.L31:
+ 253              		.loc 1 114 5 discriminator 1 view .LVU51
+ 254              		.loc 1 114 5 discriminator 1 view .LVU52
+ 255 004a A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 256 004c 13F00405 		ands	r5, r3, #4
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 8
+
+
+ 257 0050 40F0F880 		bne	.L62
+ 258              		.loc 1 114 5 discriminator 3 view .LVU53
+ 259 0054 A34A     		ldr	r2, .L71
+ 260 0056 1268     		ldr	r2, [r2]
+ 261 0058 12F0040F 		tst	r2, #4
+ 262 005c 40F0F680 		bne	.L34
+ 263              		.loc 1 114 5 discriminator 4 view .LVU54
+ 264 0060 23F00103 		bic	r3, r3, #1
+ 265 0064 A370     		strb	r3, [r4, #2]
+ 266              	.L35:
+ 267              		.loc 1 114 5 discriminator 7 view .LVU55
+ 268 0066 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 269 0068 13F0010F 		tst	r3, #1
+ 270 006c 40F0E880 		bne	.L33
+ 271              		.loc 1 114 5 discriminator 9 view .LVU56
+ 272              		.loc 1 114 5 discriminator 9 view .LVU57
+ 273 0070 9C4A     		ldr	r2, .L71
+ 274 0072 1368     		ldr	r3, [r2]
+ 275 0074 43F00403 		orr	r3, r3, #4
+ 276 0078 1360     		str	r3, [r2]
+ 115:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 277              		.loc 1 115 5 discriminator 9 view .LVU58
+ 278              		.loc 1 115 5 discriminator 9 view .LVU59
+ 279 007a 9B4B     		ldr	r3, .L71+4
+ 280 007c 0022     		movs	r2, #0
+ 281 007e 1A80     		strh	r2, [r3]	@ movhi
+ 282              		.loc 1 115 5 discriminator 9 view .LVU60
+ 283              		.loc 1 115 5 discriminator 9 view .LVU61
+ 284              		.loc 1 115 5 discriminator 9 view .LVU62
+ 285              		.loc 1 115 5 discriminator 9 view .LVU63
+ 286 0080 7323     		movs	r3, #115
+ 287 0082 2380     		strh	r3, [r4]	@ movhi
+ 288              	.L30:
+ 289              		.loc 1 115 5 discriminator 1 view .LVU64
+ 290              		.loc 1 115 5 discriminator 1 view .LVU65
+ 291 0084 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 292 0086 15F00405 		ands	r5, r5, #4
+ 293 008a 40F0E380 		bne	.L63
+ 294              		.loc 1 115 5 discriminator 3 view .LVU66
+ 295 008e 9749     		ldr	r1, .L71+8
+ 296 0090 9548     		ldr	r0, .L71+4
+ 297 0092 FFF7FEFF 		bl	__esos_OutString
+ 298              	.LVL11:
+ 299 0096 0228     		cmp	r0, #2
+ 300 0098 40F2E080 		bls	.L37
+ 301              		.loc 1 115 5 discriminator 4 view .LVU67
+ 302 009c A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 303 009e 23F00103 		bic	r3, r3, #1
+ 304 00a2 A370     		strb	r3, [r4, #2]
+ 305              	.L38:
+ 306              		.loc 1 115 5 discriminator 7 view .LVU68
+ 307 00a4 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 308 00a6 13F0010F 		tst	r3, #1
+ 309 00aa 40F0C980 		bne	.L33
+ 310              		.loc 1 115 5 discriminator 9 view .LVU69
+ 311              		.loc 1 115 5 discriminator 9 view .LVU70
+ 116:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 9
+
+
+ 312              		.loc 1 116 5 discriminator 9 view .LVU71
+ 313              		.loc 1 116 5 discriminator 9 view .LVU72
+ 314 00ae 8E4B     		ldr	r3, .L71+4
+ 315 00b0 0022     		movs	r2, #0
+ 316 00b2 1A80     		strh	r2, [r3]	@ movhi
+ 317              		.loc 1 116 5 discriminator 9 view .LVU73
+ 318              		.loc 1 116 5 discriminator 9 view .LVU74
+ 319              		.loc 1 116 5 discriminator 9 view .LVU75
+ 320              		.loc 1 116 5 discriminator 9 view .LVU76
+ 321 00b4 7423     		movs	r3, #116
+ 322 00b6 2380     		strh	r3, [r4]	@ movhi
+ 323              	.L29:
+ 324              		.loc 1 116 5 discriminator 1 view .LVU77
+ 325              		.loc 1 116 5 discriminator 1 view .LVU78
+ 326 00b8 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 327 00ba 15F00405 		ands	r5, r5, #4
+ 328 00be 40F0D280 		bne	.L64
+ 329              		.loc 1 116 5 discriminator 3 view .LVU79
+ 330 00c2 8B4B     		ldr	r3, .L71+12
+ 331 00c4 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 332 00c6 8848     		ldr	r0, .L71+4
+ 333 00c8 FFF7FEFF 		bl	__esos_OutUint8AsDecString
+ 334              	.LVL12:
+ 335 00cc 0228     		cmp	r0, #2
+ 336 00ce 40F2CE80 		bls	.L40
+ 337              		.loc 1 116 5 discriminator 4 view .LVU80
+ 338 00d2 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 339 00d4 23F00103 		bic	r3, r3, #1
+ 340 00d8 A370     		strb	r3, [r4, #2]
+ 341              	.L41:
+ 342              		.loc 1 116 5 discriminator 7 view .LVU81
+ 343 00da A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 344 00dc 13F0010F 		tst	r3, #1
+ 345 00e0 40F0AE80 		bne	.L33
+ 346              		.loc 1 116 5 discriminator 9 view .LVU82
+ 347              		.loc 1 116 5 discriminator 9 view .LVU83
+ 117:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 348              		.loc 1 117 5 discriminator 9 view .LVU84
+ 349              		.loc 1 117 5 discriminator 9 view .LVU85
+ 350 00e4 804B     		ldr	r3, .L71+4
+ 351 00e6 0022     		movs	r2, #0
+ 352 00e8 1A80     		strh	r2, [r3]	@ movhi
+ 353              		.loc 1 117 5 discriminator 9 view .LVU86
+ 354              		.loc 1 117 5 discriminator 9 view .LVU87
+ 355              		.loc 1 117 5 discriminator 9 view .LVU88
+ 356              		.loc 1 117 5 discriminator 9 view .LVU89
+ 357 00ea 7523     		movs	r3, #117
+ 358 00ec 2380     		strh	r3, [r4]	@ movhi
+ 359              	.L28:
+ 360              		.loc 1 117 5 discriminator 1 view .LVU90
+ 361              		.loc 1 117 5 discriminator 1 view .LVU91
+ 362 00ee A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 363 00f0 15F00405 		ands	r5, r5, #4
+ 364 00f4 40F0C080 		bne	.L65
+ 365              		.loc 1 117 5 discriminator 3 view .LVU92
+ 366 00f8 7E49     		ldr	r1, .L71+16
+ 367 00fa 7B48     		ldr	r0, .L71+4
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 10
+
+
+ 368 00fc FFF7FEFF 		bl	__esos_OutString
+ 369              	.LVL13:
+ 370 0100 0228     		cmp	r0, #2
+ 371 0102 40F2BD80 		bls	.L43
+ 372              		.loc 1 117 5 discriminator 4 view .LVU93
+ 373 0106 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 374 0108 23F00103 		bic	r3, r3, #1
+ 375 010c A370     		strb	r3, [r4, #2]
+ 376              	.L44:
+ 377              		.loc 1 117 5 discriminator 7 view .LVU94
+ 378 010e A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 379 0110 13F0010F 		tst	r3, #1
+ 380 0114 40F09480 		bne	.L33
+ 381              		.loc 1 117 5 discriminator 9 view .LVU95
+ 382              		.loc 1 117 5 discriminator 9 view .LVU96
+ 118:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 383              		.loc 1 118 5 discriminator 9 view .LVU97
+ 384 0118 724A     		ldr	r2, .L71
+ 385 011a 1368     		ldr	r3, [r2]
+ 386 011c 23F00403 		bic	r3, r3, #4
+ 387 0120 1360     		str	r3, [r2]
+ 119:src/semaphore2_app.c ****     u8_cnt++;
+ 388              		.loc 1 119 5 discriminator 9 view .LVU98
+ 389              		.loc 1 119 11 is_stmt 0 discriminator 9 view .LVU99
+ 390 0122 734A     		ldr	r2, .L71+12
+ 391 0124 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 392 0126 0133     		adds	r3, r3, #1
+ 393 0128 1370     		strb	r3, [r2]
+ 120:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 394              		.loc 1 120 5 is_stmt 1 discriminator 9 view .LVU100
+ 395              		.loc 1 120 5 discriminator 9 view .LVU101
+ 396 012a FFF7FEFF 		bl	__esos_hw_GetSystemTickCount
+ 397              	.LVL14:
+ 398 012e A060     		str	r0, [r4, #8]
+ 399              		.loc 1 120 5 discriminator 9 view .LVU102
+ 400              	.LBB6:
+ 401              	.LBI6:
+ 121:src/semaphore2_app.c ****   } // endof while
+ 122:src/semaphore2_app.c ****   ESOS_SIGNAL_SEMAPHORE(sem_T2CanRun, 1);
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_SEMAPHORE(sem_T1CanRun, 1);
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 126:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 127:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 128:src/semaphore2_app.c **** } // end task1()
+ 129:src/semaphore2_app.c **** 
+ 130:src/semaphore2_app.c **** /* == task2 ==
+ 131:src/semaphore2_app.c ****  * Wait for a signal from task1, then
+ 132:src/semaphore2_app.c ****  * Print out a counter value local to this task
+ 133:src/semaphore2_app.c ****  */
+ 134:src/semaphore2_app.c **** ESOS_USER_TASK(task2) {
+ 135:src/semaphore2_app.c ****   static  uint8_t           u8_cnt=0;
+ 136:src/semaphore2_app.c **** 
+ 137:src/semaphore2_app.c ****   ESOS_TASK_BEGIN();
+ 138:src/semaphore2_app.c ****   while (u8_cnt<12) {
+ 139:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 11
+
+
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 142:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 143:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 144:src/semaphore2_app.c ****     u8_cnt++;
+ 145:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 146:src/semaphore2_app.c ****   } // endof while()
+ 147:src/semaphore2_app.c ****   ESOS_SIGNAL_SEMAPHORE(sem_T1CanRun, 1);
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_SEMAPHORE(sem_T2CanRun, 1);
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 151:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 152:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 153:src/semaphore2_app.c **** } // end task2()
+ 154:src/semaphore2_app.c **** 
+ 155:src/semaphore2_app.c **** 
+ 156:src/semaphore2_app.c **** /************************************************************************
+ 157:src/semaphore2_app.c ****  * User supplied functions
+ 158:src/semaphore2_app.c ****  ************************************************************************
+ 159:src/semaphore2_app.c ****  */
+ 160:src/semaphore2_app.c ****  
+ 161:src/semaphore2_app.c ****  /*
+ 162:src/semaphore2_app.c ****  * return an uint32_t that can be used for a reasonable delay
+ 163:src/semaphore2_app.c ****  * should not be too short (~255 ticks) and not too long (~4096 ticks)
+ 164:src/semaphore2_app.c ****  */
+ 165:src/semaphore2_app.c **** inline uint32_t getRandomDelay() {
+ 402              		.loc 1 165 17 discriminator 9 view .LVU103
+ 403              	.LBB7:
+ 166:src/semaphore2_app.c ****   return ((esos_GetRandomUint32() & 0x0FFF)|0x100);
+ 404              		.loc 1 166 3 discriminator 9 view .LVU104
+ 405              		.loc 1 166 12 is_stmt 0 discriminator 9 view .LVU105
+ 406 0130 FFF7FEFF 		bl	esos_GetRandomUint32
+ 407              	.LVL15:
+ 408              		.loc 1 166 44 discriminator 9 view .LVU106
+ 409 0134 40F6FF63 		movw	r3, #3839
+ 410 0138 0340     		ands	r3, r3, r0
+ 411 013a 43F48073 		orr	r3, r3, #256
+ 412              	.LBE7:
+ 413              	.LBE6:
+ 120:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 414              		.loc 1 120 5 discriminator 9 view .LVU107
+ 415 013e E360     		str	r3, [r4, #12]
+ 120:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 416              		.loc 1 120 5 is_stmt 1 discriminator 9 view .LVU108
+ 120:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 417              		.loc 1 120 5 discriminator 9 view .LVU109
+ 418 0140 7823     		movs	r3, #120
+ 419 0142 2380     		strh	r3, [r4]	@ movhi
+ 420              	.L27:
+ 120:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 421              		.loc 1 120 5 discriminator 1 view .LVU110
+ 120:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 422              		.loc 1 120 5 discriminator 1 view .LVU111
+ 423 0144 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 424 0146 15F00405 		ands	r5, r5, #4
+ 425 014a 40F09E80 		bne	.L66
+ 120:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 426              		.loc 1 120 5 discriminator 3 view .LVU112
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 12
+
+
+ 427 014e E168     		ldr	r1, [r4, #12]
+ 428 0150 A068     		ldr	r0, [r4, #8]
+ 429 0152 FFF7FEFF 		bl	__esos_hasTickDurationPassed
+ 430              	.LVL16:
+ 431 0156 0028     		cmp	r0, #0
+ 432 0158 00F09B80 		beq	.L46
+ 120:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 433              		.loc 1 120 5 discriminator 4 view .LVU113
+ 434 015c A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 435 015e 23F00103 		bic	r3, r3, #1
+ 436 0162 A370     		strb	r3, [r4, #2]
+ 437              	.L47:
+ 120:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 438              		.loc 1 120 5 discriminator 7 view .LVU114
+ 439 0164 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 440 0166 13F0010F 		tst	r3, #1
+ 441 016a 69D1     		bne	.L33
+ 442              	.L20:
+ 120:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 443              		.loc 1 120 5 discriminator 9 view .LVU115
+ 120:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 444              		.loc 1 120 5 discriminator 9 view .LVU116
+ 120:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 445              		.loc 1 120 45 discriminator 9 view .LVU117
+ 113:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
+ 446              		.loc 1 113 9 discriminator 9 view .LVU118
+ 113:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
+ 447              		.loc 1 113 17 is_stmt 0 discriminator 9 view .LVU119
+ 448 016c 604B     		ldr	r3, .L71+12
+ 449 016e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 113:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
+ 450              		.loc 1 113 9 discriminator 9 view .LVU120
+ 451 0170 052B     		cmp	r3, #5
+ 452 0172 7FF668AF 		bls	.L48
+ 122:src/semaphore2_app.c ****   ESOS_TASK_WAIT_SEMAPHORE(sem_T1CanRun, 1);
+ 453              		.loc 1 122 3 is_stmt 1 view .LVU121
+ 454 0176 604A     		ldr	r2, .L71+20
+ 455 0178 1388     		ldrh	r3, [r2]
+ 456 017a 0133     		adds	r3, r3, #1
+ 457 017c 1380     		strh	r3, [r2]	@ movhi
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 458              		.loc 1 123 3 view .LVU122
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 459              		.loc 1 123 3 view .LVU123
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 460              		.loc 1 123 3 view .LVU124
+ 461 017e 7B23     		movs	r3, #123
+ 462 0180 2380     		strh	r3, [r4]	@ movhi
+ 463              	.L26:
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 464              		.loc 1 123 3 discriminator 1 view .LVU125
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 465              		.loc 1 123 3 discriminator 1 view .LVU126
+ 466 0182 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 467 0184 13F00405 		ands	r5, r3, #4
+ 468 0188 40F08880 		bne	.L67
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 13
+
+
+ 469              		.loc 1 123 3 discriminator 3 view .LVU127
+ 470 018c 5B4A     		ldr	r2, .L71+24
+ 471 018e B2F90020 		ldrsh	r2, [r2]
+ 472 0192 002A     		cmp	r2, #0
+ 473 0194 40F38680 		ble	.L50
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 474              		.loc 1 123 3 discriminator 4 view .LVU128
+ 475 0198 23F00103 		bic	r3, r3, #1
+ 476 019c A370     		strb	r3, [r4, #2]
+ 477              	.L51:
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 478              		.loc 1 123 3 discriminator 7 view .LVU129
+ 479 019e A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 480 01a0 13F0010F 		tst	r3, #1
+ 481 01a4 4CD1     		bne	.L33
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 482              		.loc 1 123 3 discriminator 9 view .LVU130
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 483              		.loc 1 123 3 discriminator 9 view .LVU131
+ 484 01a6 013A     		subs	r2, r2, #1
+ 485 01a8 544B     		ldr	r3, .L71+24
+ 486 01aa 1A80     		strh	r2, [r3]	@ movhi
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 487              		.loc 1 123 3 discriminator 9 view .LVU132
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 488              		.loc 1 124 3 discriminator 9 view .LVU133
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 489              		.loc 1 124 3 discriminator 9 view .LVU134
+ 490 01ac 4E4B     		ldr	r3, .L71+4
+ 491 01ae 0022     		movs	r2, #0
+ 492 01b0 1A80     		strh	r2, [r3]	@ movhi
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 493              		.loc 1 124 3 discriminator 9 view .LVU135
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 494              		.loc 1 124 3 discriminator 9 view .LVU136
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 495              		.loc 1 124 3 discriminator 9 view .LVU137
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 496              		.loc 1 124 3 discriminator 9 view .LVU138
+ 497 01b2 7C23     		movs	r3, #124
+ 498 01b4 2380     		strh	r3, [r4]	@ movhi
+ 499              	.L25:
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 500              		.loc 1 124 3 discriminator 1 view .LVU139
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 501              		.loc 1 124 3 discriminator 1 view .LVU140
+ 502 01b6 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 503 01b8 15F00405 		ands	r5, r5, #4
+ 504 01bc 76D1     		bne	.L68
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 505              		.loc 1 124 3 discriminator 3 view .LVU141
+ 506 01be 4B49     		ldr	r1, .L71+8
+ 507 01c0 4948     		ldr	r0, .L71+4
+ 508 01c2 FFF7FEFF 		bl	__esos_OutString
+ 509              	.LVL17:
+ 510 01c6 0228     		cmp	r0, #2
+ 511 01c8 74D9     		bls	.L53
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 14
+
+
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 512              		.loc 1 124 3 discriminator 4 view .LVU142
+ 513 01ca A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 514 01cc 23F00103 		bic	r3, r3, #1
+ 515 01d0 A370     		strb	r3, [r4, #2]
+ 516              	.L54:
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 517              		.loc 1 124 3 discriminator 7 view .LVU143
+ 518 01d2 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 519 01d4 13F0010F 		tst	r3, #1
+ 520 01d8 32D1     		bne	.L33
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 521              		.loc 1 124 3 discriminator 9 view .LVU144
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 522              		.loc 1 124 3 discriminator 9 view .LVU145
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 523              		.loc 1 125 3 discriminator 9 view .LVU146
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 524              		.loc 1 125 3 discriminator 9 view .LVU147
+ 525 01da 434B     		ldr	r3, .L71+4
+ 526 01dc 0022     		movs	r2, #0
+ 527 01de 1A80     		strh	r2, [r3]	@ movhi
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 528              		.loc 1 125 3 discriminator 9 view .LVU148
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 529              		.loc 1 125 3 discriminator 9 view .LVU149
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 530              		.loc 1 125 3 discriminator 9 view .LVU150
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 531              		.loc 1 125 3 discriminator 9 view .LVU151
+ 532 01e0 7D23     		movs	r3, #125
+ 533 01e2 2380     		strh	r3, [r4]	@ movhi
+ 534              	.L24:
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 535              		.loc 1 125 3 discriminator 1 view .LVU152
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 536              		.loc 1 125 3 discriminator 1 view .LVU153
+ 537 01e4 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 538 01e6 15F00405 		ands	r5, r5, #4
+ 539 01ea 68D1     		bne	.L69
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 540              		.loc 1 125 3 discriminator 3 view .LVU154
+ 541 01ec 4449     		ldr	r1, .L71+28
+ 542 01ee 3E48     		ldr	r0, .L71+4
+ 543 01f0 FFF7FEFF 		bl	__esos_OutString
+ 544              	.LVL18:
+ 545 01f4 0228     		cmp	r0, #2
+ 546 01f6 66D9     		bls	.L56
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 547              		.loc 1 125 3 discriminator 4 view .LVU155
+ 548 01f8 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 549 01fa 23F00103 		bic	r3, r3, #1
+ 550 01fe A370     		strb	r3, [r4, #2]
+ 551              	.L57:
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 552              		.loc 1 125 3 discriminator 7 view .LVU156
+ 553 0200 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 15
+
+
+ 554 0202 13F0010F 		tst	r3, #1
+ 555 0206 1BD1     		bne	.L33
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 556              		.loc 1 125 3 discriminator 9 view .LVU157
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 557              		.loc 1 125 3 discriminator 9 view .LVU158
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 558              		.loc 1 126 3 discriminator 9 view .LVU159
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 559              		.loc 1 126 3 discriminator 9 view .LVU160
+ 560 0208 374B     		ldr	r3, .L71+4
+ 561 020a 0022     		movs	r2, #0
+ 562 020c 1A80     		strh	r2, [r3]	@ movhi
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 563              		.loc 1 126 3 discriminator 9 view .LVU161
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 564              		.loc 1 126 3 discriminator 9 view .LVU162
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 565              		.loc 1 126 3 discriminator 9 view .LVU163
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 566              		.loc 1 126 3 discriminator 9 view .LVU164
+ 567 020e 7E23     		movs	r3, #126
+ 568 0210 2380     		strh	r3, [r4]	@ movhi
+ 569              	.L22:
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 570              		.loc 1 126 3 discriminator 1 view .LVU165
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 571              		.loc 1 126 3 discriminator 1 view .LVU166
+ 572 0212 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 573 0214 15F00405 		ands	r5, r5, #4
+ 574 0218 5AD1     		bne	.L70
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 575              		.loc 1 126 3 discriminator 3 view .LVU167
+ 576 021a 3649     		ldr	r1, .L71+16
+ 577 021c 3248     		ldr	r0, .L71+4
+ 578 021e FFF7FEFF 		bl	__esos_OutString
+ 579              	.LVL19:
+ 580 0222 0228     		cmp	r0, #2
+ 581 0224 58D9     		bls	.L59
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 582              		.loc 1 126 3 discriminator 4 view .LVU168
+ 583 0226 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 584 0228 23F00103 		bic	r3, r3, #1
+ 585 022c A370     		strb	r3, [r4, #2]
+ 586              	.L60:
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 587              		.loc 1 126 3 discriminator 7 view .LVU169
+ 588 022e A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 589 0230 13F0010F 		tst	r3, #1
+ 590 0234 04D1     		bne	.L33
+ 591              	.L21:
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 592              		.loc 1 126 3 discriminator 9 view .LVU170
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 593              		.loc 1 126 3 discriminator 9 view .LVU171
+ 127:src/semaphore2_app.c **** } // end task1()
+ 594              		.loc 1 127 3 discriminator 9 view .LVU172
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 16
+
+
+ 127:src/semaphore2_app.c **** } // end task1()
+ 595              		.loc 1 127 3 discriminator 9 view .LVU173
+ 596 0236 0823     		movs	r3, #8
+ 597 0238 A370     		strb	r3, [r4, #2]
+ 127:src/semaphore2_app.c **** } // end task1()
+ 598              		.loc 1 127 3 discriminator 9 view .LVU174
+ 599 023a 0023     		movs	r3, #0
+ 600 023c 2380     		strh	r3, [r4]	@ movhi
+ 127:src/semaphore2_app.c **** } // end task1()
+ 601              		.loc 1 127 3 discriminator 9 view .LVU175
+ 127:src/semaphore2_app.c **** } // end task1()
+ 602              		.loc 1 127 3 discriminator 9 view .LVU176
+ 127:src/semaphore2_app.c **** } // end task1()
+ 603              		.loc 1 127 3 discriminator 9 view .LVU177
+ 604 023e 0325     		movs	r5, #3
+ 605              	.L33:
+ 127:src/semaphore2_app.c **** } // end task1()
+ 606              		.loc 1 127 18 discriminator 1 view .LVU178
+ 128:src/semaphore2_app.c **** 
+ 607              		.loc 1 128 1 is_stmt 0 discriminator 1 view .LVU179
+ 608 0240 2846     		mov	r0, r5
+ 609 0242 38BD     		pop	{r3, r4, r5, pc}
+ 610              	.LVL20:
+ 611              	.L62:
+ 114:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 612              		.loc 1 114 5 is_stmt 1 discriminator 2 view .LVU180
+ 613 0244 0423     		movs	r3, #4
+ 614 0246 A370     		strb	r3, [r4, #2]
+ 114:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 615              		.loc 1 114 5 discriminator 2 view .LVU181
+ 616 0248 0325     		movs	r5, #3
+ 617 024a F9E7     		b	.L33
+ 618              	.L34:
+ 114:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 619              		.loc 1 114 5 discriminator 5 view .LVU182
+ 620 024c 43F00103 		orr	r3, r3, #1
+ 621 0250 A370     		strb	r3, [r4, #2]
+ 622 0252 08E7     		b	.L35
+ 623              	.L63:
+ 115:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 624              		.loc 1 115 5 discriminator 2 view .LVU183
+ 625 0254 0423     		movs	r3, #4
+ 626 0256 A370     		strb	r3, [r4, #2]
+ 115:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 627              		.loc 1 115 5 discriminator 2 view .LVU184
+ 628 0258 0325     		movs	r5, #3
+ 629 025a F1E7     		b	.L33
+ 630              	.L37:
+ 115:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 631              		.loc 1 115 5 discriminator 5 view .LVU185
+ 632 025c A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 633 025e 43F00103 		orr	r3, r3, #1
+ 634 0262 A370     		strb	r3, [r4, #2]
+ 635 0264 1EE7     		b	.L38
+ 636              	.L64:
+ 116:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 637              		.loc 1 116 5 discriminator 2 view .LVU186
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 17
+
+
+ 638 0266 0423     		movs	r3, #4
+ 639 0268 A370     		strb	r3, [r4, #2]
+ 116:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 640              		.loc 1 116 5 discriminator 2 view .LVU187
+ 641 026a 0325     		movs	r5, #3
+ 642 026c E8E7     		b	.L33
+ 643              	.L40:
+ 116:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 644              		.loc 1 116 5 discriminator 5 view .LVU188
+ 645 026e A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 646 0270 43F00103 		orr	r3, r3, #1
+ 647 0274 A370     		strb	r3, [r4, #2]
+ 648 0276 30E7     		b	.L41
+ 649              	.L65:
+ 117:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 650              		.loc 1 117 5 discriminator 2 view .LVU189
+ 651 0278 0423     		movs	r3, #4
+ 652 027a A370     		strb	r3, [r4, #2]
+ 117:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 653              		.loc 1 117 5 discriminator 2 view .LVU190
+ 654 027c 0325     		movs	r5, #3
+ 655 027e DFE7     		b	.L33
+ 656              	.L43:
+ 117:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 657              		.loc 1 117 5 discriminator 5 view .LVU191
+ 658 0280 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 659 0282 43F00103 		orr	r3, r3, #1
+ 660 0286 A370     		strb	r3, [r4, #2]
+ 661 0288 41E7     		b	.L44
+ 662              	.L66:
+ 120:src/semaphore2_app.c ****   } // endof while
+ 663              		.loc 1 120 5 discriminator 2 view .LVU192
+ 664 028a 0423     		movs	r3, #4
+ 665 028c A370     		strb	r3, [r4, #2]
+ 120:src/semaphore2_app.c ****   } // endof while
+ 666              		.loc 1 120 5 discriminator 2 view .LVU193
+ 667 028e 0325     		movs	r5, #3
+ 668 0290 D6E7     		b	.L33
+ 669              	.L46:
+ 120:src/semaphore2_app.c ****   } // endof while
+ 670              		.loc 1 120 5 discriminator 5 view .LVU194
+ 671 0292 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 672 0294 43F00103 		orr	r3, r3, #1
+ 673 0298 A370     		strb	r3, [r4, #2]
+ 674 029a 63E7     		b	.L47
+ 675              	.L67:
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 676              		.loc 1 123 3 discriminator 2 view .LVU195
+ 677 029c 0423     		movs	r3, #4
+ 678 029e A370     		strb	r3, [r4, #2]
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 679              		.loc 1 123 3 discriminator 2 view .LVU196
+ 680 02a0 0325     		movs	r5, #3
+ 681 02a2 CDE7     		b	.L33
+ 682              	.L50:
+ 123:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
+ 683              		.loc 1 123 3 discriminator 5 view .LVU197
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 18
+
+
+ 684 02a4 43F00103 		orr	r3, r3, #1
+ 685 02a8 A370     		strb	r3, [r4, #2]
+ 686 02aa 78E7     		b	.L51
+ 687              	.L68:
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 688              		.loc 1 124 3 discriminator 2 view .LVU198
+ 689 02ac 0423     		movs	r3, #4
+ 690 02ae A370     		strb	r3, [r4, #2]
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 691              		.loc 1 124 3 discriminator 2 view .LVU199
+ 692 02b0 0325     		movs	r5, #3
+ 693 02b2 C5E7     		b	.L33
+ 694              	.L53:
+ 124:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 695              		.loc 1 124 3 discriminator 5 view .LVU200
+ 696 02b4 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 697 02b6 43F00103 		orr	r3, r3, #1
+ 698 02ba A370     		strb	r3, [r4, #2]
+ 699 02bc 89E7     		b	.L54
+ 700              	.L69:
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 701              		.loc 1 125 3 discriminator 2 view .LVU201
+ 702 02be 0423     		movs	r3, #4
+ 703 02c0 A370     		strb	r3, [r4, #2]
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 704              		.loc 1 125 3 discriminator 2 view .LVU202
+ 705 02c2 0325     		movs	r5, #3
+ 706 02c4 BCE7     		b	.L33
+ 707              	.L56:
+ 125:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 708              		.loc 1 125 3 discriminator 5 view .LVU203
+ 709 02c6 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 710 02c8 43F00103 		orr	r3, r3, #1
+ 711 02cc A370     		strb	r3, [r4, #2]
+ 712 02ce 97E7     		b	.L57
+ 713              	.L70:
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 714              		.loc 1 126 3 discriminator 2 view .LVU204
+ 715 02d0 0423     		movs	r3, #4
+ 716 02d2 A370     		strb	r3, [r4, #2]
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 717              		.loc 1 126 3 discriminator 2 view .LVU205
+ 718 02d4 0325     		movs	r5, #3
+ 719 02d6 B3E7     		b	.L33
+ 720              	.L59:
+ 126:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 721              		.loc 1 126 3 discriminator 5 view .LVU206
+ 722 02d8 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 723 02da 43F00103 		orr	r3, r3, #1
+ 724 02de A370     		strb	r3, [r4, #2]
+ 725 02e0 A5E7     		b	.L60
+ 726              	.L72:
+ 727 02e2 00BF     		.align	2
+ 728              	.L71:
+ 729 02e4 00000000 		.word	__esos_u32SystemFlags
+ 730 02e8 00000000 		.word	__stChildTaskTx
+ 731 02ec 00000000 		.word	.LANCHOR0
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 19
+
+
+ 732 02f0 00000000 		.word	.LANCHOR1
+ 733 02f4 00000000 		.word	.LANCHOR2
+ 734 02f8 00000000 		.word	sem_T2CanRun
+ 735 02fc 00000000 		.word	sem_T1CanRun
+ 736 0300 00000000 		.word	.LANCHOR3
+ 737              		.cfi_endproc
+ 738              	.LFE1:
+ 740              		.section	.text.task2,"ax",%progbits
+ 741              		.align	1
+ 742              		.global	task2
+ 743              		.syntax unified
+ 744              		.thumb
+ 745              		.thumb_func
+ 746              		.fpu fpv4-sp-d16
+ 748              	task2:
+ 749              	.LVL21:
+ 750              	.LFB2:
+ 134:src/semaphore2_app.c ****   static  uint8_t           u8_cnt=0;
+ 751              		.loc 1 134 23 view -0
+ 752              		.cfi_startproc
+ 753              		@ args = 0, pretend = 0, frame = 0
+ 754              		@ frame_needed = 0, uses_anonymous_args = 0
+ 134:src/semaphore2_app.c ****   static  uint8_t           u8_cnt=0;
+ 755              		.loc 1 134 23 is_stmt 0 view .LVU208
+ 756 0000 38B5     		push	{r3, r4, r5, lr}
+ 757              	.LCFI2:
+ 758              		.cfi_def_cfa_offset 16
+ 759              		.cfi_offset 3, -16
+ 760              		.cfi_offset 4, -12
+ 761              		.cfi_offset 5, -8
+ 762              		.cfi_offset 14, -4
+ 763 0002 0446     		mov	r4, r0
+ 135:src/semaphore2_app.c **** 
+ 764              		.loc 1 135 3 is_stmt 1 view .LVU209
+ 137:src/semaphore2_app.c ****   while (u8_cnt<12) {
+ 765              		.loc 1 137 3 view .LVU210
+ 766 0004 8378     		ldrb	r3, [r0, #2]	@ zero_extendqisi2
+ 767 0006 63F07F03 		orn	r3, r3, #127
+ 768 000a 8370     		strb	r3, [r0, #2]
+ 137:src/semaphore2_app.c ****   while (u8_cnt<12) {
+ 769              		.loc 1 137 3 view .LVU211
+ 770 000c 0388     		ldrh	r3, [r0]
+ 771 000e 002B     		cmp	r3, #0
+ 772 0010 00F0AC80 		beq	.L74
+ 773 0014 972B     		cmp	r3, #151
+ 774 0016 00F20E81 		bhi	.L75
+ 775 001a 8B2B     		cmp	r3, #139
+ 776 001c C0F00B81 		bcc	.L75
+ 777 0020 8B3B     		subs	r3, r3, #139
+ 778 0022 0C2B     		cmp	r3, #12
+ 779 0024 00F20781 		bhi	.L75
+ 780 0028 DFE813F0 		tbh	[pc, r3, lsl #1]
+ 781              	.L77:
+ 782 002c 0F00     		.2byte	(.L85-.L77)/2
+ 783 002e 2C00     		.2byte	(.L84-.L77)/2
+ 784 0030 4600     		.2byte	(.L83-.L77)/2
+ 785 0032 6100     		.2byte	(.L82-.L77)/2
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 20
+
+
+ 786 0034 0501     		.2byte	(.L75-.L77)/2
+ 787 0036 0501     		.2byte	(.L75-.L77)/2
+ 788 0038 8C00     		.2byte	(.L81-.L77)/2
+ 789 003a 0501     		.2byte	(.L75-.L77)/2
+ 790 003c 0501     		.2byte	(.L75-.L77)/2
+ 791 003e AB00     		.2byte	(.L80-.L77)/2
+ 792 0040 C500     		.2byte	(.L79-.L77)/2
+ 793 0042 DC00     		.2byte	(.L78-.L77)/2
+ 794 0044 F300     		.2byte	(.L76-.L77)/2
+ 795              	.LVL22:
+ 796              		.p2align 1
+ 797              	.L102:
+ 139:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 798              		.loc 1 139 5 view .LVU212
+ 139:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 799              		.loc 1 139 5 view .LVU213
+ 800 0046 8B23     		movs	r3, #139
+ 801 0048 2380     		strh	r3, [r4]	@ movhi
+ 802              	.L85:
+ 139:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 803              		.loc 1 139 5 discriminator 1 view .LVU214
+ 139:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 804              		.loc 1 139 5 discriminator 1 view .LVU215
+ 805 004a A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 806 004c 13F00405 		ands	r5, r3, #4
+ 807 0050 40F0F880 		bne	.L116
+ 139:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 808              		.loc 1 139 5 discriminator 3 view .LVU216
+ 809 0054 A34A     		ldr	r2, .L125
+ 810 0056 1268     		ldr	r2, [r2]
+ 811 0058 12F0040F 		tst	r2, #4
+ 812 005c 40F0F680 		bne	.L88
+ 139:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 813              		.loc 1 139 5 discriminator 4 view .LVU217
+ 814 0060 23F00103 		bic	r3, r3, #1
+ 815 0064 A370     		strb	r3, [r4, #2]
+ 816              	.L89:
+ 139:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 817              		.loc 1 139 5 discriminator 7 view .LVU218
+ 818 0066 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 819 0068 13F0010F 		tst	r3, #1
+ 820 006c 40F0E880 		bne	.L87
+ 139:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 821              		.loc 1 139 5 discriminator 9 view .LVU219
+ 139:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 822              		.loc 1 139 5 discriminator 9 view .LVU220
+ 823 0070 9C4A     		ldr	r2, .L125
+ 824 0072 1368     		ldr	r3, [r2]
+ 825 0074 43F00403 		orr	r3, r3, #4
+ 826 0078 1360     		str	r3, [r2]
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 827              		.loc 1 140 5 discriminator 9 view .LVU221
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 828              		.loc 1 140 5 discriminator 9 view .LVU222
+ 829 007a 9B4B     		ldr	r3, .L125+4
+ 830 007c 0022     		movs	r2, #0
+ 831 007e 1A80     		strh	r2, [r3]	@ movhi
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 21
+
+
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 832              		.loc 1 140 5 discriminator 9 view .LVU223
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 833              		.loc 1 140 5 discriminator 9 view .LVU224
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 834              		.loc 1 140 5 discriminator 9 view .LVU225
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 835              		.loc 1 140 5 discriminator 9 view .LVU226
+ 836 0080 8C23     		movs	r3, #140
+ 837 0082 2380     		strh	r3, [r4]	@ movhi
+ 838              	.L84:
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 839              		.loc 1 140 5 discriminator 1 view .LVU227
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 840              		.loc 1 140 5 discriminator 1 view .LVU228
+ 841 0084 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 842 0086 15F00405 		ands	r5, r5, #4
+ 843 008a 40F0E380 		bne	.L117
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 844              		.loc 1 140 5 discriminator 3 view .LVU229
+ 845 008e 9749     		ldr	r1, .L125+8
+ 846 0090 9548     		ldr	r0, .L125+4
+ 847 0092 FFF7FEFF 		bl	__esos_OutString
+ 848              	.LVL23:
+ 849 0096 0228     		cmp	r0, #2
+ 850 0098 40F2E080 		bls	.L91
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 851              		.loc 1 140 5 discriminator 4 view .LVU230
+ 852 009c A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 853 009e 23F00103 		bic	r3, r3, #1
+ 854 00a2 A370     		strb	r3, [r4, #2]
+ 855              	.L92:
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 856              		.loc 1 140 5 discriminator 7 view .LVU231
+ 857 00a4 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 858 00a6 13F0010F 		tst	r3, #1
+ 859 00aa 40F0C980 		bne	.L87
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 860              		.loc 1 140 5 discriminator 9 view .LVU232
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 861              		.loc 1 140 5 discriminator 9 view .LVU233
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 862              		.loc 1 141 5 discriminator 9 view .LVU234
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 863              		.loc 1 141 5 discriminator 9 view .LVU235
+ 864 00ae 8E4B     		ldr	r3, .L125+4
+ 865 00b0 0022     		movs	r2, #0
+ 866 00b2 1A80     		strh	r2, [r3]	@ movhi
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 867              		.loc 1 141 5 discriminator 9 view .LVU236
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 868              		.loc 1 141 5 discriminator 9 view .LVU237
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 869              		.loc 1 141 5 discriminator 9 view .LVU238
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 870              		.loc 1 141 5 discriminator 9 view .LVU239
+ 871 00b4 8D23     		movs	r3, #141
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 22
+
+
+ 872 00b6 2380     		strh	r3, [r4]	@ movhi
+ 873              	.L83:
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 874              		.loc 1 141 5 discriminator 1 view .LVU240
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 875              		.loc 1 141 5 discriminator 1 view .LVU241
+ 876 00b8 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 877 00ba 15F00405 		ands	r5, r5, #4
+ 878 00be 40F0D280 		bne	.L118
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 879              		.loc 1 141 5 discriminator 3 view .LVU242
+ 880 00c2 8B4B     		ldr	r3, .L125+12
+ 881 00c4 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 882 00c6 8848     		ldr	r0, .L125+4
+ 883 00c8 FFF7FEFF 		bl	__esos_OutUint8AsDecString
+ 884              	.LVL24:
+ 885 00cc 0228     		cmp	r0, #2
+ 886 00ce 40F2CE80 		bls	.L94
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 887              		.loc 1 141 5 discriminator 4 view .LVU243
+ 888 00d2 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 889 00d4 23F00103 		bic	r3, r3, #1
+ 890 00d8 A370     		strb	r3, [r4, #2]
+ 891              	.L95:
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 892              		.loc 1 141 5 discriminator 7 view .LVU244
+ 893 00da A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 894 00dc 13F0010F 		tst	r3, #1
+ 895 00e0 40F0AE80 		bne	.L87
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 896              		.loc 1 141 5 discriminator 9 view .LVU245
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 897              		.loc 1 141 5 discriminator 9 view .LVU246
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 898              		.loc 1 142 5 discriminator 9 view .LVU247
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 899              		.loc 1 142 5 discriminator 9 view .LVU248
+ 900 00e4 804B     		ldr	r3, .L125+4
+ 901 00e6 0022     		movs	r2, #0
+ 902 00e8 1A80     		strh	r2, [r3]	@ movhi
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 903              		.loc 1 142 5 discriminator 9 view .LVU249
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 904              		.loc 1 142 5 discriminator 9 view .LVU250
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 905              		.loc 1 142 5 discriminator 9 view .LVU251
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 906              		.loc 1 142 5 discriminator 9 view .LVU252
+ 907 00ea 8E23     		movs	r3, #142
+ 908 00ec 2380     		strh	r3, [r4]	@ movhi
+ 909              	.L82:
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 910              		.loc 1 142 5 discriminator 1 view .LVU253
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 911              		.loc 1 142 5 discriminator 1 view .LVU254
+ 912 00ee A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 913 00f0 15F00405 		ands	r5, r5, #4
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 23
+
+
+ 914 00f4 40F0C080 		bne	.L119
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 915              		.loc 1 142 5 discriminator 3 view .LVU255
+ 916 00f8 7E49     		ldr	r1, .L125+16
+ 917 00fa 7B48     		ldr	r0, .L125+4
+ 918 00fc FFF7FEFF 		bl	__esos_OutString
+ 919              	.LVL25:
+ 920 0100 0228     		cmp	r0, #2
+ 921 0102 40F2BD80 		bls	.L97
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 922              		.loc 1 142 5 discriminator 4 view .LVU256
+ 923 0106 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 924 0108 23F00103 		bic	r3, r3, #1
+ 925 010c A370     		strb	r3, [r4, #2]
+ 926              	.L98:
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 927              		.loc 1 142 5 discriminator 7 view .LVU257
+ 928 010e A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 929 0110 13F0010F 		tst	r3, #1
+ 930 0114 40F09480 		bne	.L87
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 931              		.loc 1 142 5 discriminator 9 view .LVU258
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 932              		.loc 1 142 5 discriminator 9 view .LVU259
+ 143:src/semaphore2_app.c ****     u8_cnt++;
+ 933              		.loc 1 143 5 discriminator 9 view .LVU260
+ 934 0118 724A     		ldr	r2, .L125
+ 935 011a 1368     		ldr	r3, [r2]
+ 936 011c 23F00403 		bic	r3, r3, #4
+ 937 0120 1360     		str	r3, [r2]
+ 144:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 938              		.loc 1 144 5 discriminator 9 view .LVU261
+ 144:src/semaphore2_app.c ****     ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+ 939              		.loc 1 144 11 is_stmt 0 discriminator 9 view .LVU262
+ 940 0122 734A     		ldr	r2, .L125+12
+ 941 0124 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
+ 942 0126 0133     		adds	r3, r3, #1
+ 943 0128 1370     		strb	r3, [r2]
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 944              		.loc 1 145 5 is_stmt 1 discriminator 9 view .LVU263
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 945              		.loc 1 145 5 discriminator 9 view .LVU264
+ 946 012a FFF7FEFF 		bl	__esos_hw_GetSystemTickCount
+ 947              	.LVL26:
+ 948 012e A060     		str	r0, [r4, #8]
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 949              		.loc 1 145 5 discriminator 9 view .LVU265
+ 950              	.LBB8:
+ 951              	.LBI8:
+ 165:src/semaphore2_app.c ****   return ((esos_GetRandomUint32() & 0x0FFF)|0x100);
+ 952              		.loc 1 165 17 discriminator 9 view .LVU266
+ 953              	.LBB9:
+ 954              		.loc 1 166 3 discriminator 9 view .LVU267
+ 955              		.loc 1 166 12 is_stmt 0 discriminator 9 view .LVU268
+ 956 0130 FFF7FEFF 		bl	esos_GetRandomUint32
+ 957              	.LVL27:
+ 958              		.loc 1 166 44 discriminator 9 view .LVU269
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 24
+
+
+ 959 0134 40F6FF63 		movw	r3, #3839
+ 960 0138 0340     		ands	r3, r3, r0
+ 961 013a 43F48073 		orr	r3, r3, #256
+ 962              	.LBE9:
+ 963              	.LBE8:
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 964              		.loc 1 145 5 discriminator 9 view .LVU270
+ 965 013e E360     		str	r3, [r4, #12]
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 966              		.loc 1 145 5 is_stmt 1 discriminator 9 view .LVU271
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 967              		.loc 1 145 5 discriminator 9 view .LVU272
+ 968 0140 9123     		movs	r3, #145
+ 969 0142 2380     		strh	r3, [r4]	@ movhi
+ 970              	.L81:
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 971              		.loc 1 145 5 discriminator 1 view .LVU273
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 972              		.loc 1 145 5 discriminator 1 view .LVU274
+ 973 0144 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 974 0146 15F00405 		ands	r5, r5, #4
+ 975 014a 40F09E80 		bne	.L120
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 976              		.loc 1 145 5 discriminator 3 view .LVU275
+ 977 014e E168     		ldr	r1, [r4, #12]
+ 978 0150 A068     		ldr	r0, [r4, #8]
+ 979 0152 FFF7FEFF 		bl	__esos_hasTickDurationPassed
+ 980              	.LVL28:
+ 981 0156 0028     		cmp	r0, #0
+ 982 0158 00F09B80 		beq	.L100
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 983              		.loc 1 145 5 discriminator 4 view .LVU276
+ 984 015c A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 985 015e 23F00103 		bic	r3, r3, #1
+ 986 0162 A370     		strb	r3, [r4, #2]
+ 987              	.L101:
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 988              		.loc 1 145 5 discriminator 7 view .LVU277
+ 989 0164 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 990 0166 13F0010F 		tst	r3, #1
+ 991 016a 69D1     		bne	.L87
+ 992              	.L74:
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 993              		.loc 1 145 5 discriminator 9 view .LVU278
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 994              		.loc 1 145 5 discriminator 9 view .LVU279
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 995              		.loc 1 145 45 discriminator 9 view .LVU280
+ 138:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
+ 996              		.loc 1 138 9 discriminator 9 view .LVU281
+ 138:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
+ 997              		.loc 1 138 16 is_stmt 0 discriminator 9 view .LVU282
+ 998 016c 604B     		ldr	r3, .L125+12
+ 999 016e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 138:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
+ 1000              		.loc 1 138 9 discriminator 9 view .LVU283
+ 1001 0170 0B2B     		cmp	r3, #11
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 25
+
+
+ 1002 0172 7FF668AF 		bls	.L102
+ 147:src/semaphore2_app.c ****   ESOS_TASK_WAIT_SEMAPHORE(sem_T2CanRun, 1);
+ 1003              		.loc 1 147 3 is_stmt 1 view .LVU284
+ 1004 0176 604A     		ldr	r2, .L125+20
+ 1005 0178 1388     		ldrh	r3, [r2]
+ 1006 017a 0133     		adds	r3, r3, #1
+ 1007 017c 1380     		strh	r3, [r2]	@ movhi
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1008              		.loc 1 148 3 view .LVU285
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1009              		.loc 1 148 3 view .LVU286
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1010              		.loc 1 148 3 view .LVU287
+ 1011 017e 9423     		movs	r3, #148
+ 1012 0180 2380     		strh	r3, [r4]	@ movhi
+ 1013              	.L80:
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1014              		.loc 1 148 3 discriminator 1 view .LVU288
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1015              		.loc 1 148 3 discriminator 1 view .LVU289
+ 1016 0182 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1017 0184 13F00405 		ands	r5, r3, #4
+ 1018 0188 40F08880 		bne	.L121
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1019              		.loc 1 148 3 discriminator 3 view .LVU290
+ 1020 018c 5B4A     		ldr	r2, .L125+24
+ 1021 018e B2F90020 		ldrsh	r2, [r2]
+ 1022 0192 002A     		cmp	r2, #0
+ 1023 0194 40F38680 		ble	.L104
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1024              		.loc 1 148 3 discriminator 4 view .LVU291
+ 1025 0198 23F00103 		bic	r3, r3, #1
+ 1026 019c A370     		strb	r3, [r4, #2]
+ 1027              	.L105:
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1028              		.loc 1 148 3 discriminator 7 view .LVU292
+ 1029 019e A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1030 01a0 13F0010F 		tst	r3, #1
+ 1031 01a4 4CD1     		bne	.L87
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1032              		.loc 1 148 3 discriminator 9 view .LVU293
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1033              		.loc 1 148 3 discriminator 9 view .LVU294
+ 1034 01a6 013A     		subs	r2, r2, #1
+ 1035 01a8 544B     		ldr	r3, .L125+24
+ 1036 01aa 1A80     		strh	r2, [r3]	@ movhi
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1037              		.loc 1 148 3 discriminator 9 view .LVU295
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1038              		.loc 1 149 3 discriminator 9 view .LVU296
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1039              		.loc 1 149 3 discriminator 9 view .LVU297
+ 1040 01ac 4E4B     		ldr	r3, .L125+4
+ 1041 01ae 0022     		movs	r2, #0
+ 1042 01b0 1A80     		strh	r2, [r3]	@ movhi
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1043              		.loc 1 149 3 discriminator 9 view .LVU298
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 26
+
+
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1044              		.loc 1 149 3 discriminator 9 view .LVU299
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1045              		.loc 1 149 3 discriminator 9 view .LVU300
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1046              		.loc 1 149 3 discriminator 9 view .LVU301
+ 1047 01b2 9523     		movs	r3, #149
+ 1048 01b4 2380     		strh	r3, [r4]	@ movhi
+ 1049              	.L79:
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1050              		.loc 1 149 3 discriminator 1 view .LVU302
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1051              		.loc 1 149 3 discriminator 1 view .LVU303
+ 1052 01b6 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 1053 01b8 15F00405 		ands	r5, r5, #4
+ 1054 01bc 76D1     		bne	.L122
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1055              		.loc 1 149 3 discriminator 3 view .LVU304
+ 1056 01be 4B49     		ldr	r1, .L125+8
+ 1057 01c0 4948     		ldr	r0, .L125+4
+ 1058 01c2 FFF7FEFF 		bl	__esos_OutString
+ 1059              	.LVL29:
+ 1060 01c6 0228     		cmp	r0, #2
+ 1061 01c8 74D9     		bls	.L107
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1062              		.loc 1 149 3 discriminator 4 view .LVU305
+ 1063 01ca A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1064 01cc 23F00103 		bic	r3, r3, #1
+ 1065 01d0 A370     		strb	r3, [r4, #2]
+ 1066              	.L108:
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1067              		.loc 1 149 3 discriminator 7 view .LVU306
+ 1068 01d2 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1069 01d4 13F0010F 		tst	r3, #1
+ 1070 01d8 32D1     		bne	.L87
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1071              		.loc 1 149 3 discriminator 9 view .LVU307
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1072              		.loc 1 149 3 discriminator 9 view .LVU308
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1073              		.loc 1 150 3 discriminator 9 view .LVU309
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1074              		.loc 1 150 3 discriminator 9 view .LVU310
+ 1075 01da 434B     		ldr	r3, .L125+4
+ 1076 01dc 0022     		movs	r2, #0
+ 1077 01de 1A80     		strh	r2, [r3]	@ movhi
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1078              		.loc 1 150 3 discriminator 9 view .LVU311
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1079              		.loc 1 150 3 discriminator 9 view .LVU312
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1080              		.loc 1 150 3 discriminator 9 view .LVU313
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1081              		.loc 1 150 3 discriminator 9 view .LVU314
+ 1082 01e0 9623     		movs	r3, #150
+ 1083 01e2 2380     		strh	r3, [r4]	@ movhi
+ 1084              	.L78:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 27
+
+
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1085              		.loc 1 150 3 discriminator 1 view .LVU315
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1086              		.loc 1 150 3 discriminator 1 view .LVU316
+ 1087 01e4 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 1088 01e6 15F00405 		ands	r5, r5, #4
+ 1089 01ea 68D1     		bne	.L123
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1090              		.loc 1 150 3 discriminator 3 view .LVU317
+ 1091 01ec 4449     		ldr	r1, .L125+28
+ 1092 01ee 3E48     		ldr	r0, .L125+4
+ 1093 01f0 FFF7FEFF 		bl	__esos_OutString
+ 1094              	.LVL30:
+ 1095 01f4 0228     		cmp	r0, #2
+ 1096 01f6 66D9     		bls	.L110
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1097              		.loc 1 150 3 discriminator 4 view .LVU318
+ 1098 01f8 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1099 01fa 23F00103 		bic	r3, r3, #1
+ 1100 01fe A370     		strb	r3, [r4, #2]
+ 1101              	.L111:
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1102              		.loc 1 150 3 discriminator 7 view .LVU319
+ 1103 0200 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1104 0202 13F0010F 		tst	r3, #1
+ 1105 0206 1BD1     		bne	.L87
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1106              		.loc 1 150 3 discriminator 9 view .LVU320
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1107              		.loc 1 150 3 discriminator 9 view .LVU321
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1108              		.loc 1 151 3 discriminator 9 view .LVU322
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1109              		.loc 1 151 3 discriminator 9 view .LVU323
+ 1110 0208 374B     		ldr	r3, .L125+4
+ 1111 020a 0022     		movs	r2, #0
+ 1112 020c 1A80     		strh	r2, [r3]	@ movhi
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1113              		.loc 1 151 3 discriminator 9 view .LVU324
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1114              		.loc 1 151 3 discriminator 9 view .LVU325
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1115              		.loc 1 151 3 discriminator 9 view .LVU326
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1116              		.loc 1 151 3 discriminator 9 view .LVU327
+ 1117 020e 9723     		movs	r3, #151
+ 1118 0210 2380     		strh	r3, [r4]	@ movhi
+ 1119              	.L76:
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1120              		.loc 1 151 3 discriminator 1 view .LVU328
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1121              		.loc 1 151 3 discriminator 1 view .LVU329
+ 1122 0212 A578     		ldrb	r5, [r4, #2]	@ zero_extendqisi2
+ 1123 0214 15F00405 		ands	r5, r5, #4
+ 1124 0218 5AD1     		bne	.L124
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1125              		.loc 1 151 3 discriminator 3 view .LVU330
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 28
+
+
+ 1126 021a 3649     		ldr	r1, .L125+16
+ 1127 021c 3248     		ldr	r0, .L125+4
+ 1128 021e FFF7FEFF 		bl	__esos_OutString
+ 1129              	.LVL31:
+ 1130 0222 0228     		cmp	r0, #2
+ 1131 0224 58D9     		bls	.L113
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1132              		.loc 1 151 3 discriminator 4 view .LVU331
+ 1133 0226 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1134 0228 23F00103 		bic	r3, r3, #1
+ 1135 022c A370     		strb	r3, [r4, #2]
+ 1136              	.L114:
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1137              		.loc 1 151 3 discriminator 7 view .LVU332
+ 1138 022e A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1139 0230 13F0010F 		tst	r3, #1
+ 1140 0234 04D1     		bne	.L87
+ 1141              	.L75:
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1142              		.loc 1 151 3 discriminator 9 view .LVU333
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1143              		.loc 1 151 3 discriminator 9 view .LVU334
+ 152:src/semaphore2_app.c **** } // end task2()
+ 1144              		.loc 1 152 3 discriminator 9 view .LVU335
+ 152:src/semaphore2_app.c **** } // end task2()
+ 1145              		.loc 1 152 3 discriminator 9 view .LVU336
+ 1146 0236 0823     		movs	r3, #8
+ 1147 0238 A370     		strb	r3, [r4, #2]
+ 152:src/semaphore2_app.c **** } // end task2()
+ 1148              		.loc 1 152 3 discriminator 9 view .LVU337
+ 1149 023a 0023     		movs	r3, #0
+ 1150 023c 2380     		strh	r3, [r4]	@ movhi
+ 152:src/semaphore2_app.c **** } // end task2()
+ 1151              		.loc 1 152 3 discriminator 9 view .LVU338
+ 152:src/semaphore2_app.c **** } // end task2()
+ 1152              		.loc 1 152 3 discriminator 9 view .LVU339
+ 152:src/semaphore2_app.c **** } // end task2()
+ 1153              		.loc 1 152 3 discriminator 9 view .LVU340
+ 1154 023e 0325     		movs	r5, #3
+ 1155              	.L87:
+ 152:src/semaphore2_app.c **** } // end task2()
+ 1156              		.loc 1 152 18 discriminator 1 view .LVU341
+ 153:src/semaphore2_app.c **** 
+ 1157              		.loc 1 153 1 is_stmt 0 discriminator 1 view .LVU342
+ 1158 0240 2846     		mov	r0, r5
+ 1159 0242 38BD     		pop	{r3, r4, r5, pc}
+ 1160              	.LVL32:
+ 1161              	.L116:
+ 139:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1162              		.loc 1 139 5 is_stmt 1 discriminator 2 view .LVU343
+ 1163 0244 0423     		movs	r3, #4
+ 1164 0246 A370     		strb	r3, [r4, #2]
+ 139:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1165              		.loc 1 139 5 discriminator 2 view .LVU344
+ 1166 0248 0325     		movs	r5, #3
+ 1167 024a F9E7     		b	.L87
+ 1168              	.L88:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 29
+
+
+ 139:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1169              		.loc 1 139 5 discriminator 5 view .LVU345
+ 1170 024c 43F00103 		orr	r3, r3, #1
+ 1171 0250 A370     		strb	r3, [r4, #2]
+ 1172 0252 08E7     		b	.L89
+ 1173              	.L117:
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 1174              		.loc 1 140 5 discriminator 2 view .LVU346
+ 1175 0254 0423     		movs	r3, #4
+ 1176 0256 A370     		strb	r3, [r4, #2]
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 1177              		.loc 1 140 5 discriminator 2 view .LVU347
+ 1178 0258 0325     		movs	r5, #3
+ 1179 025a F1E7     		b	.L87
+ 1180              	.L91:
+ 140:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
+ 1181              		.loc 1 140 5 discriminator 5 view .LVU348
+ 1182 025c A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1183 025e 43F00103 		orr	r3, r3, #1
+ 1184 0262 A370     		strb	r3, [r4, #2]
+ 1185 0264 1EE7     		b	.L92
+ 1186              	.L118:
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1187              		.loc 1 141 5 discriminator 2 view .LVU349
+ 1188 0266 0423     		movs	r3, #4
+ 1189 0268 A370     		strb	r3, [r4, #2]
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1190              		.loc 1 141 5 discriminator 2 view .LVU350
+ 1191 026a 0325     		movs	r5, #3
+ 1192 026c E8E7     		b	.L87
+ 1193              	.L94:
+ 141:src/semaphore2_app.c ****     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1194              		.loc 1 141 5 discriminator 5 view .LVU351
+ 1195 026e A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1196 0270 43F00103 		orr	r3, r3, #1
+ 1197 0274 A370     		strb	r3, [r4, #2]
+ 1198 0276 30E7     		b	.L95
+ 1199              	.L119:
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 1200              		.loc 1 142 5 discriminator 2 view .LVU352
+ 1201 0278 0423     		movs	r3, #4
+ 1202 027a A370     		strb	r3, [r4, #2]
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 1203              		.loc 1 142 5 discriminator 2 view .LVU353
+ 1204 027c 0325     		movs	r5, #3
+ 1205 027e DFE7     		b	.L87
+ 1206              	.L97:
+ 142:src/semaphore2_app.c ****     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
+ 1207              		.loc 1 142 5 discriminator 5 view .LVU354
+ 1208 0280 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1209 0282 43F00103 		orr	r3, r3, #1
+ 1210 0286 A370     		strb	r3, [r4, #2]
+ 1211 0288 41E7     		b	.L98
+ 1212              	.L120:
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 1213              		.loc 1 145 5 discriminator 2 view .LVU355
+ 1214 028a 0423     		movs	r3, #4
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 30
+
+
+ 1215 028c A370     		strb	r3, [r4, #2]
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 1216              		.loc 1 145 5 discriminator 2 view .LVU356
+ 1217 028e 0325     		movs	r5, #3
+ 1218 0290 D6E7     		b	.L87
+ 1219              	.L100:
+ 145:src/semaphore2_app.c ****   } // endof while()
+ 1220              		.loc 1 145 5 discriminator 5 view .LVU357
+ 1221 0292 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1222 0294 43F00103 		orr	r3, r3, #1
+ 1223 0298 A370     		strb	r3, [r4, #2]
+ 1224 029a 63E7     		b	.L101
+ 1225              	.L121:
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1226              		.loc 1 148 3 discriminator 2 view .LVU358
+ 1227 029c 0423     		movs	r3, #4
+ 1228 029e A370     		strb	r3, [r4, #2]
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1229              		.loc 1 148 3 discriminator 2 view .LVU359
+ 1230 02a0 0325     		movs	r5, #3
+ 1231 02a2 CDE7     		b	.L87
+ 1232              	.L104:
+ 148:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
+ 1233              		.loc 1 148 3 discriminator 5 view .LVU360
+ 1234 02a4 43F00103 		orr	r3, r3, #1
+ 1235 02a8 A370     		strb	r3, [r4, #2]
+ 1236 02aa 78E7     		b	.L105
+ 1237              	.L122:
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1238              		.loc 1 149 3 discriminator 2 view .LVU361
+ 1239 02ac 0423     		movs	r3, #4
+ 1240 02ae A370     		strb	r3, [r4, #2]
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1241              		.loc 1 149 3 discriminator 2 view .LVU362
+ 1242 02b0 0325     		movs	r5, #3
+ 1243 02b2 C5E7     		b	.L87
+ 1244              	.L107:
+ 149:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_rv );
+ 1245              		.loc 1 149 3 discriminator 5 view .LVU363
+ 1246 02b4 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1247 02b6 43F00103 		orr	r3, r3, #1
+ 1248 02ba A370     		strb	r3, [r4, #2]
+ 1249 02bc 89E7     		b	.L108
+ 1250              	.L123:
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1251              		.loc 1 150 3 discriminator 2 view .LVU364
+ 1252 02be 0423     		movs	r3, #4
+ 1253 02c0 A370     		strb	r3, [r4, #2]
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1254              		.loc 1 150 3 discriminator 2 view .LVU365
+ 1255 02c2 0325     		movs	r5, #3
+ 1256 02c4 BCE7     		b	.L87
+ 1257              	.L110:
+ 150:src/semaphore2_app.c ****   ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
+ 1258              		.loc 1 150 3 discriminator 5 view .LVU366
+ 1259 02c6 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1260 02c8 43F00103 		orr	r3, r3, #1
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 31
+
+
+ 1261 02cc A370     		strb	r3, [r4, #2]
+ 1262 02ce 97E7     		b	.L111
+ 1263              	.L124:
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1264              		.loc 1 151 3 discriminator 2 view .LVU367
+ 1265 02d0 0423     		movs	r3, #4
+ 1266 02d2 A370     		strb	r3, [r4, #2]
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1267              		.loc 1 151 3 discriminator 2 view .LVU368
+ 1268 02d4 0325     		movs	r5, #3
+ 1269 02d6 B3E7     		b	.L87
+ 1270              	.L113:
+ 151:src/semaphore2_app.c ****   ESOS_TASK_END();
+ 1271              		.loc 1 151 3 discriminator 5 view .LVU369
+ 1272 02d8 A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 1273 02da 43F00103 		orr	r3, r3, #1
+ 1274 02de A370     		strb	r3, [r4, #2]
+ 1275 02e0 A5E7     		b	.L114
+ 1276              	.L126:
+ 1277 02e2 00BF     		.align	2
+ 1278              	.L125:
+ 1279 02e4 00000000 		.word	__esos_u32SystemFlags
+ 1280 02e8 00000000 		.word	__stChildTaskTx
+ 1281 02ec 00000000 		.word	.LANCHOR4
+ 1282 02f0 00000000 		.word	.LANCHOR5
+ 1283 02f4 00000000 		.word	.LANCHOR2
+ 1284 02f8 00000000 		.word	sem_T1CanRun
+ 1285 02fc 00000000 		.word	sem_T2CanRun
+ 1286 0300 00000000 		.word	.LANCHOR3
+ 1287              		.cfi_endproc
+ 1288              	.LFE2:
+ 1290              		.section	.text.getRandomDelay,"ax",%progbits
+ 1291              		.align	1
+ 1292              		.global	getRandomDelay
+ 1293              		.syntax unified
+ 1294              		.thumb
+ 1295              		.thumb_func
+ 1296              		.fpu fpv4-sp-d16
+ 1298              	getRandomDelay:
+ 1299              	.LFB3:
+ 165:src/semaphore2_app.c ****   return ((esos_GetRandomUint32() & 0x0FFF)|0x100);
+ 1300              		.loc 1 165 34 view -0
+ 1301              		.cfi_startproc
+ 1302              		@ args = 0, pretend = 0, frame = 0
+ 1303              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1304 0000 08B5     		push	{r3, lr}
+ 1305              	.LCFI3:
+ 1306              		.cfi_def_cfa_offset 8
+ 1307              		.cfi_offset 3, -8
+ 1308              		.cfi_offset 14, -4
+ 1309              		.loc 1 166 3 view .LVU371
+ 1310              		.loc 1 166 12 is_stmt 0 view .LVU372
+ 1311 0002 FFF7FEFF 		bl	esos_GetRandomUint32
+ 1312              	.LVL33:
+ 1313              		.loc 1 166 44 view .LVU373
+ 1314 0006 20F48070 		bic	r0, r0, #256
+ 1315 000a 0005     		lsls	r0, r0, #20
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 32
+
+
+ 1316 000c 000D     		lsrs	r0, r0, #20
+ 167:src/semaphore2_app.c **** }
+ 1317              		.loc 1 167 1 view .LVU374
+ 1318 000e 40F48070 		orr	r0, r0, #256
+ 1319 0012 08BD     		pop	{r3, pc}
+ 1320              		.cfi_endproc
+ 1321              	.LFE3:
+ 1323              		.section	.text.__user_init_hw,"ax",%progbits
+ 1324              		.align	1
+ 1325              		.global	__user_init_hw
+ 1326              		.syntax unified
+ 1327              		.thumb
+ 1328              		.thumb_func
+ 1329              		.fpu fpv4-sp-d16
+ 1331              	__user_init_hw:
+ 1332              	.LFB4:
+ 168:src/semaphore2_app.c **** 
+ 169:src/semaphore2_app.c ****  
+ 170:src/semaphore2_app.c **** void __user_init_hw(void) {
+ 1333              		.loc 1 170 27 is_stmt 1 view -0
+ 1334              		.cfi_startproc
+ 1335              		@ args = 0, pretend = 0, frame = 0
+ 1336              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1337 0000 08B5     		push	{r3, lr}
+ 1338              	.LCFI4:
+ 1339              		.cfi_def_cfa_offset 8
+ 1340              		.cfi_offset 3, -8
+ 1341              		.cfi_offset 14, -4
+ 171:src/semaphore2_app.c ****   /* GPIO Ports Clock Enable */
+ 172:src/semaphore2_app.c ****   rcc_periph_clock_enable(GPIOA);
+ 1342              		.loc 1 172 3 view .LVU376
+ 1343 0002 0020     		movs	r0, #0
+ 1344 0004 FFF7FEFF 		bl	rcc_periph_clock_enable
+ 1345              	.LVL34:
+ 173:src/semaphore2_app.c ****   rcc_periph_clock_enable(GPIOC);
+ 1346              		.loc 1 173 3 view .LVU377
+ 1347 0008 4FF40060 		mov	r0, #2048
+ 1348 000c FFF7FEFF 		bl	rcc_periph_clock_enable
+ 1349              	.LVL35:
+ 174:src/semaphore2_app.c **** 
+ 175:src/semaphore2_app.c ****   /*Configure GPIO pin : PC13 */
+ 176:src/semaphore2_app.c ****   gpio_mode_setup(SW1_GPIO_Port, GPIO_MODE_INPUT, GPIO_PUPD_NONE, SW1_Pin);
+ 1350              		.loc 1 176 3 view .LVU378
+ 1351 0010 4FF40053 		mov	r3, #8192
+ 1352 0014 0022     		movs	r2, #0
+ 1353 0016 1146     		mov	r1, r2
+ 1354 0018 0548     		ldr	r0, .L131
+ 1355 001a FFF7FEFF 		bl	gpio_mode_setup
+ 1356              	.LVL36:
+ 177:src/semaphore2_app.c **** 
+ 178:src/semaphore2_app.c ****   /*Configure GPIO pin : LED2_Pin */
+ 179:src/semaphore2_app.c ****   gpio_mode_setup(LED2_GPIO_Port, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, LED2_Pin);
+ 1357              		.loc 1 179 3 view .LVU379
+ 1358 001e 2023     		movs	r3, #32
+ 1359 0020 0022     		movs	r2, #0
+ 1360 0022 0121     		movs	r1, #1
+ 1361 0024 4FF09040 		mov	r0, #1207959552
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 33
+
+
+ 1362 0028 FFF7FEFF 		bl	gpio_mode_setup
+ 1363              	.LVL37:
+ 180:src/semaphore2_app.c **** 
+ 181:src/semaphore2_app.c **** }
+ 1364              		.loc 1 181 1 is_stmt 0 view .LVU380
+ 1365 002c 08BD     		pop	{r3, pc}
+ 1366              	.L132:
+ 1367 002e 00BF     		.align	2
+ 1368              	.L131:
+ 1369 0030 00080048 		.word	1207961600
+ 1370              		.cfi_endproc
+ 1371              	.LFE4:
+ 1373              		.section	.rodata.user_init.str1.4,"aMS",%progbits,1
+ 1374              		.align	2
+ 1375              	.LC0:
+ 1376 0000 0A737263 		.ascii	"\012src/semaphore2_app.c, built on Mar 10 2020 at 2"
+ 1376      2F73656D 
+ 1376      6170686F 
+ 1376      7265325F 
+ 1376      6170702E 
+ 1377 0030 333A3236 		.ascii	"3:26:38\012\000"
+ 1377      3A33380A 
+ 1377      00
+ 1378              		.section	.text.user_init,"ax",%progbits
+ 1379              		.align	1
+ 1380              		.global	user_init
+ 1381              		.syntax unified
+ 1382              		.thumb
+ 1383              		.thumb_func
+ 1384              		.fpu fpv4-sp-d16
+ 1386              	user_init:
+ 1387              	.LFB5:
+ 182:src/semaphore2_app.c **** 
+ 183:src/semaphore2_app.c **** 
+ 184:src/semaphore2_app.c **** 
+ 185:src/semaphore2_app.c **** /******************************************************************************
+ 186:src/semaphore2_app.c ****  * Function:        void user_init(void)
+ 187:src/semaphore2_app.c ****  *
+ 188:src/semaphore2_app.c ****  * PreCondition:    None
+ 189:src/semaphore2_app.c ****  *
+ 190:src/semaphore2_app.c ****  * Input:           None
+ 191:src/semaphore2_app.c ****  *
+ 192:src/semaphore2_app.c ****  * Output:          None
+ 193:src/semaphore2_app.c ****  *
+ 194:src/semaphore2_app.c ****  * Side Effects:    None
+ 195:src/semaphore2_app.c ****  *
+ 196:src/semaphore2_app.c ****  * Overview:        user_init is a centralized initialization routine where
+ 197:src/semaphore2_app.c ****  *                  the user can setup their application.   It is called
+ 198:src/semaphore2_app.c ****  *                  automagically by ES_OS during the operating system
+ 199:src/semaphore2_app.c ****  *                  initialization.
+ 200:src/semaphore2_app.c ****  *
+ 201:src/semaphore2_app.c ****  * Note:            The user should set up any state machines and init
+ 202:src/semaphore2_app.c ****  *                  all application variables.  They can also turn on
+ 203:src/semaphore2_app.c ****  *                  any needed peripherals here.
+ 204:src/semaphore2_app.c ****  *
+ 205:src/semaphore2_app.c ****  *                  The user SHALL NOT mess with the interrupt hardware
+ 206:src/semaphore2_app.c ****  *                  directly!!!  The ES_OS must be aware of the interrupts
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 34
+
+
+ 207:src/semaphore2_app.c ****  *                  and provides osXXXXXXX functions for the user to use.
+ 208:src/semaphore2_app.c ****  *                  Using these ES_OS-provided functions, the user may
+ 209:src/semaphore2_app.c ****  *                  (and probably should) initialize, register, and enable
+ 210:src/semaphore2_app.c ****  *                  interrupts in this routine.
+ 211:src/semaphore2_app.c ****  *
+ 212:src/semaphore2_app.c ****  *                  Furthermore, the user should register AT LEAST one
+ 213:src/semaphore2_app.c ****  *                  user application task here (via esos_RegisterTask) or
+ 214:src/semaphore2_app.c ****  *                  the ES_OS scheduler will have nothing to schedule
+ 215:src/semaphore2_app.c ****  *                  to run when this function returns.
+ 216:src/semaphore2_app.c ****  *
+ 217:src/semaphore2_app.c ****  *****************************************************************************/
+ 218:src/semaphore2_app.c **** void user_init(void) {
+ 1388              		.loc 1 218 22 is_stmt 1 view -0
+ 1389              		.cfi_startproc
+ 1390              		@ args = 0, pretend = 0, frame = 0
+ 1391              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1392 0000 08B5     		push	{r3, lr}
+ 1393              	.LCFI5:
+ 1394              		.cfi_def_cfa_offset 8
+ 1395              		.cfi_offset 3, -8
+ 1396              		.cfi_offset 14, -4
+ 219:src/semaphore2_app.c **** 
+ 220:src/semaphore2_app.c ****   // setup our software structures here
+ 221:src/semaphore2_app.c ****   
+ 222:src/semaphore2_app.c ****   // call our function to setup the hardware we like it.
+ 223:src/semaphore2_app.c ****   __user_init_hw();
+ 1397              		.loc 1 223 3 view .LVU382
+ 1398 0002 FFF7FEFF 		bl	__user_init_hw
+ 1399              	.LVL38:
+ 224:src/semaphore2_app.c **** 
+ 225:src/semaphore2_app.c ****   // Drive the UART directly.....  to print the HELLO_MSG
+ 226:src/semaphore2_app.c ****   __esos_unsafe_PutString( HELLO_MSG );
+ 1400              		.loc 1 226 3 view .LVU383
+ 1401 0006 0648     		ldr	r0, .L135
+ 1402 0008 FFF7FEFF 		bl	__esos_unsafe_PutString
+ 1403              	.LVL39:
+ 227:src/semaphore2_app.c **** 
+ 228:src/semaphore2_app.c ****   /*
+ 229:src/semaphore2_app.c ****    * Now, let's get down and dirty with ESOS and our user tasks
+ 230:src/semaphore2_app.c ****    *
+ 231:src/semaphore2_app.c ****    *   Once tasks are registered, they will start executing in
+ 232:src/semaphore2_app.c ****    *   the ESOS scheduler.
+ 233:src/semaphore2_app.c ****    */
+ 234:src/semaphore2_app.c ****   esos_RegisterTask( task_flash_LED );
+ 1404              		.loc 1 234 3 view .LVU384
+ 1405 000c 0548     		ldr	r0, .L135+4
+ 1406 000e FFF7FEFF 		bl	esos_RegisterTask
+ 1407              	.LVL40:
+ 235:src/semaphore2_app.c ****   esos_RegisterTask( task1 );
+ 1408              		.loc 1 235 3 view .LVU385
+ 1409 0012 0548     		ldr	r0, .L135+8
+ 1410 0014 FFF7FEFF 		bl	esos_RegisterTask
+ 1411              	.LVL41:
+ 236:src/semaphore2_app.c ****   esos_RegisterTask( task2 );
+ 1412              		.loc 1 236 3 view .LVU386
+ 1413 0018 0448     		ldr	r0, .L135+12
+ 1414 001a FFF7FEFF 		bl	esos_RegisterTask
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 35
+
+
+ 1415              	.LVL42:
+ 237:src/semaphore2_app.c **** 
+ 238:src/semaphore2_app.c **** } // end user_init()
+ 1416              		.loc 1 238 1 is_stmt 0 view .LVU387
+ 1417 001e 08BD     		pop	{r3, pc}
+ 1418              	.L136:
+ 1419              		.align	2
+ 1420              	.L135:
+ 1421 0020 00000000 		.word	.LC0
+ 1422 0024 00000000 		.word	task_flash_LED
+ 1423 0028 00000000 		.word	task1
+ 1424 002c 00000000 		.word	task2
+ 1425              		.cfi_endproc
+ 1426              	.LFE5:
+ 1428              		.comm	sem_T2CanRun,2,4
+ 1429              		.comm	sem_T1CanRun,2,4
+ 1430              		.global	psz_rv
+ 1431              		.global	psz_T2
+ 1432              		.global	psz_T1
+ 1433              		.global	psz_CRNL
+ 1434              		.section	.bss.u8_cnt.6757,"aw",%nobits
+ 1435              		.set	.LANCHOR1,. + 0
+ 1438              	u8_cnt.6757:
+ 1439 0000 00       		.space	1
+ 1440              		.section	.bss.u8_cnt.6774,"aw",%nobits
+ 1441              		.set	.LANCHOR5,. + 0
+ 1444              	u8_cnt.6774:
+ 1445 0000 00       		.space	1
+ 1446              		.section	.data.psz_CRNL,"aw"
+ 1447              		.align	2
+ 1448              		.set	.LANCHOR2,. + 0
+ 1451              	psz_CRNL:
+ 1452 0000 0D0A00   		.ascii	"\015\012\000"
+ 1453              		.section	.data.psz_T1,"aw"
+ 1454              		.align	2
+ 1455              		.set	.LANCHOR0,. + 0
+ 1458              	psz_T1:
+ 1459 0000 5461736B 		.ascii	"Task 1: \000"
+ 1459      20313A20 
+ 1459      00
+ 1460              		.section	.data.psz_T2,"aw"
+ 1461              		.align	2
+ 1462              		.set	.LANCHOR4,. + 0
+ 1465              	psz_T2:
+ 1466 0000 5461736B 		.ascii	"Task 2: \000"
+ 1466      20323A20 
+ 1466      00
+ 1467              		.section	.data.psz_rv,"aw"
+ 1468              		.align	2
+ 1469              		.set	.LANCHOR3,. + 0
+ 1472              	psz_rv:
+ 1473 0000 72656E64 		.ascii	"rendez-vous!\000"
+ 1473      657A2D76 
+ 1473      6F757321 
+ 1473      00
+ 1474              		.text
+ 1475              	.Letext0:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 36
+
+
+ 1476              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 1477              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 1478              		.file 4 "C:/MinGW/msys/1.0/esos32/include/lc-switch.h"
+ 1479              		.file 5 "C:/MinGW/msys/1.0/esos32/include/esos_cb.h"
+ 1480              		.file 6 "C:/MinGW/msys/1.0/esos32/include/esos_mail.h"
+ 1481              		.file 7 "C:/MinGW/msys/1.0/esos32/include/esos_task.h"
+ 1482              		.file 8 "C:/MinGW/msys/1.0/esos32/include/esos_utils.h"
+ 1483              		.file 9 "C:/MinGW/msys/1.0/esos32/include/esos_comm.h"
+ 1484              		.file 10 "C:/MinGW/msys/1.0/esos32/include/esos.h"
+ 1485              		.file 11 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/l4/rcc.h"
+ 1486              		.file 12 "C:/MinGW/msys/1.0/esos32/include/stm32l4_ocm3/esos_stm32l4_rs232.h"
+ 1487              		.file 13 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/common/rc
+ 1488              		.file 14 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/common/gp
+ 1489              		.file 15 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/common/gp
+ 1490              		.file 16 "C:/MinGW/msys/1.0/esos32/include/all_generic.h"
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s 			page 37
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 semaphore2_app.c
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:18     .text.task_flash_LED:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:26     .text.task_flash_LED:00000000 task_flash_LED
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:186    .text.task_flash_LED:000000c8 $d
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:191    .text.task1:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:198    .text.task1:00000000 task1
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:232    .text.task1:0000002c $d
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:246    .text.task1:00000046 $t
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:729    .text.task1:000002e4 $d
+                            *COM*:00000002 sem_T2CanRun
+                            *COM*:00000002 sem_T1CanRun
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:741    .text.task2:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:748    .text.task2:00000000 task2
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:782    .text.task2:0000002c $d
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:796    .text.task2:00000046 $t
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1279   .text.task2:000002e4 $d
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1291   .text.getRandomDelay:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1298   .text.getRandomDelay:00000000 getRandomDelay
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1324   .text.__user_init_hw:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1331   .text.__user_init_hw:00000000 __user_init_hw
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1369   .text.__user_init_hw:00000030 $d
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1374   .rodata.user_init.str1.4:00000000 $d
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1379   .text.user_init:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1386   .text.user_init:00000000 user_init
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1421   .text.user_init:00000020 $d
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1472   .data.psz_rv:00000000 psz_rv
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1465   .data.psz_T2:00000000 psz_T2
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1458   .data.psz_T1:00000000 psz_T1
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1451   .data.psz_CRNL:00000000 psz_CRNL
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1438   .bss.u8_cnt.6757:00000000 u8_cnt.6757
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1439   .bss.u8_cnt.6757:00000000 $d
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1444   .bss.u8_cnt.6774:00000000 u8_cnt.6774
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1445   .bss.u8_cnt.6774:00000000 $d
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1447   .data.psz_CRNL:00000000 $d
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1454   .data.psz_T1:00000000 $d
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1461   .data.psz_T2:00000000 $d
+C:\Users\Travis\AppData\Local\Temp\ccDSvd09.s:1468   .data.psz_rv:00000000 $d
+
+UNDEFINED SYMBOLS
+gpio_toggle
+gpio_get
+__esos_hw_GetSystemTickCount
+__esos_hasTickDurationPassed
+__esos_OutString
+__esos_OutUint8AsDecString
+esos_GetRandomUint32
+__esos_u32SystemFlags
+__stChildTaskTx
+rcc_periph_clock_enable
+gpio_mode_setup
+__esos_unsafe_PutString
+esos_RegisterTask

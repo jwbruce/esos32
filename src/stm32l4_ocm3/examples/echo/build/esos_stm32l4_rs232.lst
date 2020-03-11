@@ -1,0 +1,857 @@
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"esos_stm32l4_rs232.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.__esos_hw_signal_start_tx,"ax",%progbits
+  18              		.align	1
+  19              		.global	__esos_hw_signal_start_tx
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	__esos_hw_signal_start_tx:
+  27              	.LFB0:
+  28              		.file 1 "C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3/esos_stm32l4_rs232.c"
+   1:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** /*
+   2:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * "Copyright (c) 2019 J. W. Bruce ("AUTHOR(S)")"
+   3:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * All rights reserved.
+   4:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * (J. W. Bruce, jwbruce_AT_tntech.edu, Tennessee Tech University)
+   5:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+   6:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Permission to use, copy, modify, and distribute this software and its
+   7:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * documentation for any purpose, without fee, and without written agreement is
+   8:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * hereby granted, provided that the above copyright notice, the following
+   9:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * two paragraphs and the authors appear in all copies of this software.
+  10:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+  11:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * IN NO EVENT SHALL THE "AUTHORS" BE LIABLE TO ANY PARTY FOR
+  12:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT
+  13:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE "AUTHORS"
+  14:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  15:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+  16:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * THE "AUTHORS" SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+  17:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+  18:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS
+  19:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * ON AN "AS IS" BASIS, AND THE "AUTHORS" HAS NO OBLIGATION TO
+  20:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
+  21:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+  22:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Please maintain this header in its entirety when copying/modifying
+  23:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * these files.
+  24:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+  25:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+  26:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  */
+  27:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+  28:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+  29:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** /**
+  30:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * \addtogroup ESOS_UART_Service
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 2
+
+
+  31:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * @{
+  32:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  */
+  33:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+  34:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+  35:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** // Documentation for this file. If the \file tag isn't present,
+  36:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** // this file won't be documented.
+  37:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** /** \file
+  38:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * \brief STM32L4xx hardware support for RS-232 serial communications
+  39:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+  40:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  */
+  41:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+  42:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** /*** I N C L U D E S *************************************************/
+  43:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** #include "esos_stm32l4_rs232.h"
+  44:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+  45:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** /*** G L O B A L S *************************************************/
+  46:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** uint8_t         u8_uartRXbuf;
+  47:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** uint8_t         u8_uartTXbuf;
+  48:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** //UART_HandleTypeDef    st_huart2;
+  49:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+  50:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** /*** T H E   C O D E *************************************************/
+  51:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** // probably need to define a flag for this so ISRs can start/stop
+  52:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** //  transfers
+  53:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** #define   __ESOS_HW_SIGNAL_START_TX()     __esos_SetSystemFlag(__ESOS_SYS_COMM_TX_ONGOING)
+  54:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** #define   __ESOS_HW_SIGNAL_STOP_TX()        __esos_ClearSystemFlag(__ESOS_SYS_COMM_TX_ONGOING)
+  55:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+  56:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** /*********************************************************
+  57:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Public functions intended to be called by other files *
+  58:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *********************************************************/
+  59:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** inline void    __esos_hw_signal_start_tx(void) {
+  29              		.loc 1 59 48 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  60:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   if __esos_IsSystemFlagClear(__ESOS_SYS_COMM_TX_ONGOING) {
+  33              		.loc 1 60 3 view .LVU1
+  34              		.loc 1 60 6 is_stmt 0 view .LVU2
+  35 0000 0C4B     		ldr	r3, .L8
+  36 0002 1B68     		ldr	r3, [r3]
+  37 0004 13F0100F 		tst	r3, #16
+  38 0008 00D0     		beq	.L7
+  39 000a 7047     		bx	lr
+  40              	.L7:
+  59:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   if __esos_IsSystemFlagClear(__ESOS_SYS_COMM_TX_ONGOING) {
+  41              		.loc 1 59 48 view .LVU3
+  42 000c 10B5     		push	{r4, lr}
+  43              	.LCFI0:
+  44              		.cfi_def_cfa_offset 8
+  45              		.cfi_offset 4, -8
+  46              		.cfi_offset 14, -4
+  61:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****     // no TX is currently ongoing, so kick it off.
+  62:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****     __esos_SetSystemFlag(__ESOS_SYS_COMM_TX_ONGOING);
+  47              		.loc 1 62 5 is_stmt 1 view .LVU4
+  48 000e 43F01003 		orr	r3, r3, #16
+  49 0012 084A     		ldr	r2, .L8
+  50 0014 1360     		str	r3, [r2]
+  63:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	  
+  64:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****     // HAL_UART_Transmit_IT requires a pointer to the data, so
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 3
+
+
+  65:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****     //  have CB return the data to a local variable and pass that
+  66:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****     //  address to the HAL_UART_Transmit_IT.  The ESOS CB don't
+  67:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****     //  have a routine that returns a pointer to data, and I
+  68:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****     //  don't trust the HAL enough to pass an address into my CB.
+  69:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	u8_uartTXbuf = __esos_CB_ReadUINT8(  __pst_CB_Tx );
+  51              		.loc 1 69 2 view .LVU5
+  52              		.loc 1 69 17 is_stmt 0 view .LVU6
+  53 0016 084B     		ldr	r3, .L8+4
+  54 0018 1868     		ldr	r0, [r3]
+  55 001a FFF7FEFF 		bl	__esos_CB_ReadUINT8
+  56              	.LVL0:
+  57 001e 0146     		mov	r1, r0
+  58              		.loc 1 69 15 view .LVU7
+  59 0020 064B     		ldr	r3, .L8+8
+  60 0022 1870     		strb	r0, [r3]
+  70:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	  
+  71:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	usart_send(USART_CONSOLE, u8_uartTXbuf);
+  61              		.loc 1 71 2 is_stmt 1 view .LVU8
+  62 0024 064C     		ldr	r4, .L8+12
+  63 0026 2046     		mov	r0, r4
+  64 0028 FFF7FEFF 		bl	usart_send
+  65              	.LVL1:
+  72:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	usart_enable_tx_interrupt(USART_CONSOLE);
+  66              		.loc 1 72 2 view .LVU9
+  67 002c 2046     		mov	r0, r4
+  68 002e FFF7FEFF 		bl	usart_enable_tx_interrupt
+  69              	.LVL2:
+  73:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	//HAL_UART_Transmit_IT(&st_huart2, &u8_uartTXbuf, 1);
+  74:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   }
+  75:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** }
+  70              		.loc 1 75 1 is_stmt 0 view .LVU10
+  71 0032 10BD     		pop	{r4, pc}
+  72              	.L9:
+  73              		.align	2
+  74              	.L8:
+  75 0034 00000000 		.word	__esos_u32SystemFlags
+  76 0038 00000000 		.word	__pst_CB_Tx
+  77 003c 00000000 		.word	u8_uartTXbuf
+  78 0040 00440040 		.word	1073759232
+  79              		.cfi_endproc
+  80              	.LFE0:
+  82              		.section	.text.__esos_hw_signal_stop_tx,"ax",%progbits
+  83              		.align	1
+  84              		.global	__esos_hw_signal_stop_tx
+  85              		.syntax unified
+  86              		.thumb
+  87              		.thumb_func
+  88              		.fpu fpv4-sp-d16
+  90              	__esos_hw_signal_stop_tx:
+  91              	.LFB1:
+  76:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+  77:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** inline void    __esos_hw_signal_stop_tx(void) {
+  92              		.loc 1 77 47 is_stmt 1 view -0
+  93              		.cfi_startproc
+  94              		@ args = 0, pretend = 0, frame = 0
+  95              		@ frame_needed = 0, uses_anonymous_args = 0
+  96              		@ link register save eliminated.
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 4
+
+
+  78:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   __esos_ClearSystemFlag(__ESOS_SYS_COMM_TX_ONGOING);
+  97              		.loc 1 78 3 view .LVU12
+  98 0000 024A     		ldr	r2, .L11
+  99 0002 1368     		ldr	r3, [r2]
+ 100 0004 23F01003 		bic	r3, r3, #16
+ 101 0008 1360     		str	r3, [r2]
+  79:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** }
+ 102              		.loc 1 79 1 is_stmt 0 view .LVU13
+ 103 000a 7047     		bx	lr
+ 104              	.L12:
+ 105              		.align	2
+ 106              	.L11:
+ 107 000c 00000000 		.word	__esos_u32SystemFlags
+ 108              		.cfi_endproc
+ 109              	.LFE1:
+ 111              		.section	.text.usart2_isr,"ax",%progbits
+ 112              		.align	1
+ 113              		.global	usart2_isr
+ 114              		.syntax unified
+ 115              		.thumb
+ 116              		.thumb_func
+ 117              		.fpu fpv4-sp-d16
+ 119              	usart2_isr:
+ 120              	.LFB2:
+  80:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+  81:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** /** *******************************************
+  82:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * UART ISR callbacks
+  83:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+  84:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * HAL will call these functions at the conclusion
+  85:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * of TX and RX operations
+  86:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+  87:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * TODO:  STM32L4 ISRs below are using the standard
+  88:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *   STM32 cube priorities.  These ISRs have not
+  89:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *   been incorporated into ESOS's interrupt priority
+  90:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *   scheme.
+  91:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+  92:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * ********************************************
+  93:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  */
+  94:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+  95:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** void usart2_isr(void)
+  96:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** {
+ 121              		.loc 1 96 1 is_stmt 1 view -0
+ 122              		.cfi_startproc
+ 123              		@ args = 0, pretend = 0, frame = 0
+ 124              		@ frame_needed = 0, uses_anonymous_args = 0
+ 125 0000 10B5     		push	{r4, lr}
+ 126              	.LCFI1:
+ 127              		.cfi_def_cfa_offset 8
+ 128              		.cfi_offset 4, -8
+ 129              		.cfi_offset 14, -4
+  97:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	/* If this function is called, one of the UART interrupt flags
+  98:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	 * has been fired. We will need to determine which one it is
+  99:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	 * and handle it appropriately.
+ 100:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	 */
+ 101:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	if(((USART_CR1(USART_CONSOLE) & USART_CR1_RXNEIE) != 0) &&
+ 130              		.loc 1 101 2 view .LVU15
+ 131              		.loc 1 101 7 is_stmt 0 view .LVU16
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 5
+
+
+ 132 0002 1C4B     		ldr	r3, .L19
+ 133 0004 1B68     		ldr	r3, [r3]
+ 134              		.loc 1 101 4 view .LVU17
+ 135 0006 13F0200F 		tst	r3, #32
+ 136 000a 04D0     		beq	.L14
+ 102:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	   ((USART_ISR(USART_CONSOLE) & USART_ISR_RXNE) != 0 ))
+ 137              		.loc 1 102 7 discriminator 1 view .LVU18
+ 138 000c 1A4B     		ldr	r3, .L19+4
+ 139 000e 1B68     		ldr	r3, [r3]
+ 101:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	   ((USART_ISR(USART_CONSOLE) & USART_ISR_RXNE) != 0 ))
+ 140              		.loc 1 101 58 discriminator 1 view .LVU19
+ 141 0010 13F0200F 		tst	r3, #32
+ 142 0014 16D1     		bne	.L18
+ 143              	.L14:
+ 103:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	{
+ 104:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		/* If the code reaches here, we have received a
+ 105:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		 * byte into the UART.
+ 106:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		 */
+ 107:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		
+ 108:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		// call CB overwrite.... we can't block here in the ISR so
+ 109:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   		// if data comes in too fast, we will just overwrite existing
+ 110:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   		// data in the CBs
+ 111:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		u8_uartRXbuf = usart_recv(USART_CONSOLE);
+ 112:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		__esos_CB_OverwriteUINT8( __pst_CB_Rx, u8_uartRXbuf );
+ 113:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		// request HAL UART handler to get ONE more byte
+ 114:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		//enable the error condition flags (overrun, noise, framing)
+ 115:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		//usart_enable_error_interrupt(USART_CONSOLE);
+ 116:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		//usart_enable_rx_interrupt(USART_CONSOLE);
+ 117:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	}
+ 118:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	else if(((USART_CR1(USART_CONSOLE) & USART_CR1_TXEIE) != 0) &&
+ 144              		.loc 1 118 7 is_stmt 1 view .LVU20
+ 145              		.loc 1 118 12 is_stmt 0 view .LVU21
+ 146 0016 174B     		ldr	r3, .L19
+ 147 0018 1B68     		ldr	r3, [r3]
+ 148              		.loc 1 118 9 view .LVU22
+ 149 001a 13F0800F 		tst	r3, #128
+ 150 001e 1BD0     		beq	.L13
+ 119:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	   ((USART_ISR(USART_CONSOLE) & USART_ISR_TXE) != 0 ))
+ 151              		.loc 1 119 7 discriminator 1 view .LVU23
+ 152 0020 154B     		ldr	r3, .L19+4
+ 153 0022 1B68     		ldr	r3, [r3]
+ 118:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	   ((USART_ISR(USART_CONSOLE) & USART_ISR_TXE) != 0 ))
+ 154              		.loc 1 118 62 discriminator 1 view .LVU24
+ 155 0024 13F0800F 		tst	r3, #128
+ 156 0028 16D0     		beq	.L13
+ 120:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	{
+ 121:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		/* If the code reaches here, the HW transmit buffer is empty
+ 122:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		 */
+ 123:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		if (__ESOS_CB_IS_EMPTY( __pst_CB_Tx)) {
+ 157              		.loc 1 123 3 is_stmt 1 view .LVU25
+ 158              		.loc 1 123 7 is_stmt 0 view .LVU26
+ 159 002a 144B     		ldr	r3, .L19+8
+ 160 002c 1868     		ldr	r0, [r3]
+ 161 002e 8388     		ldrh	r3, [r0, #4]
+ 162              		.loc 1 123 6 view .LVU27
+ 163 0030 9BB9     		cbnz	r3, .L16
+ 124:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****     		//empty TX buffer, disable the interrupt, do not clear the flag
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 6
+
+
+ 125:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****     		usart_disable_tx_interrupt(USART_CONSOLE);
+ 164              		.loc 1 125 7 is_stmt 1 view .LVU28
+ 165 0032 1048     		ldr	r0, .L19
+ 166 0034 FFF7FEFF 		bl	usart_disable_tx_interrupt
+ 167              	.LVL3:
+ 126:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 			__esos_hw_signal_stop_tx();
+ 168              		.loc 1 126 4 view .LVU29
+ 169              	.LBB4:
+ 170              	.LBI4:
+  77:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   __esos_ClearSystemFlag(__ESOS_SYS_COMM_TX_ONGOING);
+ 171              		.loc 1 77 16 view .LVU30
+ 172              	.LBB5:
+  78:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** }
+ 173              		.loc 1 78 3 view .LVU31
+ 174 0038 114A     		ldr	r2, .L19+12
+ 175 003a 1368     		ldr	r3, [r2]
+ 176 003c 23F01003 		bic	r3, r3, #16
+ 177 0040 1360     		str	r3, [r2]
+  79:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 178              		.loc 1 79 1 is_stmt 0 view .LVU32
+ 179 0042 09E0     		b	.L13
+ 180              	.L18:
+ 181              	.LBE5:
+ 182              	.LBE4:
+ 111:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		__esos_CB_OverwriteUINT8( __pst_CB_Rx, u8_uartRXbuf );
+ 183              		.loc 1 111 3 is_stmt 1 view .LVU33
+ 111:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		__esos_CB_OverwriteUINT8( __pst_CB_Rx, u8_uartRXbuf );
+ 184              		.loc 1 111 18 is_stmt 0 view .LVU34
+ 185 0044 0B48     		ldr	r0, .L19
+ 186 0046 FFF7FEFF 		bl	usart_recv
+ 187              	.LVL4:
+ 111:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		__esos_CB_OverwriteUINT8( __pst_CB_Rx, u8_uartRXbuf );
+ 188              		.loc 1 111 16 view .LVU35
+ 189 004a C1B2     		uxtb	r1, r0
+ 190 004c 0D4B     		ldr	r3, .L19+16
+ 191 004e 1970     		strb	r1, [r3]
+ 112:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		// request HAL UART handler to get ONE more byte
+ 192              		.loc 1 112 3 is_stmt 1 view .LVU36
+ 193 0050 0D4B     		ldr	r3, .L19+20
+ 194 0052 1868     		ldr	r0, [r3]
+ 195 0054 FFF7FEFF 		bl	__esos_CB_OverwriteUINT8
+ 196              	.LVL5:
+ 197              	.L13:
+ 127:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		}
+ 128:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		else
+ 129:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		{
+ 130:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 			// HAL_UART_Transmit_IT requires a pointer to the data, so
+ 131:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 			//  have CB return the data to a local variable and pass that
+ 132:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 			//  address to the HAL_UART_Transmit_IT.  The ESOS CB don't
+ 133:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 			//  have a routine that returns a pointer to data, and I
+ 134:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 			//  don't trust the HAL enough to pass an address into my CB.
+ 135:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 			u8_uartTXbuf = __esos_CB_ReadUINT8(  __pst_CB_Tx );
+ 136:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 			usart_send(USART_CONSOLE, u8_uartTXbuf);
+ 137:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 			usart_enable_tx_interrupt(USART_CONSOLE);
+ 138:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		}
+ 139:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	}
+ 140:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	/*else if(((USART_CR1(USART_CONSOLE) & USART_CR3_EIE) != 0) &&
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 7
+
+
+ 141:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	   ((USART_ISR(USART_CONSOLE) & USART_ISR_ORE) != 0 ))
+ 142:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	{
+ 143:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		/* Error handler for the UART
+ 144:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		 *
+ 145:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		//usart_enable_error_interrupt(USART_CONSOLE);
+ 146:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		u8_uartRXbuf = usart_recv(USART_CONSOLE);
+ 147:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	}*/
+ 148:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** }
+ 198              		.loc 1 148 1 is_stmt 0 view .LVU37
+ 199 0058 10BD     		pop	{r4, pc}
+ 200              	.L16:
+ 135:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 			usart_send(USART_CONSOLE, u8_uartTXbuf);
+ 201              		.loc 1 135 4 is_stmt 1 view .LVU38
+ 135:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 			usart_send(USART_CONSOLE, u8_uartTXbuf);
+ 202              		.loc 1 135 19 is_stmt 0 view .LVU39
+ 203 005a FFF7FEFF 		bl	__esos_CB_ReadUINT8
+ 204              	.LVL6:
+ 205 005e 0146     		mov	r1, r0
+ 135:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 			usart_send(USART_CONSOLE, u8_uartTXbuf);
+ 206              		.loc 1 135 17 view .LVU40
+ 207 0060 0A4B     		ldr	r3, .L19+24
+ 208 0062 1870     		strb	r0, [r3]
+ 136:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 			usart_enable_tx_interrupt(USART_CONSOLE);
+ 209              		.loc 1 136 4 is_stmt 1 view .LVU41
+ 210 0064 034C     		ldr	r4, .L19
+ 211 0066 2046     		mov	r0, r4
+ 212 0068 FFF7FEFF 		bl	usart_send
+ 213              	.LVL7:
+ 137:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 		}
+ 214              		.loc 1 137 4 view .LVU42
+ 215 006c 2046     		mov	r0, r4
+ 216 006e FFF7FEFF 		bl	usart_enable_tx_interrupt
+ 217              	.LVL8:
+ 218              		.loc 1 148 1 is_stmt 0 view .LVU43
+ 219 0072 F1E7     		b	.L13
+ 220              	.L20:
+ 221              		.align	2
+ 222              	.L19:
+ 223 0074 00440040 		.word	1073759232
+ 224 0078 1C440040 		.word	1073759260
+ 225 007c 00000000 		.word	__pst_CB_Tx
+ 226 0080 00000000 		.word	__esos_u32SystemFlags
+ 227 0084 00000000 		.word	u8_uartRXbuf
+ 228 0088 00000000 		.word	__pst_CB_Rx
+ 229 008c 00000000 		.word	u8_uartTXbuf
+ 230              		.cfi_endproc
+ 231              	.LFE2:
+ 233              		.section	.text.__esos_configUART1,"ax",%progbits
+ 234              		.align	1
+ 235              		.global	__esos_configUART1
+ 236              		.syntax unified
+ 237              		.thumb
+ 238              		.thumb_func
+ 239              		.fpu fpv4-sp-d16
+ 241              	__esos_configUART1:
+ 242              	.LVL9:
+ 243              	.LFB3:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 8
+
+
+ 149:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 150:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** /** Configure the UART. Settings chosen:
+ 151:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *  - Format is 8 data bits, no parity, 1 stop bit
+ 152:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *  - CTS, RTS, and BCLK not used
+ 153:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 154:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *  \param u32_baudRate The baud rate to use.
+ 155:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  */
+ 156:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** void __esos_configUART1(uint32_t u32_baudRate) {
+ 244              		.loc 1 156 48 is_stmt 1 view -0
+ 245              		.cfi_startproc
+ 246              		@ args = 0, pretend = 0, frame = 0
+ 247              		@ frame_needed = 0, uses_anonymous_args = 0
+ 248              		.loc 1 156 48 is_stmt 0 view .LVU45
+ 249 0000 38B5     		push	{r3, r4, r5, lr}
+ 250              	.LCFI2:
+ 251              		.cfi_def_cfa_offset 16
+ 252              		.cfi_offset 3, -16
+ 253              		.cfi_offset 4, -12
+ 254              		.cfi_offset 5, -8
+ 255              		.cfi_offset 14, -4
+ 256 0002 0546     		mov	r5, r0
+ 157:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   /*************************  UART config ********************/
+ 158:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   	nvic_enable_irq(NVIC_USART2_IRQ);
+ 257              		.loc 1 158 4 is_stmt 1 view .LVU46
+ 258 0004 2620     		movs	r0, #38
+ 259              	.LVL10:
+ 260              		.loc 1 158 4 is_stmt 0 view .LVU47
+ 261 0006 FFF7FEFF 		bl	nvic_enable_irq
+ 262              	.LVL11:
+ 159:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	
+ 160:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 161:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** #if (HARDWARE_PLATFORM == NUCLEO64)
+ 162:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** # warning Building configUART1() for Nucleo 64 development board
+ 163:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	rcc_periph_clock_enable(RCC_USART2);
+ 263              		.loc 1 163 2 is_stmt 1 view .LVU48
+ 264 000a 40F61130 		movw	r0, #2833
+ 265 000e FFF7FEFF 		bl	rcc_periph_clock_enable
+ 266              	.LVL12:
+ 164:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 165:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   // we are using USART2.  On the STM32L452RE chip, this means
+ 166:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   // that TX is PA2, and RX is PA3.
+ 167:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO2);
+ 267              		.loc 1 167 2 view .LVU49
+ 268 0012 0423     		movs	r3, #4
+ 269 0014 0022     		movs	r2, #0
+ 270 0016 0221     		movs	r1, #2
+ 271 0018 4FF09040 		mov	r0, #1207959552
+ 272 001c FFF7FEFF 		bl	gpio_mode_setup
+ 273              	.LVL13:
+ 168:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO3);
+ 274              		.loc 1 168 2 view .LVU50
+ 275 0020 0823     		movs	r3, #8
+ 276 0022 0022     		movs	r2, #0
+ 277 0024 0221     		movs	r1, #2
+ 278 0026 4FF09040 		mov	r0, #1207959552
+ 279 002a FFF7FEFF 		bl	gpio_mode_setup
+ 280              	.LVL14:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 9
+
+
+ 169:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	gpio_set_output_options(GPIOA, GPIO_OTYPE_OD, GPIO_OSPEED_25MHZ, GPIO3);
+ 281              		.loc 1 169 2 view .LVU51
+ 282 002e 0823     		movs	r3, #8
+ 283 0030 0122     		movs	r2, #1
+ 284 0032 1146     		mov	r1, r2
+ 285 0034 4FF09040 		mov	r0, #1207959552
+ 286 0038 FFF7FEFF 		bl	gpio_set_output_options
+ 287              	.LVL15:
+ 170:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	
+ 171:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	/* Setup USART2 TX pin as alternate function. */
+ 172:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	gpio_set_af(GPIOA, GPIO_AF7, GPIO2);
+ 288              		.loc 1 172 2 view .LVU52
+ 289 003c 0422     		movs	r2, #4
+ 290 003e 0721     		movs	r1, #7
+ 291 0040 4FF09040 		mov	r0, #1207959552
+ 292 0044 FFF7FEFF 		bl	gpio_set_af
+ 293              	.LVL16:
+ 173:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	gpio_set_af(GPIOA, GPIO_AF7, GPIO3);
+ 294              		.loc 1 173 2 view .LVU53
+ 295 0048 0822     		movs	r2, #8
+ 296 004a 0721     		movs	r1, #7
+ 297 004c 4FF09040 		mov	r0, #1207959552
+ 298 0050 FFF7FEFF 		bl	gpio_set_af
+ 299              	.LVL17:
+ 174:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	
+ 175:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	usart_set_baudrate(USART_CONSOLE, u32_baudRate);
+ 300              		.loc 1 175 2 view .LVU54
+ 301 0054 114C     		ldr	r4, .L23
+ 302 0056 2946     		mov	r1, r5
+ 303 0058 2046     		mov	r0, r4
+ 304 005a FFF7FEFF 		bl	usart_set_baudrate
+ 305              	.LVL18:
+ 176:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	usart_set_databits(USART_CONSOLE, 8);
+ 306              		.loc 1 176 2 view .LVU55
+ 307 005e 0821     		movs	r1, #8
+ 308 0060 2046     		mov	r0, r4
+ 309 0062 FFF7FEFF 		bl	usart_set_databits
+ 310              	.LVL19:
+ 177:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	usart_set_stopbits(USART_CONSOLE, USART_STOPBITS_1);
+ 311              		.loc 1 177 2 view .LVU56
+ 312 0066 0021     		movs	r1, #0
+ 313 0068 2046     		mov	r0, r4
+ 314 006a FFF7FEFF 		bl	usart_set_stopbits
+ 315              	.LVL20:
+ 178:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	usart_set_mode(USART_CONSOLE, USART_MODE_TX_RX);
+ 316              		.loc 1 178 2 view .LVU57
+ 317 006e 0C21     		movs	r1, #12
+ 318 0070 2046     		mov	r0, r4
+ 319 0072 FFF7FEFF 		bl	usart_set_mode
+ 320              	.LVL21:
+ 179:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	usart_set_parity(USART_CONSOLE, USART_PARITY_NONE);
+ 321              		.loc 1 179 2 view .LVU58
+ 322 0076 0021     		movs	r1, #0
+ 323 0078 2046     		mov	r0, r4
+ 324 007a FFF7FEFF 		bl	usart_set_parity
+ 325              	.LVL22:
+ 180:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	usart_set_flow_control(USART_CONSOLE, USART_FLOWCONTROL_NONE);
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 10
+
+
+ 326              		.loc 1 180 2 view .LVU59
+ 327 007e 0021     		movs	r1, #0
+ 328 0080 2046     		mov	r0, r4
+ 329 0082 FFF7FEFF 		bl	usart_set_flow_control
+ 330              	.LVL23:
+ 181:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	
+ 182:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	// This interrupt will happen if the transmit buffer is empty
+ 183:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****     usart_disable_tx_interrupt(USART_CONSOLE);
+ 331              		.loc 1 183 5 view .LVU60
+ 332 0086 2046     		mov	r0, r4
+ 333 0088 FFF7FEFF 		bl	usart_disable_tx_interrupt
+ 334              	.LVL24:
+ 184:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	//usart_enable_error_interrupt(USART_CONSOLE);
+ 185:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	usart_enable_rx_interrupt(USART_CONSOLE);
+ 335              		.loc 1 185 2 view .LVU61
+ 336 008c 2046     		mov	r0, r4
+ 337 008e FFF7FEFF 		bl	usart_enable_rx_interrupt
+ 338              	.LVL25:
+ 186:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	// usart_disable_rx_interrupt(USART_CONSOLE);
+ 187:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 188:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	/* Finally enable the USART. */
+ 189:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	usart_enable(USART_CONSOLE);
+ 339              		.loc 1 189 2 view .LVU62
+ 340 0092 2046     		mov	r0, r4
+ 341 0094 FFF7FEFF 		bl	usart_enable
+ 342              	.LVL26:
+ 190:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** #else
+ 191:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** #error Can not configUART1() since target hardware has not been defined.
+ 192:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** #endif
+ 193:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 194:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   // Now that UART is configured, let's enable the USART2 interrupts
+ 195:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 196:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 197:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   // Kick off RX on UART via call to HAL.  Upon receipt of data
+ 198:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   //  the call back should kick off another one.  In the current
+ 199:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   //  specificaiton of ESOS, we always are "receiving", so RX is
+ 200:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   //  never disabled.
+ 201:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 	//u8_uartRXbuf = usart_recv(USART_CONSOLE);
+ 202:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** }
+ 343              		.loc 1 202 1 is_stmt 0 view .LVU63
+ 344 0098 38BD     		pop	{r3, r4, r5, pc}
+ 345              	.LVL27:
+ 346              	.L24:
+ 347              		.loc 1 202 1 view .LVU64
+ 348 009a 00BF     		.align	2
+ 349              	.L23:
+ 350 009c 00440040 		.word	1073759232
+ 351              		.cfi_endproc
+ 352              	.LFE3:
+ 354              		.section	.text.__esos_hw_InitCommSystem,"ax",%progbits
+ 355              		.align	1
+ 356              		.global	__esos_hw_InitCommSystem
+ 357              		.syntax unified
+ 358              		.thumb
+ 359              		.thumb_func
+ 360              		.fpu fpv4-sp-d16
+ 362              	__esos_hw_InitCommSystem:
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 11
+
+
+ 363              	.LFB4:
+ 203:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 204:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** /* ########################################################################### */
+ 205:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 206:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 207:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** /******************************************************************************
+ 208:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Function:        void _esos_hw_InitSerialUart( void )
+ 209:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 210:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * PreCondition:    None
+ 211:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 212:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Input:           None
+ 213:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 214:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Output:          ptr to ESOS_COMM_BUFF_DSC structure with initialized ptrs
+ 215:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 216:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Side Effects:    Turns on USART hardware
+ 217:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 218:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *****************************************************************************/
+ 219:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** void __esos_hw_InitCommSystem(void) {
+ 364              		.loc 1 219 37 is_stmt 1 view -0
+ 365              		.cfi_startproc
+ 366              		@ args = 0, pretend = 0, frame = 0
+ 367              		@ frame_needed = 0, uses_anonymous_args = 0
+ 368 0000 08B5     		push	{r3, lr}
+ 369              	.LCFI3:
+ 370              		.cfi_def_cfa_offset 8
+ 371              		.cfi_offset 3, -8
+ 372              		.cfi_offset 14, -4
+ 220:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   // use the HAL-inspired code to init the RS232 comm subsystem
+ 221:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   // 8N1 @ 56k7 baud (DEFAULT_BAUDRATE) for now
+ 222:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   __esos_configUART1(DEFAULT_BAUDRATE) ;
+ 373              		.loc 1 222 3 view .LVU66
+ 374 0002 4FF46140 		mov	r0, #57600
+ 375 0006 FFF7FEFF 		bl	__esos_configUART1
+ 376              	.LVL28:
+ 223:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 224:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** }  // end __esos_hw_InitCommSystem()
+ 377              		.loc 1 224 1 is_stmt 0 view .LVU67
+ 378 000a 08BD     		pop	{r3, pc}
+ 379              		.cfi_endproc
+ 380              	.LFE4:
+ 382              		.section	.text.esos_GetCommSystemMaxInDataLen,"ax",%progbits
+ 383              		.align	1
+ 384              		.global	esos_GetCommSystemMaxInDataLen
+ 385              		.syntax unified
+ 386              		.thumb
+ 387              		.thumb_func
+ 388              		.fpu fpv4-sp-d16
+ 390              	esos_GetCommSystemMaxInDataLen:
+ 391              	.LFB5:
+ 225:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 226:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 227:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** /******************************************************************************
+ 228:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Function:        uint8_t esos_GetCommSystemMaxInDataLen(void)
+ 229:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 230:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * PreCondition:    None.
+ 231:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 232:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Input:           None
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 12
+
+
+ 233:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 234:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Output:          the maximum number of uint8_ts that the comm system will
+ 235:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  receive in a single buffer transfer from the host -- OR --
+ 236:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *          in the case of single uint8_t xfers (like RS232), the maximum
+ 237:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *          number of uint8_ts that can be RX-ed before the buffers
+ 238:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *          overflow
+ 239:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 240:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Side Effects:    None
+ 241:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 242:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Overview:        A way for a run-time determination of the maximum buffer
+ 243:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  size that the user can can expect.  This number is
+ 244:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  actually hard-coded in the USB CDC header file, but this
+ 245:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  method will allow the user code to be more generic, if
+ 246:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  it chooses to be.
+ 247:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 248:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *****************************************************************************/
+ 249:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** uint8_t esos_GetCommSystemMaxInDataLen(void) {
+ 392              		.loc 1 249 46 is_stmt 1 view -0
+ 393              		.cfi_startproc
+ 394              		@ args = 0, pretend = 0, frame = 0
+ 395              		@ frame_needed = 0, uses_anonymous_args = 0
+ 396              		@ link register save eliminated.
+ 250:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   return ESOS_SERIAL_OUT_EP_SIZE;
+ 397              		.loc 1 250 3 view .LVU69
+ 251:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** } //end esos_GetCommSystemMaxInDataLen()
+ 398              		.loc 1 251 1 is_stmt 0 view .LVU70
+ 399 0000 4020     		movs	r0, #64
+ 400 0002 7047     		bx	lr
+ 401              		.cfi_endproc
+ 402              	.LFE5:
+ 404              		.section	.text.esos_GetCommSystemMaxOutDataLen,"ax",%progbits
+ 405              		.align	1
+ 406              		.global	esos_GetCommSystemMaxOutDataLen
+ 407              		.syntax unified
+ 408              		.thumb
+ 409              		.thumb_func
+ 410              		.fpu fpv4-sp-d16
+ 412              	esos_GetCommSystemMaxOutDataLen:
+ 413              	.LFB6:
+ 252:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 253:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** /******************************************************************************
+ 254:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Function:        uint8_t esos_GetCommSystemMaxOutDataLen(void)
+ 255:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 256:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * PreCondition:    None.
+ 257:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 258:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Input:           None
+ 259:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 260:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Output:          the maximum number of uint8_ts that the comm system will
+ 261:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  transfer back to the host in a single buffer  -- OR --
+ 262:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *          in the case of singe uint8_t xfers (like RS232), the maximum
+ 263:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *          number of uint8_ts in the output buffer before overflow
+ 264:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 265:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Side Effects:    None
+ 266:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 267:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Overview:        A way for a run-time determination of the maximum buffer
+ 268:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  size that the user can can send efficiently.  The USB system
+ 269:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  will send a bigger buffer than getUSBCdcTxMax() size, but
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 13
+
+
+ 270:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  will do so in several smaller getUSBCdcTxMax()-sized chunks.
+ 271:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 272:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  This number is actually hard-coded in the USB CDC header file,
+ 273:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  but this method will allow the user code to be more generic,
+ 274:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  if it chooses to be.
+ 275:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 276:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *****************************************************************************/
+ 277:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** uint8_t esos_GetCommSystemMaxOutDataLen(void) {
+ 414              		.loc 1 277 47 is_stmt 1 view -0
+ 415              		.cfi_startproc
+ 416              		@ args = 0, pretend = 0, frame = 0
+ 417              		@ frame_needed = 0, uses_anonymous_args = 0
+ 418              		@ link register save eliminated.
+ 278:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   return  ESOS_SERIAL_IN_EP_SIZE;
+ 419              		.loc 1 278 3 view .LVU72
+ 279:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** } //end esos_GetCommSystemMaxOutDataLen()
+ 420              		.loc 1 279 1 is_stmt 0 view .LVU73
+ 421 0000 4020     		movs	r0, #64
+ 422 0002 7047     		bx	lr
+ 423              		.cfi_endproc
+ 424              	.LFE6:
+ 426              		.section	.text._esos_hw_GetSerialUartVersion,"ax",%progbits
+ 427              		.align	1
+ 428              		.global	_esos_hw_GetSerialUartVersion
+ 429              		.syntax unified
+ 430              		.thumb
+ 431              		.thumb_func
+ 432              		.fpu fpv4-sp-d16
+ 434              	_esos_hw_GetSerialUartVersion:
+ 435              	.LFB7:
+ 280:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** 
+ 281:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** /******************************************************************************
+ 282:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Function:        uint8_t _esos_hw_GetUartVersion(void)
+ 283:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 284:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * PreCondition:    None.
+ 285:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 286:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Input:           None
+ 287:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 288:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Output:          Return the version number of the MSU Bulk CDC driver firmware
+ 289:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  currently running.
+ 290:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  The most-significant bit denotes we're running USB
+ 291:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  The most-significant nibble is the major revision number
+ 292:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *                  The least-significant nibble is the minor revision number
+ 293:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 294:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  * Side Effects:    None
+ 295:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *
+ 296:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****  *****************************************************************************/
+ 297:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** uint8_t _esos_hw_GetSerialUartVersion(void) {
+ 436              		.loc 1 297 45 is_stmt 1 view -0
+ 437              		.cfi_startproc
+ 438              		@ args = 0, pretend = 0, frame = 0
+ 439              		@ frame_needed = 0, uses_anonymous_args = 0
+ 440              		@ link register save eliminated.
+ 298:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c ****   return  ESOS_COMM_SYS_SERIAL_REV;
+ 441              		.loc 1 298 3 view .LVU75
+ 299:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_rs232.c **** } //end _esos_hw_GetUartVersion()
+ 442              		.loc 1 299 1 is_stmt 0 view .LVU76
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 14
+
+
+ 443 0000 0120     		movs	r0, #1
+ 444 0002 7047     		bx	lr
+ 445              		.cfi_endproc
+ 446              	.LFE7:
+ 448              		.comm	u8_uartTXbuf,1,1
+ 449              		.comm	u8_uartRXbuf,1,1
+ 450              		.text
+ 451              	.Letext0:
+ 452              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 453              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 454              		.file 4 "C:/MinGW/msys/1.0/esos32/include/lc-switch.h"
+ 455              		.file 5 "C:/MinGW/msys/1.0/esos32/include/esos_cb.h"
+ 456              		.file 6 "C:/MinGW/msys/1.0/esos32/include/esos_mail.h"
+ 457              		.file 7 "C:/MinGW/msys/1.0/esos32/include/esos_task.h"
+ 458              		.file 8 "C:/MinGW/msys/1.0/esos32/include/esos_utils.h"
+ 459              		.file 9 "C:/MinGW/msys/1.0/esos32/include/esos_comm.h"
+ 460              		.file 10 "C:/MinGW/msys/1.0/esos32/include/esos.h"
+ 461              		.file 11 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/l4/rcc.h"
+ 462              		.file 12 "C:/MinGW/msys/1.0/esos32/include/stm32l4_ocm3/esos_stm32l4_rs232.h"
+ 463              		.file 13 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/cm3/nvic.h"
+ 464              		.file 14 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/common/rc
+ 465              		.file 15 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/common/gp
+ 466              		.file 16 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/common/us
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s 			page 15
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 esos_stm32l4_rs232.c
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:18     .text.__esos_hw_signal_start_tx:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:26     .text.__esos_hw_signal_start_tx:00000000 __esos_hw_signal_start_tx
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:75     .text.__esos_hw_signal_start_tx:00000034 $d
+                            *COM*:00000001 u8_uartTXbuf
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:83     .text.__esos_hw_signal_stop_tx:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:90     .text.__esos_hw_signal_stop_tx:00000000 __esos_hw_signal_stop_tx
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:107    .text.__esos_hw_signal_stop_tx:0000000c $d
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:112    .text.usart2_isr:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:119    .text.usart2_isr:00000000 usart2_isr
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:223    .text.usart2_isr:00000074 $d
+                            *COM*:00000001 u8_uartRXbuf
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:234    .text.__esos_configUART1:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:241    .text.__esos_configUART1:00000000 __esos_configUART1
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:350    .text.__esos_configUART1:0000009c $d
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:355    .text.__esos_hw_InitCommSystem:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:362    .text.__esos_hw_InitCommSystem:00000000 __esos_hw_InitCommSystem
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:383    .text.esos_GetCommSystemMaxInDataLen:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:390    .text.esos_GetCommSystemMaxInDataLen:00000000 esos_GetCommSystemMaxInDataLen
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:405    .text.esos_GetCommSystemMaxOutDataLen:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:412    .text.esos_GetCommSystemMaxOutDataLen:00000000 esos_GetCommSystemMaxOutDataLen
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:427    .text._esos_hw_GetSerialUartVersion:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\cctDMVAa.s:434    .text._esos_hw_GetSerialUartVersion:00000000 _esos_hw_GetSerialUartVersion
+
+UNDEFINED SYMBOLS
+__esos_CB_ReadUINT8
+usart_send
+usart_enable_tx_interrupt
+__esos_u32SystemFlags
+__pst_CB_Tx
+usart_disable_tx_interrupt
+usart_recv
+__esos_CB_OverwriteUINT8
+__pst_CB_Rx
+nvic_enable_irq
+rcc_periph_clock_enable
+gpio_mode_setup
+gpio_set_output_options
+gpio_set_af
+usart_set_baudrate
+usart_set_databits
+usart_set_stopbits
+usart_set_mode
+usart_set_parity
+usart_set_flow_control
+usart_enable_rx_interrupt
+usart_enable

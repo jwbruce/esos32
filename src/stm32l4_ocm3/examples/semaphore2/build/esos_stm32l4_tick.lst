@@ -1,0 +1,505 @@
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccJuunop.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"esos_stm32l4_tick.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.__esos_hw_InitSystemTick,"ax",%progbits
+  18              		.align	1
+  19              		.global	__esos_hw_InitSystemTick
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	__esos_hw_InitSystemTick:
+  27              	.LFB0:
+  28              		.file 1 "C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3/esos_stm32l4_tick.c"
+   1:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** /*
+   2:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * "Copyright (c) 2019 J. W. Bruce ("AUTHOR(S)")"
+   3:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * All rights reserved.
+   4:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * (J. W. Bruce, jwbruce_AT_tntech.edu, Tennessee Tech University)
+   5:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  *
+   6:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * Permission to use, copy, modify, and distribute this software and its
+   7:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * documentation for any purpose, without fee, and without written agreement is
+   8:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * hereby granted, provided that the above copyright notice, the following
+   9:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * two paragraphs and the authors appear in all copies of this software.
+  10:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  *
+  11:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * IN NO EVENT SHALL THE "AUTHORS" BE LIABLE TO ANY PARTY FOR
+  12:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT
+  13:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE "AUTHORS"
+  14:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  15:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  *
+  16:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * THE "AUTHORS" SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+  17:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+  18:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS
+  19:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * ON AN "AS IS" BASIS, AND THE "AUTHORS" HAS NO OBLIGATION TO
+  20:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS."
+  21:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  *
+  22:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * Please maintain this header in its entirety when copying/modifying
+  23:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * these files.
+  24:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  *
+  25:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  *
+  26:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  */
+  27:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+  28:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** /**
+  29:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * \addtogroup ESOS_Tick
+  30:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  * @{
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccJuunop.s 			page 2
+
+
+  31:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****  */
+  32:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+  33:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+  34:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** // Documentation for this file. If the \file tag isn't present,
+  35:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** // this file won't be documented.
+  36:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** /**
+  37:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * \file
+  38:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * \brief STM32L4xx hardware support to generate the ESOS system tick functionality.
+  39:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * 
+  40:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * \note Currently the code supports the STM32L452RE processor..... on the Nucleo-L452RE board.
+  41:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** */
+  42:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+  43:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** // Include any HW-specific header files to pick up the HW register
+  44:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** //  definitions, macros, etc.
+  45:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** #include    "esos_stm32l4.h"
+  46:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+  47:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** // local prototypes
+  48:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** void Error_Handler(void);
+  49:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+  50:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** // create a "global" variable for the esos_tick count
+  51:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** //  It either contains the actual tick (in the case of a using the
+  52:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** //  software variable) or the system tick of the last time the tick
+  53:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** //  was accessed (in the case of a hardware timer register
+  54:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** //  containing the real clock tick)
+  55:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** volatile  uint32_t        esos_tick_count;
+  56:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** int count = 0;
+  57:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+  58:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** /****************************************************/
+  59:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** /*
+  60:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * \brief Initializes the ESOS system tick.
+  61:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** *
+  62:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * \pre None assumed
+  63:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** *
+  64:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * \post Sets up any hardware required to generate the 1.0ms tick
+  65:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * required by ESOS.
+  66:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** *
+  67:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * The (platform-independent) ESOS initialization code will
+  68:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * call this function to setup and init the hardware (HWXXX
+  69:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * MCU, in this case) to create the required timers,IRQs,etc
+  70:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * to generate the 1.0ms ESOS system tick.
+  71:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** *
+  72:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * \note We can either generate an IRQ every 1.0ms or longer period,
+  73:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * we just need to make sure that ISR that increments the tick
+  74:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * count is consistent.
+  75:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** ********************************************************/
+  76:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+  77:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** void    __esos_hw_InitSystemTick(void) {
+  29              		.loc 1 77 40 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 10B5     		push	{r4, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 4, -8
+  37              		.cfi_offset 14, -4
+  38 0002 82B0     		sub	sp, sp, #8
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccJuunop.s 			page 3
+
+
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 16
+  78:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	
+  79:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	// Config the SysTick
+  80:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
+  41              		.loc 1 80 2 view .LVU1
+  42 0004 0420     		movs	r0, #4
+  43 0006 FFF7FEFF 		bl	systick_set_clocksource
+  44              	.LVL0:
+  81:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+  82:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	systick_set_reload(80e3);
+  45              		.loc 1 82 2 view .LVU2
+  46 000a 2448     		ldr	r0, .L3
+  47 000c FFF7FEFF 		bl	systick_set_reload
+  48              	.LVL1:
+  83:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	systick_counter_enable();
+  49              		.loc 1 83 2 view .LVU3
+  50 0010 FFF7FEFF 		bl	systick_counter_enable
+  51              	.LVL2:
+  84:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	systick_interrupt_enable();
+  52              		.loc 1 84 2 view .LVU4
+  53 0014 FFF7FEFF 		bl	systick_interrupt_enable
+  54              	.LVL3:
+  85:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	
+  86:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	rcc_osc_on(RCC_HSI16);
+  55              		.loc 1 86 2 view .LVU5
+  56 0018 0220     		movs	r0, #2
+  57 001a FFF7FEFF 		bl	rcc_osc_on
+  58              	.LVL4:
+  87:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	
+  88:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	flash_prefetch_enable();
+  59              		.loc 1 88 2 view .LVU6
+  60 001e FFF7FEFF 		bl	flash_prefetch_enable
+  61              	.LVL5:
+  89:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	flash_set_ws(4);
+  62              		.loc 1 89 2 view .LVU7
+  63 0022 0420     		movs	r0, #4
+  64 0024 FFF7FEFF 		bl	flash_set_ws
+  65              	.LVL6:
+  90:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	flash_dcache_enable();
+  66              		.loc 1 90 2 view .LVU8
+  67 0028 FFF7FEFF 		bl	flash_dcache_enable
+  68              	.LVL7:
+  91:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	flash_icache_enable();
+  69              		.loc 1 91 2 view .LVU9
+  70 002c FFF7FEFF 		bl	flash_icache_enable
+  71              	.LVL8:
+  92:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	/* 16MHz / 4 = > 4 * 40 = 160MHz VCO => 80MHz main pll  */
+  93:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	rcc_set_main_pll(RCC_PLLCFGR_PLLSRC_HSI16, 4, 40,
+  72              		.loc 1 93 2 view .LVU10
+  73 0030 0024     		movs	r4, #0
+  74 0032 0194     		str	r4, [sp, #4]
+  75 0034 0094     		str	r4, [sp]
+  76 0036 2346     		mov	r3, r4
+  77 0038 2822     		movs	r2, #40
+  78 003a 0421     		movs	r1, #4
+  79 003c 0220     		movs	r0, #2
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccJuunop.s 			page 4
+
+
+  80 003e FFF7FEFF 		bl	rcc_set_main_pll
+  81              	.LVL9:
+  94:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 			0, 0, RCC_PLLCFGR_PLLR_DIV2);
+  95:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	rcc_osc_on(RCC_PLL);
+  82              		.loc 1 95 2 view .LVU11
+  83 0042 2046     		mov	r0, r4
+  84 0044 FFF7FEFF 		bl	rcc_osc_on
+  85              	.LVL10:
+  96:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	/* either rcc_wait_for_osc_ready() or do other things */
+  97:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+  98:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	/* Enable clocks for the ports we need */
+  99:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	rcc_periph_clock_enable(RCC_GPIOA);
+  86              		.loc 1 99 2 view .LVU12
+  87 0048 4FF41860 		mov	r0, #2432
+  88 004c FFF7FEFF 		bl	rcc_periph_clock_enable
+  89              	.LVL11:
+ 100:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	rcc_periph_clock_enable(RCC_GPIOB);
+  90              		.loc 1 100 2 view .LVU13
+  91 0050 40F68110 		movw	r0, #2433
+  92 0054 FFF7FEFF 		bl	rcc_periph_clock_enable
+  93              	.LVL12:
+ 101:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	rcc_periph_clock_enable(RCC_GPIOC);
+  94              		.loc 1 101 2 view .LVU14
+  95 0058 40F68210 		movw	r0, #2434
+  96 005c FFF7FEFF 		bl	rcc_periph_clock_enable
+  97              	.LVL13:
+ 102:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	rcc_periph_clock_enable(RCC_GPIOD);
+  98              		.loc 1 102 2 view .LVU15
+  99 0060 40F68310 		movw	r0, #2435
+ 100 0064 FFF7FEFF 		bl	rcc_periph_clock_enable
+ 101              	.LVL14:
+ 103:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	rcc_periph_clock_enable(RCC_GPIOE);
+ 102              		.loc 1 103 2 view .LVU16
+ 103 0068 40F68410 		movw	r0, #2436
+ 104 006c FFF7FEFF 		bl	rcc_periph_clock_enable
+ 105              	.LVL15:
+ 104:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+ 105:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	/* Enable clocks for peripherals we need */
+ 106:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	//rcc_periph_clock_enable(RCC_USART2);
+ 107:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	rcc_periph_clock_enable(RCC_SYSCFG);
+ 106              		.loc 1 107 2 view .LVU17
+ 107 0070 4FF44060 		mov	r0, #3072
+ 108 0074 FFF7FEFF 		bl	rcc_periph_clock_enable
+ 109              	.LVL16:
+ 108:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+ 109:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	rcc_set_sysclk_source(RCC_CFGR_SW_PLL); /* careful with the param here! */
+ 110              		.loc 1 109 2 view .LVU18
+ 111 0078 0320     		movs	r0, #3
+ 112 007a FFF7FEFF 		bl	rcc_set_sysclk_source
+ 113              	.LVL17:
+ 110:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	rcc_wait_for_sysclk_status(RCC_PLL);
+ 114              		.loc 1 110 2 view .LVU19
+ 115 007e 2046     		mov	r0, r4
+ 116 0080 FFF7FEFF 		bl	rcc_wait_for_sysclk_status
+ 117              	.LVL18:
+ 111:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	/* FIXME - eventually handled internally */
+ 112:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	rcc_ahb_frequency = 80e6;
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccJuunop.s 			page 5
+
+
+ 118              		.loc 1 112 2 view .LVU20
+ 119              		.loc 1 112 20 is_stmt 0 view .LVU21
+ 120 0084 064B     		ldr	r3, .L3+4
+ 121 0086 074A     		ldr	r2, .L3+8
+ 122 0088 1360     		str	r3, [r2]
+ 113:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	rcc_apb1_frequency = 80e6;
+ 123              		.loc 1 113 2 is_stmt 1 view .LVU22
+ 124              		.loc 1 113 21 is_stmt 0 view .LVU23
+ 125 008a 074A     		ldr	r2, .L3+12
+ 126 008c 1360     		str	r3, [r2]
+ 114:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	rcc_apb2_frequency = 80e6;
+ 127              		.loc 1 114 2 is_stmt 1 view .LVU24
+ 128              		.loc 1 114 21 is_stmt 0 view .LVU25
+ 129 008e 074A     		ldr	r2, .L3+16
+ 130 0090 1360     		str	r3, [r2]
+ 115:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	
+ 116:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	esos_tick_count = 0;
+ 131              		.loc 1 116 2 is_stmt 1 view .LVU26
+ 132              		.loc 1 116 18 is_stmt 0 view .LVU27
+ 133 0092 074B     		ldr	r3, .L3+20
+ 134 0094 1C60     		str	r4, [r3]
+ 117:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	
+ 118:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** } // end __esos_hw_InitSystemTick()
+ 135              		.loc 1 118 1 view .LVU28
+ 136 0096 02B0     		add	sp, sp, #8
+ 137              	.LCFI2:
+ 138              		.cfi_def_cfa_offset 8
+ 139              		@ sp needed
+ 140 0098 10BD     		pop	{r4, pc}
+ 141              	.L4:
+ 142 009a 00BF     		.align	2
+ 143              	.L3:
+ 144 009c 80380100 		.word	80000
+ 145 00a0 00B4C404 		.word	80000000
+ 146 00a4 00000000 		.word	rcc_ahb_frequency
+ 147 00a8 00000000 		.word	rcc_apb1_frequency
+ 148 00ac 00000000 		.word	rcc_apb2_frequency
+ 149 00b0 00000000 		.word	esos_tick_count
+ 150              		.cfi_endproc
+ 151              	.LFE0:
+ 153              		.section	.text.__esos_hw_GetSystemTickCount,"ax",%progbits
+ 154              		.align	1
+ 155              		.global	__esos_hw_GetSystemTickCount
+ 156              		.syntax unified
+ 157              		.thumb
+ 158              		.thumb_func
+ 159              		.fpu fpv4-sp-d16
+ 161              	__esos_hw_GetSystemTickCount:
+ 162              	.LFB1:
+ 119:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+ 120:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** /****************************************************/
+ 121:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+ 122:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** /* *****************************************************
+ 123:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * \brief Returns the ESOS system tick count.
+ 124:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** *
+ 125:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * \pre ESOS system tick is running/working.
+ 126:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** *
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccJuunop.s 			page 6
+
+
+ 127:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * \return A 32-bit value of the number of ESOS system ticks
+ 128:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** * since the system has booted.
+ 129:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** *
+ 130:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** ********************************************************/
+ 131:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+ 132:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** uint32_t   __esos_hw_GetSystemTickCount(void) {
+ 163              		.loc 1 132 47 is_stmt 1 view -0
+ 164              		.cfi_startproc
+ 165              		@ args = 0, pretend = 0, frame = 0
+ 166              		@ frame_needed = 0, uses_anonymous_args = 0
+ 167              		@ link register save eliminated.
+ 133:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   // if a hardware timer register contains the free-running tick
+ 134:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   // value, be sure to save the register value to esos_tick_count
+ 135:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   // before returning.  This is done to ensure that any rogue app
+ 136:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   // that tries to read esos_tick_count directly without calling
+ 137:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   // the ESOS_GET_TICKS() macro (which ultimately maps to this
+ 138:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   // function) will get a tick value that is
+ 139:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   // reasonable..... maybe....  sort of..... not really...
+ 140:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   //
+ 141:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+ 142:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   return  esos_tick_count;
+ 168              		.loc 1 142 3 view .LVU30
+ 169              		.loc 1 142 11 is_stmt 0 view .LVU31
+ 170 0000 014B     		ldr	r3, .L6
+ 171 0002 1868     		ldr	r0, [r3]
+ 143:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** }  // end __esos_hw_GetSystemTickCount()
+ 172              		.loc 1 143 1 view .LVU32
+ 173 0004 7047     		bx	lr
+ 174              	.L7:
+ 175 0006 00BF     		.align	2
+ 176              	.L6:
+ 177 0008 00000000 		.word	esos_tick_count
+ 178              		.cfi_endproc
+ 179              	.LFE1:
+ 181              		.section	.text.sys_tick_handler,"ax",%progbits
+ 182              		.align	1
+ 183              		.global	sys_tick_handler
+ 184              		.syntax unified
+ 185              		.thumb
+ 186              		.thumb_func
+ 187              		.fpu fpv4-sp-d16
+ 189              	sys_tick_handler:
+ 190              	.LFB2:
+ 144:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+ 145:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** void sys_tick_handler(void)
+ 146:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** {
+ 191              		.loc 1 146 1 is_stmt 1 view -0
+ 192              		.cfi_startproc
+ 193              		@ args = 0, pretend = 0, frame = 0
+ 194              		@ frame_needed = 0, uses_anonymous_args = 0
+ 195 0000 08B5     		push	{r3, lr}
+ 196              	.LCFI3:
+ 197              		.cfi_def_cfa_offset 8
+ 198              		.cfi_offset 3, -8
+ 199              		.cfi_offset 14, -4
+ 147:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	// ISR for the systick, named by LibOpenCM3
+ 148:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	// Increment the esos tick counter
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccJuunop.s 			page 7
+
+
+ 149:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	esos_tick_count++;
+ 200              		.loc 1 149 2 view .LVU34
+ 201              		.loc 1 149 17 is_stmt 0 view .LVU35
+ 202 0002 034A     		ldr	r2, .L10
+ 203 0004 1368     		ldr	r3, [r2]
+ 204 0006 0133     		adds	r3, r3, #1
+ 205 0008 1360     		str	r3, [r2]
+ 150:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	
+ 151:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	// The timer services callback function for ESOS
+ 152:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	// Must be called every tick
+ 153:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	__esos_tmrSvcsExecute();
+ 206              		.loc 1 153 2 is_stmt 1 view .LVU36
+ 207 000a FFF7FEFF 		bl	__esos_tmrSvcsExecute
+ 208              	.LVL19:
+ 154:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** }
+ 209              		.loc 1 154 1 is_stmt 0 view .LVU37
+ 210 000e 08BD     		pop	{r3, pc}
+ 211              	.L11:
+ 212              		.align	2
+ 213              	.L10:
+ 214 0010 00000000 		.word	esos_tick_count
+ 215              		.cfi_endproc
+ 216              	.LFE2:
+ 218              		.section	.text.Default_Handler,"ax",%progbits
+ 219              		.align	1
+ 220              		.global	Default_Handler
+ 221              		.syntax unified
+ 222              		.thumb
+ 223              		.thumb_func
+ 224              		.fpu fpv4-sp-d16
+ 226              	Default_Handler:
+ 227              	.LFB3:
+ 155:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+ 156:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** // temporary home for the Default handler
+ 157:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** void Default_Handler()
+ 158:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** {
+ 228              		.loc 1 158 1 is_stmt 1 view -0
+ 229              		.cfi_startproc
+ 230              		@ args = 0, pretend = 0, frame = 0
+ 231              		@ frame_needed = 0, uses_anonymous_args = 0
+ 232              		@ link register save eliminated.
+ 159:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 	
+ 160:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** }
+ 233              		.loc 1 160 1 view .LVU39
+ 234 0000 7047     		bx	lr
+ 235              		.cfi_endproc
+ 236              	.LFE3:
+ 238              		.section	.text.Error_Handler,"ax",%progbits
+ 239              		.align	1
+ 240              		.global	Error_Handler
+ 241              		.syntax unified
+ 242              		.thumb
+ 243              		.thumb_func
+ 244              		.fpu fpv4-sp-d16
+ 246              	Error_Handler:
+ 247              	.LFB4:
+ 161:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccJuunop.s 			page 8
+
+
+ 162:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** /**
+ 163:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   * @brief  This function is executed in case of error occurrence.
+ 164:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   * @retval None
+ 165:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   */
+ 166:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** void Error_Handler(void) {
+ 248              		.loc 1 166 26 view -0
+ 249              		.cfi_startproc
+ 250              		@ args = 0, pretend = 0, frame = 0
+ 251              		@ frame_needed = 0, uses_anonymous_args = 0
+ 252              		@ link register save eliminated.
+ 167:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   /* USER CODE BEGIN Error_Handler_Debug */
+ 168:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   /* User can add his own implementation to report the HAL error return state */
+ 169:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** 
+ 170:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c ****   /* USER CODE END Error_Handler_Debug */
+ 171:C:/MinGW/msys/1.0/esos32/src/stm32l4_ocm3\esos_stm32l4_tick.c **** }
+ 253              		.loc 1 171 1 view .LVU41
+ 254 0000 7047     		bx	lr
+ 255              		.cfi_endproc
+ 256              	.LFE4:
+ 258              		.global	count
+ 259              		.comm	esos_tick_count,4,4
+ 260              		.section	.bss.count,"aw",%nobits
+ 261              		.align	2
+ 264              	count:
+ 265 0000 00000000 		.space	4
+ 266              		.text
+ 267              	.Letext0:
+ 268              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 269              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 270              		.file 4 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/l4/rcc.h"
+ 271              		.file 5 "C:/MinGW/msys/1.0/esos32/include/esos_utils.h"
+ 272              		.file 6 "C:/MinGW/msys/1.0/esos32/include/lc-switch.h"
+ 273              		.file 7 "C:/MinGW/msys/1.0/esos32/include/esos_cb.h"
+ 274              		.file 8 "C:/MinGW/msys/1.0/esos32/include/esos_mail.h"
+ 275              		.file 9 "C:/MinGW/msys/1.0/esos32/include/esos_task.h"
+ 276              		.file 10 "C:/MinGW/msys/1.0/esos32/include/esos_comm.h"
+ 277              		.file 11 "C:/MinGW/msys/1.0/esos32/include/esos.h"
+ 278              		.file 12 "C:/MinGW/msys/1.0/esos32/include/stm32l4_ocm3/esos_stm32l4_rs232.h"
+ 279              		.file 13 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/cm3/systick.h"
+ 280              		.file 14 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/common/fl
+ 281              		.file 15 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/common/fl
+ 282              		.file 16 "C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master/include/libopencm3/stm32/common/rc
+ARM GAS  C:\Users\Travis\AppData\Local\Temp\ccJuunop.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 esos_stm32l4_tick.c
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:18     .text.__esos_hw_InitSystemTick:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:26     .text.__esos_hw_InitSystemTick:00000000 __esos_hw_InitSystemTick
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:144    .text.__esos_hw_InitSystemTick:0000009c $d
+                            *COM*:00000004 esos_tick_count
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:154    .text.__esos_hw_GetSystemTickCount:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:161    .text.__esos_hw_GetSystemTickCount:00000000 __esos_hw_GetSystemTickCount
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:177    .text.__esos_hw_GetSystemTickCount:00000008 $d
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:182    .text.sys_tick_handler:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:189    .text.sys_tick_handler:00000000 sys_tick_handler
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:214    .text.sys_tick_handler:00000010 $d
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:219    .text.Default_Handler:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:226    .text.Default_Handler:00000000 Default_Handler
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:239    .text.Error_Handler:00000000 $t
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:246    .text.Error_Handler:00000000 Error_Handler
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:264    .bss.count:00000000 count
+C:\Users\Travis\AppData\Local\Temp\ccJuunop.s:261    .bss.count:00000000 $d
+
+UNDEFINED SYMBOLS
+systick_set_clocksource
+systick_set_reload
+systick_counter_enable
+systick_interrupt_enable
+rcc_osc_on
+flash_prefetch_enable
+flash_set_ws
+flash_dcache_enable
+flash_icache_enable
+rcc_set_main_pll
+rcc_periph_clock_enable
+rcc_set_sysclk_source
+rcc_wait_for_sysclk_status
+rcc_ahb_frequency
+rcc_apb1_frequency
+rcc_apb2_frequency
+__esos_tmrSvcsExecute
