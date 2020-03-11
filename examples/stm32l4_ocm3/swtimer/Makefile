@@ -21,9 +21,9 @@ OPT = -Og
 # Build path
 BUILD_DIR = build
 # ESOS base path
-#ESOS_DIR = THE_PATH_TO_YOUR_ESOS_TREE
+ESOS_DIR = C:/MinGW/msys/1.0/esos32
 # CM3 base path
-#CM3_DIR = THE_PATH_TO_YOUR_LIBOPENCM3_TREE
+CM3_DIR = C:/MinGW/msys/1.0/libopencm3-master/libopencm3-master
 
 
 ######################################
