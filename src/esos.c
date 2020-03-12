@@ -44,14 +44,24 @@
  * 
  * The initial port of ESOS32 is aimed at the ARM-Cortex M4 chips from
  * STMicroelectronics. The first specific target processor is the
- * STM32L452 processor hosted on the Nucleo64 development board.
- *
+ * STM32L452RE processor hosted on the Nucleo64 development board.
+ * 
+ * This tree contains the foundations for two separate hardware
+ * implmentations for the STM32L452RE processor. The first is found
+ * in under the *stm32l4_HAL* folders and is built upon the very
+ * feature-rich [hardware abstraction library available from
+ * STMicroelectronics (https://github.com/STMicroelectronics/STM32CubeL4)].  
+ * The second is found
+ * in under the *stm32l4_ocm3* folders and is built upon the very
+ * lower-level and community developed [libOpenCM3 hardware abstraction
+ * library (http://libopencm3.org)].  
+ * 
  * \section install_sec Installation
  * 
  * The public repository for ESOS32 is hosted by
- * [Bitbucket](http://bitbucket.org/).
+ * [github](http://github.com/).
  * Source code can be found at 
- * [ESOS32 public repo](https://bitbucket.org/jwbruce/esos32).
+ * [ESOS32 public repo](https://github.com/jwbruce/esos32).
  *
  * \section using_dox Using this documentation
  *
