@@ -435,70 +435,138 @@ typedef enum _BOOL {
 #define NULLPTR         0
 /** An unitialized index value */
 #define NULLIDX         0xFF
+
+// Create bit masks for ease-of-use.  Surround each
+// with #ifndef because some libraries (libopencm3,
+// for example) have already defined these constants
 /** Mask to represent bit 0 (the LSb) */
+#ifndef BIT0
 #define BIT0            0x0001
+#endif
 /** Mask to represent bit 1 */
+#ifndef BIT1
 #define BIT1            0x0002
+#endif
 /** Mask to represent bit 2 */
+#ifndef BIT2
 #define BIT2            0x0004
+#endif
 /** Mask to represent bit 3 */
+#ifndef BIT3
 #define BIT3            0x0008
+#endif
 /** Mask to represent bit 4 */
+#ifndef BIT4
 #define BIT4            0x0010
+#endif
 /** Mask to represent bit 5 */
+#ifndef BIT5
 #define BIT5            0x0020
+#endif
 /** Mask to represent bit 6 */
+#ifndef BIT6
 #define BIT6            0x0040
+#endif
 /** Mask to represent bit 7 (the MSb of a uint8) */
+#ifndef BIT7
 #define BIT7            0x0080
+#endif
 /** Mask to represent bit 8 (the LSb of the most-significant byte in an uint8)*/
+#ifndef BIT8
 #define BIT8            0x0100
+#endif
 /** Mask to represent bit 9 */
+#ifndef BIT9
 #define BIT9            0x0200
+#endif
 /** Mask to represent bit 10 */
+#ifndef BIT10
 #define BIT10           0x0400
+#endif
 /** Mask to represent bit 11 */
+#ifndef BIT11
 #define BIT11           0x0800
+#endif
 /** Mask to represent bit 12 */
+#ifndef BIT12
 #define BIT12           0x1000
+#endif
 /** Mask to represent bit 13 */
+#ifndef BIT13
 #define BIT13           0x2000
+#endif
 /** Mask to represent bit 14 */
+#ifndef BIT14
 #define BIT14           0x4000
+#endif
 /** Mask to represent bit 15 (the MSb of an uint16) */
+#ifndef BIT15
 #define BIT15           0x8000
+#endif
 /** Mask to represent bit 16 */
+#ifndef BIT16
 #define BIT16            0x00010000
+#endif
 /** Mask to represent bit 17 */
+#ifndef BIT17
 #define BIT17            0x00020000
+#endif
 /** Mask to represent bit 18 */
+#ifndef BIT18
 #define BIT18            0x00040000
+#endif
 /** Mask to represent bit 19 */
+#ifndef BIT19
 #define BIT19            0x00080000
+#endif
 /** Mask to represent bit 20 */
+#ifndef BIT20
 #define BIT20            0x00100000
+#endif
 /** Mask to represent bit 21 */
+#ifndef BIT21
 #define BIT21            0x00200000
+#endif
 /** Mask to represent bit 22 */
+#ifndef BIT22
 #define BIT22            0x00400000
+#endif
 /** Mask to represent bit 23 */
+#ifndef BIT23
 #define BIT23           0x00800000
+#endif
 /** Mask to represent bit 24 */
+#ifndef BIT24
 #define BIT24            0x01000000
+#endif
 /** Mask to represent bit 25 */
+#ifndef BIT25
 #define BIT25            0x02000000
+#endif
 /** Mask to represent bit 26 */
+#ifndef BIT26
 #define BIT26           0x04000000
+#endif
 /** Mask to represent bit 27 */
+#ifndef BIT27
 #define BIT27           0x08000000
+#endif
 /** Mask to represent bit 28 */
+#ifndef BIT28
 #define BIT28           0x10000000
+#endif
 /** Mask to represent bit 29 */
+#ifndef BIT29
 #define BIT29           0x20000000
+#endif
 /** Mask to represent bit 30 */
+#ifndef BIT30
 #define BIT30           0x40000000
+#endif
 /** Mask to represent bit 31 (the MSb of an uint32) */
+#ifndef BIT31
 #define BIT31           0x80000000
+#endif
 
 /**
  * Sets the bits of a variable according to a mask
