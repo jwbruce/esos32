@@ -130,9 +130,8 @@ void   __esos_hw_config_PRNG(void) {
 *
 ********************************************************** */
 void __esos_hw_set_PRNG_Seed(uint32_t u32_seed) {
-#ifdef STM32L452xx
-   // RNG hardware doesn't let us set the seed
-#else
+#ifndef STM32L452xx
+// RNG hardware doesn't let us set the seed
    __esos_set_PRNG_U32Seed(u32_seed);
 #endif
   
