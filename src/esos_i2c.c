@@ -64,11 +64,13 @@ bits per second clock speed.
  */
 void __esos_i2c_config(uint32_t u32_i2cbps) {
 	// setup any ESOS structures needed for I2C here
+	__esos_SetSystemFlag(__ESOS_SYS_I2C_IS_BUSY); 
 	
 	// call the hardware provided function to setup the HW itself
 	__esos_i2c_hw_config( u32_i2cbps);
 	
 	// do any last-minute I2C configuration for ESOS
+	__esos_ClearSystemFlag(__ESOS_SYS_I2C_IS_BUSY); 
 }
 
 /**@}*/

@@ -31,20 +31,22 @@
  * @{
  */
 
-
-
 // Documentation for this file. If the \file tag isn't present,
 // this file won't be documented.
 /** \file
-* \brief Template for creating hardware-specific support for ESOS32 
-* SPI communications service
+* \brief Hardware independent support for ESOS32 SPI services
+* 
+* Must have supporing hw-specific files underneath to work.
 */
 
 
 /*** I N C L U D E S *************************************************/
-#include "esos_hwxxx_spi.h"
+#include "esos.h"
+#include "esos_spi.h"
 
 /*** G L O B A L S *************************************************/
+struct stTask   __stChildTaskSPI;
+uint16_t           __esos_spi_u16s[2];
 
 /*** T H E   C O D E *************************************************/
 
@@ -52,47 +54,28 @@
  * Public functions intended to be called by other files *
  *********************************************************/
 
-// Documentation for this file. If the \file tag is not present,
-// this file will not be documented.
-// Note: place this comment below the #if NUM_I2C_MODS so Doxygen
-// will only see it once.
-/** \file
- *  SPI support functions. \see pic24_spi.h for details.
- */
-
-/*
-Transaction: Does hardware configuration to setup the SPI
-periperal given the SPI transfer bitrate \em u32_spibps.
-\note The SPI peripheral setup determines whether 8-bit or 16-bit data
-is written.
- */
-extern void __esos_spi_hw_config(uint32_t u32_spibps){
-	
-	// write the required hardware code to setup the SPI peripheral
-	
-}  // end __esos_spi_hw_config()
-
-/*
-Transaction: Writes \em u16_cnt words stored in
-buffer \em *pu16_out to SPI device, while reading \em u16_cnt words from
-SPI device placing results into buffer \em *pu16_in
-\note Assumes that SPI peripheral has been properly configured.
-\note The SPI peripheral setup determines whether 8-bit or 16-bit data
-is written.
-\param pu16_out Pointer to buffer containing data to send.  If \em pu16_out is \em NULLPTR this function will send zeroes to the SPI device and only "read"
-\param pu16_in Pointer to buffer to catch incoming data.  If \em pu16_in is \em NULLPTR this function will only "write" the SPI device
-\param u16_cnt Number of words to send
- */
-ESOS_CHILD_TASK( __esos_hw_xferNSPI, uint16_t* pu16_out, uint16_t* pu16_in, uint16_t u16_cnt) {
-
-  ESOS_TASK_BEGIN();
-
-	// write the hardware-specific code to implement the
-	// functional requirements given above
-
-  ESOS_TASK_END();
-} // end __esos_hw_xferNSPI
-
 /**
- * @}
+* Configure and enable the ESOS SPI service for operation at \em u32_spibbps
+* bits per second clock speed.
+* \param u32_spibps specifies clock speed in bits per second
+* \sa ESOS_TASK_WAIT_ON_WRITE1SPI1
+* \sa ESOS_TASK_WAIT_ON_WRITE2SPI1
+* \sa ESOS_TASK_WAIT_ON_WRITENSPI1
+* \sa ESOS_TASK_WAIT_ON_XFERNSPI1
+* \sa ESOS_TASK_WAIT_ON_READ1SPI1
+* \sa ESOS_TASK_WAIT_ON_READ2SPI1
+* \sa ESOS_TASK_WAIT_ON_READNSPI1
+\hideinitializer
  */
+void __esos_spi_config(uint32_t u32_spibps) {
+	// setup any ESOS structures needed for SPI here
+	__esos_SetSystemFlag(__ESOS_SYS_SPI_IS_BUSY); 
+	
+	// call the hardware provided function to setup the HW itself
+	__esos_i2c_spi_config( u32_spibps);
+	
+	// do any last-minute I2C configuration for ESOS
+	__esos_ClearSystemFlag(__ESOS_SYS_SPI_IS_BUSY); 
+}
+
+/**@}*/
