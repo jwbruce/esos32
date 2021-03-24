@@ -86,20 +86,20 @@ typedef   struct stTask*                   ESOS_TASK_HANDLE;
 
 
 /* Task flag : task is waiting on ACK from other task reading mail */
-#define __TASK_MAILNACK_MASK     BIT5
+#define __TASK_MAILNACK_MASK     ESOS_BIT5
 /* Task flag : task has mail needing to be read */
-#define __TASK_HASMAIL_MASK      BIT4
+#define __TASK_HASMAIL_MASK      ESOS_BIT4
 
 /* Task flag : task has ended (hit ESOS_TASK_END) */
-#define __TASK_ENDED_MASK        BIT3
+#define __TASK_ENDED_MASK        ESOS_BIT3
 /* Task flag : task has been flagged to be killed (will exit on next block/wait/yield) */
-#define __TASK_KILLED_MASK       BIT2
+#define __TASK_KILLED_MASK       ESOS_BIT2
 /* Task flag : task is sleeping */
-#define __TASK_SLEEPING_MASK     BIT1
+#define __TASK_SLEEPING_MASK     ESOS_BIT1
 /* Task flag : task is waiting */
-#define __TASK_WAITING_MASK      BIT0
+#define __TASK_WAITING_MASK      ESOS_BIT0
 /* Task flag : task has been called by scheduler  */
-#define __TASK_CALLED_MASK       BIT7
+#define __TASK_CALLED_MASK       ESOS_BIT7
 
 /* some helper macros to manage Task states **/
 #define   __ESOS_SET_TASK_SLEEPING_FLAG(TaskHandle)    BIT_SET_MASK((TaskHandle)->flags, __TASK_SLEEPING_MASK)

@@ -34,7 +34,6 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-//#include <stm32l4xx_hal.h>
 
 /* Private includes ----------------------------------------------------------*/
 
@@ -48,28 +47,39 @@ extern "C" {
 void Error_Handler(void);
 
 /* Private defines -----------------------------------------------------------*/
-#define SW1_Pin GPIO13
-#define SW1_GPIO_Port GPIOC
-#define USART_TX_Pin GPIO2
-#define USART_TX_GPIO_Port GPIOA
-#define USART_RX_Pin GPIO3
-#define USART_RX_GPIO_Port GPIOA
-#define LED2_Pin GPIO5
-#define LED2_GPIO_Port GPIOA
-#define TMS_Pin GPIO13
-#define TMS_GPIO_Port GPIOA
-#define TCK_Pin GPIO14
-#define TCK_GPIO_Port GPIOA
-#define SWO_Pin GPIO3
-#define SWO_GPIO_Port GPIOB
-/* USER CODE BEGIN Private defines */
+#ifdef __PTB_APOLLO_BOARD
+	#define SW1_Pin GPIO13
+	#define SW1_GPIO_Port GPIOC
+	#define USART_TX_Pin GPIO2
+	#define USART_TX_GPIO_Port GPIOA
+	#define USART_RX_Pin GPIO3
+	#define USART_RX_GPIO_Port GPIOA
+	#define LED2_Pin GPIO5
+	#define LED2_GPIO_Port GPIOA
+	#define TMS_Pin GPIO13
+	#define TMS_GPIO_Port GPIOA
+	#define TCK_Pin GPIO14
+	#define TCK_GPIO_Port GPIOA
+	#define SWO_Pin GPIO3
+	#define SWO_GPIO_Port GPIOB
 
-#define LEFT_BTN_PORT GPIOC
-#define LEFT_BTN_PIN  GPIO7
-#define RIGHT_BTN_PORT  GPIOA
-#define RIGHT_BTN_PIN GPIO8
 
-/* USER CODE END Private defines */
+	#define LEFT_BTN_PORT GPIOC
+	#define LEFT_BTN_PIN  GPIO7
+	#define RIGHT_BTN_PORT  GPIOA
+	#define RIGHT_BTN_PIN GPIO8
+#endif
+
+#ifdef __EDUB_BOARD
+	#define SW1_Pin GPIO8
+	#define SW1_GPIO_Port GPIOB
+	#define USART_TX_Pin GPIO2
+	#define USART_TX_GPIO_Port GPIOA
+	#define USART_RX_Pin GPIO3
+	#define USART_RX_GPIO_Port GPIOA
+	#define LED2_Pin GPIO7
+	#define LED2_GPIO_Port GPIOC
+#endif
 
 #ifdef __cplusplus
 }

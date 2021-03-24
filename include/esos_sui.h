@@ -101,10 +101,10 @@ enum esos_sui_LEDEvents {
 #define   SWITCH_SINGLE_PRESS_LATENCY       100 // Time before single click is recognized, double click must first release before this time.
 #define   SWITCH_DOUBLE_PRESS_MAX_LATENCY   200 // Time before double click must be pressed after releasing the switch from first press
 
-
-#define __ESOS_TICKS_TO_MS(x)           (x/1)
-#define __ESOS_MS_TO_TICKS(x)           (x*1)
-#define __ESOS_SUI_TASK_PERIOD         	25
+// The time duration #DEFINES should be used from  esos/include/all_generic.h
+//#define __ESOS_TICKS_TO_MS(x)           (x/1)
+//#define __ESOS_MS_TO_TICKS(x)           (x*1)
+#define __ESOS_SUI_TASK_PERIOD         	(25*MILLISECONDS)
 
 // PRIVATE DATA 
 

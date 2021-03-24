@@ -137,14 +137,13 @@ void usart2_isr(void)
 			usart_enable_tx_interrupt(USART_CONSOLE);
 		}
 	}
-	/*else if(((USART_CR1(USART_CONSOLE) & USART_CR3_EIE) != 0) &&
-	   ((USART_ISR(USART_CONSOLE) & USART_ISR_ORE) != 0 ))
-	{
-		/* Error handler for the UART
-		 *
-		//usart_enable_error_interrupt(USART_CONSOLE);
-		u8_uartRXbuf = usart_recv(USART_CONSOLE);
-	}*/
+	//else if(((USART_CR1(USART_CONSOLE) & USART_CR3_EIE) != 0) &&
+	//   ((USART_ISR(USART_CONSOLE) & USART_ISR_ORE) != 0 ))
+	//{
+	//   // Error handler for the UART
+		 //usart_enable_error_interrupt(USART_CONSOLE);
+	//	u8_uartRXbuf = usart_recv(USART_CONSOLE);
+	//}*/
 }
 
 /** Configure the UART. Settings chosen:

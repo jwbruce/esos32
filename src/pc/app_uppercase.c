@@ -429,24 +429,24 @@ ESOS_USER_TASK( watchdog ) {
   u8_i = FALSE;
   ESOS_TASK_BEGIN(pstTask);
   while (TRUE) {
-    if (pst_MyTasks[0]->pfn != random_1 ) u8_i |= BIT0;
-    if (pst_MyTasks[1]->pfn != random_2 ) u8_i |= BIT1;
-    if (pst_MyTasks[2]->pfn != random_3 ) u8_i |= BIT2;
+    if (pst_MyTasks[0]->pfn != random_1 ) u8_i |= ESOS_BIT0;
+    if (pst_MyTasks[1]->pfn != random_2 ) u8_i |= ESOS_BIT1;
+    if (pst_MyTasks[2]->pfn != random_3 ) u8_i |= ESOS_BIT2;
     if (u8_i) {
       ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
       ESOS_TASK_SIGNAL_BUSY_OUT_COMM();
 
-      if ( u8_i && BIT0 ) {
+      if ( u8_i && ESOS_BIT0 ) {
         ESOS_TASK_WAIT_ON_SEND_STRING( "pstTasks[0] is now " );
         ESOS_TASK_WAIT_ON_SEND_UINT32_AS_HEX_STRING( (uint32_t) pst_MyTasks[0]->pfn );
         ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
       }
-      if ( u8_i && BIT1 ) {
+      if ( u8_i && ESOS_BIT1 ) {
         ESOS_TASK_WAIT_ON_SEND_STRING( "pstTasks[1] is now" );
         ESOS_TASK_WAIT_ON_SEND_UINT32_AS_HEX_STRING( (uint32_t) pst_MyTasks[1]->pfn );
         ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
       }
-      if ( u8_i && BIT2 ) {
+      if ( u8_i && ESOS_BIT2 ) {
         ESOS_TASK_WAIT_ON_SEND_STRING( "pstTasks[2] is now" );
         ESOS_TASK_WAIT_ON_SEND_UINT32_AS_HEX_STRING( (uint32_t) pst_MyTasks[2]->pfn );
         ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );

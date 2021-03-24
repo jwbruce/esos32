@@ -72,7 +72,7 @@ void __esos_spi_config(uint32_t u32_spibps) {
 	__esos_SetSystemFlag(__ESOS_SYS_SPI_IS_BUSY); 
 	
 	// call the hardware provided function to setup the HW itself
-	__esos_i2c_spi_config( u32_spibps);
+	__esos_spi_hw_config( u32_spibps);
 	
 	// do any last-minute I2C configuration for ESOS
 	__esos_ClearSystemFlag(__ESOS_SYS_SPI_IS_BUSY); 

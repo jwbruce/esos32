@@ -1,6 +1,27 @@
 ##########################################################################################################################
-# Makefile based on auto-generated from STM32Cube tool
+# Makefile    J.W.Bruce (C) 2020
 ##########################################################################################################################
+
+
+########################################
+# determine OS
+########################################
+ifeq ($(OS),Windows_NT)
+    MAKECLEANCMD = del
+    MAKECLEANFLAGS = /f
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
+		MAKECLEANCMD = rm
+		MAKECLEANFLAGS = -fR
+    endif
+    ifeq ($(UNAME_S),Darwin)
+		MAKECLEANCMD = rm
+		MAKECLEANFLAGS = -fR
+    endif
+endif
+
+
 
 ######################################
 # target
@@ -23,9 +44,9 @@ OPT = -Og
 # Build path
 BUILD_DIR = build
 # ESOS base path
-#ESOS_DIR = THE_PATH_TO_YOUR_ESOS_TREE
+ESOS_DIR = /home/jwbruce/GITs/esos32
 # CM3 base path
-#CM3_DIR = THE_PATH_TO_YOUR_LIBOPENCM3_TREE
+CM3_DIR = /home/jwbruce/GITs/libopencm3
 
 
 ######################################
@@ -92,7 +113,9 @@ C_DEFS =  \
 -DSTM32L452xx  					\
 -DHARDWARE_PLATFORM=NUCLEO64	\
 -DESOS_USE_SERIAL_PORT			\
+-D__EDUB_BOARD
 
+# FOR THE APOLLO BOARD  -D__PTB_APOLLO_BOARD
 
 # AS includes
 AS_INCLUDES = 
@@ -168,7 +191,8 @@ $(BUILD_DIR):
 # clean up
 #######################################
 clean:
-	-rm -fR $(BUILD_DIR)
+	-$(MAKECLEANCMD) $(MAKECLEANFLAGS) $(BUILD_DIR)
+  
   
 #######################################
 # dependencies

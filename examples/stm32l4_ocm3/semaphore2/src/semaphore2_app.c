@@ -110,7 +110,7 @@ ESOS_USER_TASK(task1) {
   static  uint8_t           u8_cnt=0;
 
   ESOS_TASK_BEGIN();
-  while (u8_cnt < 6) {
+  while (u8_cnt < 10) {
     ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T1 );
     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
@@ -135,14 +135,14 @@ ESOS_USER_TASK(task2) {
   static  uint8_t           u8_cnt=0;
 
   ESOS_TASK_BEGIN();
-  while (u8_cnt<12) {
+  while (u8_cnt<10) {
     ESOS_TASK_WAIT_ON_AVAILABLE_OUT_COMM();
     ESOS_TASK_WAIT_ON_SEND_STRING( psz_T2 );
     ESOS_TASK_WAIT_ON_SEND_UINT8_AS_DEC_STRING( u8_cnt );
     ESOS_TASK_WAIT_ON_SEND_STRING( psz_CRNL );
     ESOS_TASK_SIGNAL_AVAILABLE_OUT_COMM();
     u8_cnt++;
-    ESOS_TASK_WAIT_TICKS( getRandomDelay() );
+    ESOS_TASK_WAIT_TICKS( getRandomDelay() >> 1 );
   } // endof while()
   ESOS_SIGNAL_SEMAPHORE(sem_T1CanRun, 1);
   ESOS_TASK_WAIT_SEMAPHORE(sem_T2CanRun, 1);

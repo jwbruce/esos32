@@ -107,8 +107,8 @@ ESOS_USER_TASK( task_flash_LED ) {
 ESOS_USER_TASK( sender_C0 ) {
   uint32_t                      u32_rnd;
   static  uint8_t               u8_cnt;
-  static  ESOS_TASK_HANDLE    hTask;
-  static  MAILMESSAGE         st_Message;
+  static  ESOS_TASK_HANDLE    	hTask;
+  static  MAILMESSAGE         	st_Message;
   static  char					psz_tempStr[80];
 
   ESOS_TASK_BEGIN();

@@ -106,9 +106,9 @@ ESOS_USER_TASK( task_flash_LED ) {
 ************************************************************/
 
 ESOS_USER_TASK( sender_D0 ) {
-  uint32_t                u32_rnd;
-  static  uint8_t         u8_cnt;
-  static  ESOS_TASK_HANDLE    hTask;
+  uint32_t                	u32_rnd;
+  static  uint8_t         	u8_cnt;
+  static  ESOS_TASK_HANDLE  hTask;
   static  MAILMESSAGE       st_Message;
   static  char				psz_tempStr[80];
 
@@ -152,8 +152,8 @@ ESOS_USER_TASK( sender_D0 ) {
 
 ESOS_USER_TASK( sender_D1 ) {
   static    uint32_t        u32_rnd;
-  static  uint8_t         u8_cnt;
-  static  ESOS_TASK_HANDLE    hTask;
+  static  uint8_t         	u8_cnt;
+  static  ESOS_TASK_HANDLE  hTask;
   static  MAILMESSAGE       st_Message;
   static  char				psz_tempStr[80];
 
@@ -196,9 +196,9 @@ ESOS_USER_TASK( sender_D1 ) {
 
 //TASK that doesn't check mail very often
 ESOS_USER_TASK( recipient_D ) {
-  uint32_t                u32_rnd;
-  static MAILMESSAGE    stMsg;
-  static ESOS_TASK_HANDLE           hSenderD0, hSenderD1;
+  uint32_t                	u32_rnd;
+  static MAILMESSAGE    	stMsg;
+  static ESOS_TASK_HANDLE   hSenderD0, hSenderD1;
   static  char				psz_tempStr[80];
 
   ESOS_TASK_BEGIN();

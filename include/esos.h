@@ -174,131 +174,131 @@ struct stTimer {
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_0          BIT0
+#define   ESOS_USER_FLAG_0          ESOS_BIT0
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_1          BIT1
+#define   ESOS_USER_FLAG_1          ESOS_BIT1
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_2          BIT2
+#define   ESOS_USER_FLAG_2          ESOS_BIT2
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_3          BIT3
+#define   ESOS_USER_FLAG_3          ESOS_BIT3
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_4          BIT4
+#define   ESOS_USER_FLAG_4          ESOS_BIT4
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_5          BIT5
+#define   ESOS_USER_FLAG_5          ESOS_BIT5
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_6          BIT6
+#define   ESOS_USER_FLAG_6          ESOS_BIT6
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_7          BIT7
+#define   ESOS_USER_FLAG_7          ESOS_BIT7
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_8          BIT8
+#define   ESOS_USER_FLAG_8          ESOS_BIT8
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_9          BIT9
+#define   ESOS_USER_FLAG_9          ESOS_BIT9
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_10          BIT10
+#define   ESOS_USER_FLAG_10          ESOS_BIT10
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_11          BIT11
+#define   ESOS_USER_FLAG_11          ESOS_BIT11
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_12          BIT12
+#define   ESOS_USER_FLAG_12          ESOS_BIT12
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_13          BIT13
+#define   ESOS_USER_FLAG_13          ESOS_BIT13
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_14          BIT14
+#define   ESOS_USER_FLAG_14          ESOS_BIT14
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_15          BIT15
+#define   ESOS_USER_FLAG_15          ESOS_BIT15
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_16          BIT16
+#define   ESOS_USER_FLAG_16          ESOS_BIT16
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_17          BIT17
+#define   ESOS_USER_FLAG_17          ESOS_BIT17
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_18          BIT18
+#define   ESOS_USER_FLAG_18          ESOS_BIT18
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_19          BIT19
+#define   ESOS_USER_FLAG_19          ESOS_BIT19
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_20          BIT20
+#define   ESOS_USER_FLAG_20          ESOS_BIT20
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_21          BIT21
+#define   ESOS_USER_FLAG_21          ESOS_BIT21
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_22          BIT22
+#define   ESOS_USER_FLAG_22          ESOS_BIT22
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_23          BIT23
+#define   ESOS_USER_FLAG_23          ESOS_BIT23
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_24          BIT24
+#define   ESOS_USER_FLAG_24          ESOS_BIT24
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_25         BIT25
+#define   ESOS_USER_FLAG_25         ESOS_BIT25
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_26          BIT26
+#define   ESOS_USER_FLAG_26          ESOS_BIT26
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_27          BIT27
+#define   ESOS_USER_FLAG_27          ESOS_BIT27
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_28          BIT28
+#define   ESOS_USER_FLAG_28          ESOS_BIT28
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_29          BIT29
+#define   ESOS_USER_FLAG_29          ESOS_BIT29
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_30          BIT30
+#define   ESOS_USER_FLAG_30          ESOS_BIT30
 /** Mask for a global user flag provided by ESOS
  * \hideinitializer
  */
-#define   ESOS_USER_FLAG_31          BIT31
+#define   ESOS_USER_FLAG_31          ESOS_BIT31
 
 
 /**
@@ -557,20 +557,20 @@ extern uint32_t       __esos_u32UserFlags, __esos_u32SystemFlags;
  * \sa esos_ChangeTimerPeriod
  * \hideinitializer
  */
-#define   esos_IsTimerRunning(hndl)            IS_BIT_SET_MASK(__esos_u32TmrActiveFlags, (BIT0<<(hndl)))
-#define   __esos_MarkTimerRunning(hndl)        BIT_SET_MASK(__esos_u32TmrActiveFlags, (BIT0<<(hndl)))
-#define   __esos_MarkTimerStopped(hndl)        BIT_CLEAR_MASK(__esos_u32TmrActiveFlags, (BIT0<<(hndl)))
+#define   esos_IsTimerRunning(hndl)            IS_BIT_SET_MASK(__esos_u32TmrActiveFlags, (ESOS_BIT0<<(hndl)))
+#define   __esos_MarkTimerRunning(hndl)        BIT_SET_MASK(__esos_u32TmrActiveFlags, (ESOS_BIT0<<(hndl)))
+#define   __esos_MarkTimerStopped(hndl)        BIT_CLEAR_MASK(__esos_u32TmrActiveFlags, (ESOS_BIT0<<(hndl)))
 
 
 // System flag definitions... only ESOS needs to use these
-#define     __ESOS_SYS_FLAG_PACK_TASKS        BIT0
-#define     __ESOS_SYS_FLAG_NULL_LAST_TASK      BIT1
-#define     __ESOS_SYS_COMM_TX_IS_BUSY        BIT2
-#define     __ESOS_SYS_COMM_RX_IS_BUSY        BIT3
-#define   __ESOS_SYS_COMM_TX_ONGOING    BIT4
-#define   __ESOS_SYS_I2C_IS_BUSY          BIT8
-#define   __ESOS_SYS_SPI_IS_BUSY          BIT9
-#define   __ESOS_SYS_ADC_IS_BUSY          BIT10
+#define     __ESOS_SYS_FLAG_PACK_TASKS        ESOS_BIT0
+#define     __ESOS_SYS_FLAG_NULL_LAST_TASK      ESOS_BIT1
+#define     __ESOS_SYS_COMM_TX_IS_BUSY        ESOS_BIT2
+#define     __ESOS_SYS_COMM_RX_IS_BUSY        ESOS_BIT3
+#define   __ESOS_SYS_COMM_TX_ONGOING    ESOS_BIT4
+#define   __ESOS_SYS_I2C_IS_BUSY          ESOS_BIT8
+#define   __ESOS_SYS_SPI_IS_BUSY          ESOS_BIT9
+#define   __ESOS_SYS_ADC_IS_BUSY          ESOS_BIT10
 
 // Other useful macros for the user
 #define   __abs(x)    (((x) < 0) ? -(x) : (x))
