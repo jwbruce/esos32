@@ -46,7 +46,6 @@
 /* I N C L U D E S **********************************************************/
 #include "esos.h"
 #include "esos_i2c.h"
-#include "esos_lcd44780wo.h"
 #include "esos_stm32l4.h"
 
 /* D E F I N I T I O N S ****************************************************/
@@ -71,7 +70,7 @@ extern uint8_t            __esos_i2c_dataBytes[2];                    // used to
 #define	__ESOS_I2C_STM32L4_CLEAR_AUTOEND()		I2C1_CR2 &= (~I2C_CR2_AUTOEND)
 #define	__ESOS_I2C_STM32L4_SET_RELOAD()			I2C1_CR2 |= I2C_CR2_RELOAD
 #define	__ESOS_I2C_STM32L4_CLEAR_RELOAD()		I2C1_CR2 &= (~I2C_CR2_RELOAD)
-#define	__ESOS_I2C_STM32L4_IS_NACK_RECEIVED()	I2C1_ISR & I2C_ISR_NACKF
+#define	__ESOS_I2C_STM32L4_IS_NACK_RECEIVED()	(I2C1_ISR & I2C_ISR_NACKF)
 
 #define	__ESOS_I2C_STM32L4_CLEAR_STOP_FLAG()	I2C1_ICR |= I2C_ICR_STOPCF
 #define	__ESOS_I2C_STM32L4_RESET_CR2()			I2C1_CR2 &= (uint32_t)~((uint32_t)(I2C_CR2_SADD_7BIT_MASK | I2C_CR2_HEAD10R | I2C_CR2_NBYTES_MASK | I2C_CR2_RELOAD | I2C_CR2_RD_WRN))
