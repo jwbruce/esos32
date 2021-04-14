@@ -47,8 +47,6 @@
 #include "esos_stm32l4_spi.h"
 
 /*** G L O B A L S *************************************************/
-struct stTask   __stChildTaskSPI;
-uint16_t           __esos_spi_u16s[2];
 
 /*** T H E   C O D E *************************************************/
 
