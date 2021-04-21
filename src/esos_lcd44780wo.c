@@ -313,7 +313,7 @@ void esos_lcd44780_writeBuffer( uint8_t u8_row, uint8_t u8_column, uint8_t *pu8_
 	// and that the buffer is never written to past its length or width.
 	uint8_t i;
     for(i = 0; i < u8_bufflen; i++){
-        if(u8_column + i >= 8){
+        if(u8_column + i >= 16){
             u8_row = !u8_row;
         }
         esos_lcd44780_vars.aac_lcdBuffer[(u8_row)][(u8_column+i)%ESOS_LCD44780_MEM_WIDTH] = pu8_data[i];
