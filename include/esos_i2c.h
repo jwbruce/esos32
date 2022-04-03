@@ -57,25 +57,27 @@
 /**
 Current task waits until the ESOS I2C resource becomes available for use.
 
-\sa ESOS_SIGNAL_AVIALABLE_I2C
+\sa ESOS_SIGNAL_AVAILABLE_I2C
+\sa ESOS_IS_I2C_AVAILABLE
 \sa ESOS_TASK_WAIT_ON_WRITE2I2C
 \sa ESOS_TASK_WAIT_ON_WRITENI2C
-\sa esos_hw_configI2C
+\sa __esos_i2c_hw_config
 \hideinitializer
 */
-#define ESOS_TASK_WAIT_ON_AVAILABLE_I2C()                                           \
-        do {                                                                        \
-        ESOS_TASK_WAIT_WHILE(__esos_IsSystemFlagSet(__ESOS_SYS_I2C_IN_USE));   \
-        __esos_SetSystemFlag(__ESOS_SYS_I2C_IN_USE);                           \
+#define ESOS_TASK_WAIT_ON_AVAILABLE_I2C()                    \
+        do {                                                 \
+        ESOS_TASK_WAIT_UNTIL(ESOS_IS_I2C_AVAILABLE());       \
+        __esos_SetSystemFlag(__ESOS_SYS_I2C_IN_USE);         \
     } while(0)
 
 /**
 Release ESOS I2C resource for use by other task.
 
-\sa ESOS_TASK_WAIT_ON_AVIALABLE_I2C
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_I2C
+\sa ESOS_IS_I2C_AVAILABLE
 \sa ESOS_TASK_WAIT_ON_WRITE2I2C
 \sa ESOS_TASK_WAIT_ON_WRITENI2C
-\sa esos_hw_configI2C
+\sa __esos_i2c_hw_config
 \hideinitializer
 */
 #define ESOS_SIGNAL_AVAILABLE_I2C() __esos_ClearSystemFlag(__ESOS_SYS_I2C_IN_USE)
@@ -83,9 +85,11 @@ Release ESOS I2C resource for use by other task.
 /**
 Returns TRUE if the ESOS I2C resource is available, else returns FALSE.
 \retval  TRUE   ESOS I2C is not in use; available
-\sa ESOS_TASK_WAIT_ON_AVIALABLE_I2C
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_I2C
+\sa ESOS_SIGNAL_AVAILABLE_I2C 
 \sa ESOS_TASK_WAIT_ON_WRITE2I2C
 \sa ESOS_TASK_WAIT_ON_WRITENI2C
+\sa __esos_i2c_hw_config
 \hideinitializer
 */
 #define ESOS_IS_I2C_AVAILABLE()     (__esos_IsSystemFlagClear(__ESOS_SYS_I2C_IN_USE))
@@ -101,11 +105,12 @@ Returns TRUE if the ESOS I2C resource is available, else returns FALSE.
 Transaction: Write 1 (ONE) byte stored in variable \em u8_d1 to I2C slave at address \em u8_addr.
 \param u8_addr  Slave I2C address
 \param u8_d1   Variable containing first byte to write
-\sa ESOS_TASK_WAIT_ON_AVIALABLE_I2C
-\sa ESOS_SIGNAL_AVIALABLE_I2C
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_I2C
+\sa ESOS_SIGNAL_AVAILABLE_I2C
+\sa ESOS_IS_I2C_AVAILABLE 
 \sa ESOS_TASK_WAIT_ON_WRITE2I2C
 \sa ESOS_TASK_WAIT_ON_WRITENI2C
-\sa esos_hw_configI2C
+\sa __esos_i2c_hw_config
 \hideinitializer
 */
 #define   ESOS_TASK_WAIT_ON_WRITE1I2C( u8_addr, u8_d1 )                     \
@@ -123,10 +128,12 @@ Transaction: Write 2 (TWO) bytes stored in variables \em u8_d1 and \em u8_d2 to 
 \param u8_addr  Slave I2C address
 \param u8_d1   Variable containing first byte to write
 \param u8_d2   Variable containing second byte to write
-\sa ESOS_TASK_WAIT_ON_AVIALABLE_I2C
-\sa ESOS_SIGNAL_AVIALABLE_I2C
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_I2C
+\sa ESOS_SIGNAL_AVAILABLE_I2C
+\sa ESOS_IS_I2C_AVAILABLE 
 \sa ESOS_TASK_WAIT_ON_WRITE1I2C
 \sa ESOS_TASK_WAIT_ON_WRITENI2C
+\sa __esos_i2c_hw_config
 \hideinitializer
 */
 #define   ESOS_TASK_WAIT_ON_WRITE2I2C( u8_addr, u8_d1, u8_d2 )              \
@@ -141,10 +148,12 @@ Transaction: Write \em u16_cnt bytes stored in buffer \em *pu8_d to I2C slave at
 \param u8_addr  Slave I2C address
 \param pu8_d Pointer to buffer containing bytes to send
 \param u16_cnt Number of bytes to send
-\sa ESOS_TASK_WAIT_ON_AVIALABLE_I2C
-\sa ESOS_SIGNAL_AVIALABLE_I2C
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_I2C
+\sa ESOS_SIGNAL_AVAILABLE_I2C
+\sa ESOS_IS_I2C_AVAILABLE 
 \sa ESOS_TASK_WAIT_ON_WRITE1I2C
 \sa ESOS_TASK_WAIT_ON_WRITE2I2C
+\sa __esos_i2c_hw_config
 \hideinitializer
 */
 #define   ESOS_TASK_WAIT_ON_WRITENI2C( u8_addr, pu8_d, u8_cnt )              \
@@ -158,11 +167,12 @@ As per the I2C standard, a NAK is returned for the last byte read from the slave
 \param u8_addr  Slave I2C address
 \param u8_d1   variable to hold the read byte
 \hideinitializer
-\sa ESOS_TASK_WAIT_ON_AVIALABLE_I2C
-\sa ESOS_SIGNAL_AVIALABLE_I2C
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_I2C
+\sa ESOS_SIGNAL_AVAILABLE_I2C
+\sa ESOS_IS_I2C_AVAILABLE 
 \sa ESOS_TASK_WAIT_ON_READ2I2C
 \sa ESOS_TASK_WAIT_ON_READNI2C
-\sa esos_hw_configI2C
+\sa __esos_i2c_hw_config
 */
 #define   ESOS_TASK_WAIT_ON_READ1I2C( u8_addr, u8_d1 )                     \
             ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskI2C,  __esos_i2c_hw_readN, (u8_addr), &(u8_d1), 1 )
@@ -178,9 +188,12 @@ As per the I2C standard, a NAK is returned for the last byte read from the slave
 \param u8_d1   variable to hold first read byte
 \param u8_d2   variable to hold second read byte
 \hideinitializer
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_I2C
+\sa ESOS_SIGNAL_AVAILABLE_I2C
+\sa ESOS_IS_I2C_AVAILABLE 
 \sa ESOS_TASK_WAIT_ON_READ1I2C
 \sa ESOS_TASK_WAIT_ON_READNI2C
-\sa esos_hw_configI2C
+\sa __esos_i2c_hw_config
 */
 #define   ESOS_TASK_WAIT_ON_READ2I2C( u8_addr, u8_d1, u8_d2 )                     \
      do{                                                                              \
@@ -200,7 +213,7 @@ As per the I2C standard, a NAK is returned for the last byte read from the slave
 \sa ESOS_SIGNAL_AVIALABLE_I2C
 \sa ESOS_TASK_WAIT_ON_READ1I2C
 \sa ESOS_TASK_WAIT_ON_READ2I2C
-\sa esos_stm32l4_configI2C
+\sa __esos_i2c_hw_config
 */
 #define   ESOS_TASK_WAIT_ON_READNI2C( u8_addr, pu8_d, u8_cnt )                     \
 		do {																\

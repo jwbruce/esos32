@@ -37,8 +37,9 @@
 *  \brief This file contains routines which define, configure,
 * and allow use of the write-only "LCD character display" service on
 * the STMicroelectronics ARM-Cortex hardware targeting the Edubase-v2
-* Communication with LCD display is SPI (serial) via the
-* `595 shift register
+* Communication with LCD display is via 6 GPIO pins (for RS,E, D4-D7)
+* to implement the LCD nibble-wide data interface per the
+* HD44780 informal specification
 * 
 */
 
