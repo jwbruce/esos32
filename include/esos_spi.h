@@ -39,18 +39,17 @@
 // Documentation for this file. If the \file tag isn't present,
 // this file won't be documented.
 /** \file
- *  This file contains routines which se SPI on the Microchip PIC24 MCU.
+ *  This file contains routines which SPI service on ESOS
  */
 
 
 /* I N C L U D E S **********************************************************/
 #include "esos.h"
-#include "esos_hwxxx.h"
 
 /* D E F I N I T I O N S ****************************************************/
 
 /* E X T E R N S ************************************************************/
-extern struct stTask     __stChildTaskSPI;
+extern struct stTask     __stChildTaskSPI;         // req'd child task for hw SPI functions
 extern uint16_t            __esos_spi_u16s[2];     // used to store arguments
 
 /* M A C R O S **************************************************************/
@@ -76,7 +75,7 @@ Transaction: Write 1 (ONE) "word" stored in variable \em u16_d1 to SPI device.
 #define   ESOS_TASK_WAIT_ON_WRITE1SPI1(u16_d1 )              \
     do{                                                                        \
       __esos_spi_u16s[0] = (uint16_t) (u16_d1);                                      \
-      ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskSPI, __esos_hwxxx_xferNSPI, &__esos_spi_u16s[0], NULLPTR, 1 );    \
+      ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskSPI, __esos_spi_hw_xferNSPI1, &__esos_spi_u16s[0], NULLPTR, 1 );    \
     }while(0)
 
 
@@ -99,7 +98,7 @@ Transaction: Write 2 (TWO) "words" (bytes or 16-bits) stored in variables \em u1
     do{                                                                        \
       __esos_spi_u16s[0] = (uint16_t) (u16_d1);                                      \
       __esos_spi_u16s[1] = (uint16_t) (u16_d2);                                      \
-      ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskSPI, __esos_hwxxx_xferNSPI, &__esos_spi_u16s[0], NULLPTR, 2 );    \
+      ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskSPI, __esos_spi_hw_xferNSPI1, &__esos_spi_u16s[0], NULLPTR, 2 );    \
     }while(0)
 
 /**
@@ -114,7 +113,7 @@ Transaction: Write \em u16_cnt "words" (bytes or 16-bits) to SPI device
 \hideinitializer
 */
 #define   ESOS_TASK_WAIT_ON_WRITENSPI1( pu16_out, u16_cnt )              \
-            ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskSPI, __esos_hwxxx_xferNSPI, (pu16_out), NULLPTR, (u16_cnt) )
+            ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskSPI, __esos_spi_hw_xferNSPI1, (pu16_out), NULLPTR, (u16_cnt) )
 
 /**
 Transaction: Transfer (Read and write SPI simultaneously) \em u16_cnt "words" (bytes or 16-bits) to SPI device
@@ -133,7 +132,7 @@ Transaction: Transfer (Read and write SPI simultaneously) \em u16_cnt "words" (b
 \hideinitializer
 */
 #define   ESOS_TASK_WAIT_ON_XFERNSPI1( pu16_out, pu16_in, u16_cnt )              \
-            ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskSPI, __esos_hwxxx_xferNSPI, (pu16_out), (pu16_in), (u16_cnt) )
+            ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskSPI, __esos_spi_hw_xferNSPI1, (pu16_out), (pu16_in), (u16_cnt) )
 
 /**
 Transaction: Read 1 (ONE) "word" from SPI device and stores result in variable \em u16_d1
@@ -148,7 +147,7 @@ Transaction: Read 1 (ONE) "word" from SPI device and stores result in variable \
 */
 #define   ESOS_TASK_WAIT_ON_READ1SPI1(u16_d1 )              \
     do{                                                                        \
-      ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskSPI, __esos_hwxxx_xferNSPI, NULLPTR, &__esos_spi_u16s[0], 1 );    \
+      ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskSPI, __esos_spi_hw_xferNSPI1, NULLPTR, &__esos_spi_u16s[0], 1 );    \
       (u16_d1) = __esos_spi_u16s[0];        \
     }while(0)
 
@@ -166,7 +165,7 @@ Transaction: Read 2 (TWO) "words" (bytes or 16-bits) from SPI device.  Stores re
 */
 #define   ESOS_TASK_WAIT_ON_READ2SPI1(u16_d1, u16_d2)              \
     do{                                                            \
-      ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskSPI, __esos_hwxxx_xferNSPI, NULLPTR, &__esos_spi_u16s[0], 2 );    \
+      ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskSPI, __esos_spi_hw_xferNSPI1, NULLPTR, &__esos_spi_u16s[0], 2 );    \
       (u16_d1) = __esos_spi_u16s[0];        \
       (u16_d2) = __esos_spi_u16s[1];        \
     }while(0)
@@ -184,7 +183,7 @@ Transaction: Reads \em u16_cnt "words" (bytes or 16-bits) from SPI device.  Resu
 \hideinitializer
 */
 #define   ESOS_TASK_WAIT_ON_READNSPI1( pu16_in, u16_cnt )              \
-            ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskSPI, __esos_hwxxx_xferNSPI, NULLPTR, (pu16_in), (u16_cnt) )
+            ESOS_TASK_SPAWN_AND_WAIT( (ESOS_TASK_HANDLE)&__stChildTaskSPI, __esos_spi_hw_xferNSPI1, NULLPTR, (pu16_in), (u16_cnt) )
 
 
 /* P U B L I C  P R O T O T Y P E S *****************************************/
@@ -192,7 +191,7 @@ void __esos_spi_config(uint32_t u32_spibps);
 
 /* P R O T O T Y P E S  HARDWARE-SPECIFIC ********************************/
 extern void __esos_spi_hw_config(uint32_t u32_spibps);
-ESOS_CHILD_TASK( __esos_hw_xferNSPI, uint16_t* pu16_out, uint16_t* pu16_in, uint16_t u16_cnt);
+ESOS_CHILD_TASK( __esos_spi_hw_xferNSPI1, uint16_t* pu16_out, uint16_t* pu16_in, uint16_t u16_cnt);
 
 /** @} */
 #endif // end ESOS_SPI_H

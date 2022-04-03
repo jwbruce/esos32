@@ -47,6 +47,7 @@
 #include "esos.h"
 #include "esos_spi.h"
 #include "esos_stm32l4.h"
+#include <libopencm3/stm32/spi.h>
 
 /* D E F I N I T I O N S ****************************************************/
 #define	__ESOS_SPI_STM32L4_IS_BUSY()			( SPI_SR(SPI1) & SPI_SR_BSY )
@@ -58,8 +59,6 @@
 
 /* E X T E R N S ************************************************************/
 
-extern struct stTask   __stChildTaskSPI;
-extern uint16_t           __esos_spi_u16s[2];     // used to store arguments
 
 /* M A C R O S **************************************************************/
 

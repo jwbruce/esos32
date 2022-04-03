@@ -47,6 +47,9 @@
 #include "esos_stm32l4_spi.h"
 
 /*** G L O B A L S *************************************************/
+// NOTE THAT __stChildTaskSPI and __esos_spi_u16s[2] are defined
+//     in esos_spi.c and extern-ed in esos_spi.h
+
 
 /*** T H E   C O D E *************************************************/
 

@@ -72,8 +72,20 @@
 #ifdef      ESOS_USE_IRQS
 #include    "esos_stm32l4_irq.h"
 #endif
+
 #ifdef 		ESOS_USE_SERIAL_PORT
 #include    "esos_stm32l4_rs232.h"
 #endif
+
+#ifdef 		ESOS_USE_SPI
+#include    <libopencm3/stm32/spi.h>
+#include    "esos_stm32l4_spi.h"
+#endif
+
+#ifdef      ESOS_USE_I2C
+#include    <libopencm3/stm32/i2c.h>
+#include    "esos_stm32l4_i2c.h"
+#endif
+
 
 #endif      // ESOS_STM32L4_H

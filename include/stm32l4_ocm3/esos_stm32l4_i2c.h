@@ -47,6 +47,7 @@
 #include "esos.h"
 #include "esos_i2c.h"
 #include "esos_stm32l4.h"
+#include <libopencm3/stm32/i2c.h>
 
 /* D E F I N I T I O N S ****************************************************/
 

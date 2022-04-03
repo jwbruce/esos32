@@ -45,8 +45,8 @@
 #include "esos_spi.h"
 
 /*** G L O B A L S *************************************************/
-struct stTask   __stChildTaskSPI;
-uint16_t           __esos_spi_u16s[2];
+struct stTask   __stChildTaskSPI;       // req'd child task for SPI hw functions
+uint16_t           __esos_spi_u16s[2];  // storage for the child task arguments
 
 /*** T H E   C O D E *************************************************/
 

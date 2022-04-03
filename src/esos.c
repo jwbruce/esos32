@@ -593,6 +593,13 @@ void __esosInit(void) {
 #endif
 #endif
 
+// Call **AFTER** user_init() because the user might have set
+// pin directions and peripheral functions in their user_init()
+// ESOS will call the specific __esos_spi_hw_config( u32_spibps)
+//  as well.
+#ifdef ESOS_USE_SPI
+  __esos_spi_config(1000000UL);
+#endif
 
 #ifdef ESOS_USE_WATCHDOG
   // must be called at the very end so that watchdog doesnt reset
