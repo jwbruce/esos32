@@ -53,20 +53,58 @@ extern struct stTask     __stChildTaskSPI;         // req'd child task for hw SP
 extern uint16_t            __esos_spi_u16s[2];     // used to store arguments
 
 /* M A C R O S **************************************************************/
+/**
+Current task waits until the ESOS SPI resource becomes available for use.
 
+\sa ESOS_SIGNAL_AVIALABLE_SPI
+\sa ESOS_IS_SPI_AVAILABLE
+\sa ESOS_TASK_WAIT_ON_WRITE2SPI1
+\sa ESOS_TASK_WAIT_ON_WRITENSPI1
+\sa ESOS_TASK_WAIT_ON_XFERNSPI1
+\sa esos_hw_configSPI
+\hideinitializer
+*/
 #define ESOS_TASK_WAIT_ON_AVAILABLE_SPI()                                           \
         do {                                                                        \
-        ESOS_TASK_WAIT_WHILE(__esos_IsSystemFlagSet(__ESOS_SYS_SPI_IS_BUSY));   \
-        __esos_SetSystemFlag(__ESOS_SYS_SPI_IS_BUSY);                           \
+        ESOS_TASK_WAIT_WHILE(__esos_IsSystemFlagSet(__ESOS_SYS_SPI_IN_USE));   \
+        __esos_SetSystemFlag(__ESOS_SYS_SPI_IN_USE);                           \
       }while(0)
 
-#define ESOS_TASK_SIGNAL_AVAILABLE_SPI() __esos_ClearSystemFlag(__ESOS_SYS_SPI_IS_BUSY)
+/**
+Release ESOS SPI resource for use by other tasks.
+
+\sa ESOS_TASK_WAIT_ON_AVIALABLE_SPI
+\sa ESOS_IS_SPI_AVAILABLE
+\sa ESOS_TASK_WAIT_ON_WRITE2SPI1
+\sa ESOS_TASK_WAIT_ON_WRITENSPI1
+\sa ESOS_TASK_WAIT_ON_XFERNSPI1
+\sa esos_hw_configSPI
+\hideinitializer
+*/
+#define ESOS_SIGNAL_AVAILABLE_SPI() __esos_ClearSystemFlag(__ESOS_SYS_SPI_IN_USE)
+
+/**
+ * /**
+Returns TRUE if the ESOS SPI resource is available, else returns FALSE.
+\retval  TRUE   ESOS SPI is not in use; available
+\note It is the application programmers resposibility to ensure that the SPI is available before use
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_SPI
+\sa ESOS_SIGNAL_AVAILABLE_SPI
+\sa ESOS_TASK_WAIT_ON_WRITE2SPI1
+\sa ESOS_TASK_WAIT_ON_WRITENSPI1
+\sa ESOS_TASK_WAIT_ON_XFERNSPI1
+\hideinitializer
+*/
+#define ESOS_IS_SPI_AVAILABLE()     (__esos_IsSystemFlagClear(__ESOS_SYS_SPI_IN_USE))
 
 /**
 Transaction: Write 1 (ONE) "word" stored in variable \em u16_d1 to SPI device.
 \param u16_d1   Variable containing word (byte or 16-bits) to write
 \note Assumes SPI peripheral has been properly configured.
 \note SPI peripheral configuration determines whether 8 or 16 bits are written.
+\note It is the application programmers resposibility to ensure that the SPI is available before use
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_SPI
+\sa ESOS_SIGNAL_AVAILABLE_SPI
 \sa ESOS_TASK_WAIT_ON_WRITE2SPI1
 \sa ESOS_TASK_WAIT_ON_WRITENSPI1
 \sa ESOS_TASK_WAIT_ON_XFERNSPI1
@@ -89,6 +127,9 @@ Transaction: Write 2 (TWO) "words" (bytes or 16-bits) stored in variables \em u1
 \param u16_d2   Variable containing second byte to write
 \note Assumes SPI peripheral has been properly configured.
 \note SPI peripheral configuration determines whether 8 or 16 bits are written.
+\note It is the application programmers resposibility to ensure that the SPI is available before use 
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_SPI
+\sa ESOS_SIGNAL_AVAILABLE_SPI
 \sa ESOS_TASK_WAIT_ON_WRITE1SPI1
 \sa ESOS_TASK_WAIT_ON_WRITENSPI1
 \sa ESOS_TASK_WAIT_ON_XFERNSPI1
@@ -107,6 +148,9 @@ Transaction: Write \em u16_cnt "words" (bytes or 16-bits) to SPI device
 \param u16_cnt Number of bytes to send
 \note Assumes SPI peripheral has been properly configured.
 \note SPI peripheral configuration determines whether 8 or 16 bits are written.
+\note It is the application programmers resposibility to ensure that the SPI is available before use 
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_SPI
+\sa ESOS_SIGNAL_AVAILABLE_SPI
 \sa ESOS_TASK_WAIT_ON_WRITE1SPI1
 \sa ESOS_TASK_WAIT_ON_WRITE2SPI1
 \sa ESOS_TASK_WAIT_ON_XFERNSPI1
@@ -123,6 +167,9 @@ Transaction: Transfer (Read and write SPI simultaneously) \em u16_cnt "words" (b
 \note Assumes SPI peripheral has been properly configured.
 \note SPI peripheral configuration determines whether 8 or 16 bits are written.
 \note Assumes that both incoming and outgoing buffers are properly sized and available.
+\note It is the application programmers resposibility to ensure that the SPI is available before use 
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_SPI
+\sa ESOS_SIGNAL_AVAILABLE_SPI
 \sa ESOS_TASK_WAIT_ON_WRITE1SPI1
 \sa ESOS_TASK_WAIT_ON_WRITE2SPI1
 \sa ESOS_TASK_WAIT_ON_WRITENSPI1
@@ -140,6 +187,9 @@ Transaction: Read 1 (ONE) "word" from SPI device and stores result in variable \
 \note Assumes SPI peripheral has been properly configured.
 \note SPI peripheral configuration determines whether 8 or 16 bits are written.
 \note This routine writes ZEROES to SPI device during reads
+\note It is the application programmers resposibility to ensure that the SPI is available before use
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_SPI
+\sa ESOS_SIGNAL_AVAILABLE_SPI
 \sa ESOS_TASK_WAIT_ON_READ2SPI1
 \sa ESOS_TASK_WAIT_ON_READNSPI1
 \sa ESOS_TASK_WAIT_ON_XFERNSPI1
@@ -158,6 +208,9 @@ Transaction: Read 2 (TWO) "words" (bytes or 16-bits) from SPI device.  Stores re
 \note Assumes SPI peripheral has been properly configured.
 \note SPI peripheral configuration determines whether 8 or 16 bits are written.
 \note This routine writes ZEROES to SPI device during reads
+\note It is the application programmers resposibility to ensure that the SPI is available before use
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_SPI
+\sa ESOS_SIGNAL_AVAILABLE_SPI
 \sa ESOS_TASK_WAIT_ON_READ1SPI1
 \sa ESOS_TASK_WAIT_ON_READNSPI1
 \sa ESOS_TASK_WAIT_ON_XFERNSPI1
@@ -177,6 +230,9 @@ Transaction: Reads \em u16_cnt "words" (bytes or 16-bits) from SPI device.  Resu
 \note Assumes SPI peripheral has been properly configured.
 \note SPI peripheral configuration determines whether 8 or 16 bits are written.
 \note This routine writes ZEROES to SPI device during reads
+\note It is the application programmers resposibility to ensure that the SPI is available before use
+\sa ESOS_TASK_WAIT_ON_AVAILABLE_SPI
+\sa ESOS_SIGNAL_AVAILABLE_SPI
 \sa ESOS_TASK_WAIT_ON_READ1SPI1
 \sa ESOS_TASK_WAIT_ON_READ2SPI1
 \sa ESOS_TASK_WAIT_ON_XFERNSPI1

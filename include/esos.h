@@ -104,6 +104,14 @@
 #endif		// ESOS_USE_I2C
 
 
+#if defined (ESOS_USE_SPI)
+/*
+*  user wants to use the SPI interface
+*/
+#include	"esos_spi.h"
+#endif		// ESOS_USE_SPI
+
+
 #ifdef  ESOS_RUNS_ON_REAL_OS
 // computers running a host OS (windoze/Linux/etc) expect
 //      their applications to return and return a value
@@ -568,9 +576,9 @@ extern uint32_t       __esos_u32UserFlags, __esos_u32SystemFlags;
 #define     __ESOS_SYS_COMM_TX_IS_BUSY        ESOS_BIT2
 #define     __ESOS_SYS_COMM_RX_IS_BUSY        ESOS_BIT3
 #define   __ESOS_SYS_COMM_TX_ONGOING    ESOS_BIT4
-#define   __ESOS_SYS_I2C_IS_BUSY          ESOS_BIT8
-#define   __ESOS_SYS_SPI_IS_BUSY          ESOS_BIT9
-#define   __ESOS_SYS_ADC_IS_BUSY          ESOS_BIT10
+#define   __ESOS_SYS_I2C_IN_USE           ESOS_BIT8
+#define   __ESOS_SYS_SPI_IN_USE           ESOS_BIT9
+#define   __ESOS_SYS_ADC_IN_USE           ESOS_BIT10
 
 // Other useful macros for the user
 #define   __abs(x)    (((x) < 0) ? -(x) : (x))
