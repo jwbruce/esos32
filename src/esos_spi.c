@@ -69,13 +69,13 @@ uint16_t           __esos_spi_u16s[2];  // storage for the child task arguments
  */
 void __esos_spi_config(uint32_t u32_spibps) {
 	// setup any ESOS structures needed for SPI here
-	__esos_SetSystemFlag(__ESOS_SYS_SPI_IS_BUSY); 
+	__esos_SetSystemFlag(__ESOS_SYS_SPI_IN_USE); 
 	
 	// call the hardware provided function to setup the HW itself
 	__esos_spi_hw_config( u32_spibps);
 	
 	// do any last-minute I2C configuration for ESOS
-	__esos_ClearSystemFlag(__ESOS_SYS_SPI_IS_BUSY); 
+	__esos_ClearSystemFlag(__ESOS_SYS_SPI_IN_USE); 
 }
 
 /**@}*/

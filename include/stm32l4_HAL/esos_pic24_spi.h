@@ -155,11 +155,11 @@ extern uint16_t            __esos_spi_u16s[2];     // used to store arguments
 
 #define ESOS_TASK_WAIT_ON_AVAILABLE_SPI()                                           \
         do {                                                                        \
-        ESOS_TASK_WAIT_WHILE(__esos_IsSystemFlagSet(__ESOS_SYS_SPI_IS_BUSY));   \
-        __esos_SetSystemFlag(__ESOS_SYS_SPI_IS_BUSY);                           \
+        ESOS_TASK_WAIT_WHILE(__esos_IsSystemFlagSet(__ESOS_SYS_SPI_IN_USE));   \
+        __esos_SetSystemFlag(__ESOS_SYS_SPI_IN_USE);                           \
       }while(0)
 
-#define ESOS_TASK_SIGNAL_AVAILABLE_SPI() __esos_ClearSystemFlag(__ESOS_SYS_SPI_IS_BUSY)
+#define ESOS_TASK_SIGNAL_AVAILABLE_SPI() __esos_ClearSystemFlag(__ESOS_SYS_SPI_IN_USE)
 
 /**
 Transaction: Write 1 (ONE) "word" stored in variable \em u16_d1 to SPI device.
